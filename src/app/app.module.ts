@@ -14,7 +14,7 @@ import { AcercaPage } from '../pages/acerca/acerca';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import {NgCalendarModule} from 'ionic2-calendar';
+import { NgCalendarModule } from 'ionic2-calendar';
 import { GetDatosProvider } from '../providers/get-datos/get-datos';
 import { SQLite } from '@ionic-native/sqlite';
 

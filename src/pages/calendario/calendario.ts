@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos'
-
-
 /**
  * Generated class for the CalendarioPage page.
  *
@@ -10,16 +8,19 @@ import { GetDatosProvider } from '../../providers/get-datos/get-datos'
  * Ionic pages and navigation.
  */
 
+@IonicPage()
 @Component({
   selector: 'page-calendario',
   templateUrl: 'calendario.html',
 })
 export class CalendarioPage {
 
+  
+    tasks: any[] = [];
 
-	cargar = false;
-	viewTitle = '';
-	calendar = {
+    cargar = false;
+    viewTitle = '';
+    calendar = {
         eventSource: [],
         mode: 'month',
         currentDate: new Date(),
@@ -29,16 +30,17 @@ export class CalendarioPage {
         allDayLabel: 'Todo el día',
         formatWeekTitle: 'MMMM yyyy, Se $n'
     };
-	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 
-		this.getDatos.traerDatos();
-	}
+       this.getDatos.saveData();
+    }
 
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad CalendarioPage');
-	}
-	onViewTitleChanged(title) {
+    ionViewDidLoad() {
+        console.log('ionViewDidLoad CalendarioPage');
+    }
+    onViewTitleChanged(title) {
         this.viewTitle = title;
     }
+
 
 }
