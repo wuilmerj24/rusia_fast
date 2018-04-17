@@ -31,28 +31,8 @@ export class CalendarioPage {
 
         var self = this;
         this.getDatos.crearBD().then(
-           function(eventos) {
-               console.log('OK!');
-               //console.log(eventos);
-
-                /*for (var key in guia) {
-                    var dateStart = new Date(String((guia[key]).date_begin).replace(' ', 'T'));
-                    var dateEnd = new Date(String((guia[key]).date_end).replace(' ', 'T'));
-                    var startTime = new Date(dateStart.getFullYear(), dateStart.getMonth(), dateStart.getDate(), dateStart.getHours(), dateStart.getMinutes());
-                    var endTime = new Date(dateEnd.getFullYear(), dateEnd.getMonth(), dateEnd.getDate(), dateEnd.getHours(), dateEnd.getMinutes());
-                    guia[key].startTime = startTime;
-                    guia[key].endTime = endTime;
-                    guia[key].title = (guia[key]).tour_id[1];
-                    //guia[key].title = 'cualquiercosa';
-                    guia[key].allDay = false;
-                    guia[key].reservas = [];
-                    guia[key].futuras = [];
-                    guia[key].guia_id = guia[key].guia_id ? guia[key].guia_id : '';
-                    guia[key].observaciones = guia[key].observaciones ? guia[key].observaciones : '';
-                    guia[key].no_editable = self.add;
-
-                    ids.push(guia[key].id);
-                }*/
+           function(eventos: {rows}) {
+               //console.log('OK!');
                var event_format = [];
 
                 for(var i=0; i<eventos.rows.length; i++) {

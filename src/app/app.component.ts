@@ -11,6 +11,7 @@ import { GuiaPage } from '../pages/guia/guia';
 import { GananciasPage } from '../pages/ganancias/ganancias';
 import { ReservasPage } from '../pages/reservas/reservas';
 import { AcercaPage } from '../pages/acerca/acerca';
+import { DetallesReservaPage } from '../pages/detalles-reserva/detalles-reserva';
 
 @Component({
   templateUrl: 'app.html'
