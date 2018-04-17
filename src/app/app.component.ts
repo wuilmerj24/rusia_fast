@@ -18,7 +18,7 @@ import { AcercaPage } from '../pages/acerca/acerca';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = CalendarioPage;
+  rootPage: any;
 
   pages: Array<{title: string, component: any}>;
 
@@ -41,6 +41,7 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      this.rootPage = CalendarioPage;
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
