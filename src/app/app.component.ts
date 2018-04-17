@@ -3,8 +3,14 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
+
+import { CalendarioPage } from '../pages/calendario/calendario';
+import { ChoferPage } from '../pages/chofer/chofer';
+import { ConfiPage } from '../pages/confi/confi';
+import { GuiaPage } from '../pages/guia/guia';
+import { GananciasPage } from '../pages/ganancias/ganancias';
+import { ReservasPage } from '../pages/reservas/reservas';
+import { AcercaPage } from '../pages/acerca/acerca';
 
 @Component({
   templateUrl: 'app.html'
@@ -12,7 +18,7 @@ import { ListPage } from '../pages/list/list';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any = CalendarioPage;
 
   pages: Array<{title: string, component: any}>;
 
@@ -21,14 +27,14 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Calendario', component: HomePage },
-      { title: 'Chofer adjudicado', component: ListPage },
-      { title: 'Guia adjudicado', component: HomePage },
-      { title: 'Reservas', component: HomePage },
-      { title: 'Ganancias', component: HomePage },
-      { title: 'Configuración', component: HomePage },
-      { title: 'Acerca de', component: HomePage },
-      { title: 'Salir', component: HomePage },
+      { title: 'Calendario', component: CalendarioPage },
+      { title: 'Chofer adjudicado', component: ChoferPage },
+      { title: 'Guia adjudicado',  component:GuiaPage },
+      { title: 'Reservas', component: ReservasPage },
+      { title: 'Ganancias', component: GananciasPage },
+      { title: 'Configuración', component: ConfiPage },
+      { title: 'Acerca de', component: AcercaPage },
+      { title: 'Salir', component: 'salir' },
     ];
 
   }
