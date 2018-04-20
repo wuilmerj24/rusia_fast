@@ -21,15 +21,19 @@ export class LoginPage {
     cargar = false;    
    
    	//guia
-    //conexion = {usuario: 'alekseevadar@gmail.com', bd: 'rusia3', pwd: '123456'};
+    conexion = {usuario: 'alekseevadar@gmail.com', bd: 'rusia3', pwd: '123456'};
     //admin
-    conexion = {usuario: 'jdmas@maui.com.mx', bd: 'rusia3', pwd: 'rusia@2018'};
+    //conexion = {usuario: 'jdmas@maui.com.mx', bd: 'rusia3', pwd: 'rusia@2018'};
 //    conexion = {usuario: '', bd: 'rusia3', pwd: ''};
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getData:GetDatosProvider) {
 
 		var operacion = this.navParams.get('operacion');
 		if(operacion != null && operacion == 'salir'){
 			this.getData.deleteBD();
+		}else{
+			if(this.conexion.usuario != ""){
+				this.conectarApp();	
+			}			
 		}
 	}
 
@@ -40,8 +44,9 @@ export class LoginPage {
 	private conectarApp(){
 
 		var self = this;
+		self.cargar = true;
 		this.getData.login(this.conexion).then(res => {
-
+			self.cargar = false;
 			self.navCtrl.setRoot(CalendarioPage);							
 		}).catch(e => {
 			console.log(e.message);

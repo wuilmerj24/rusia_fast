@@ -15,12 +15,19 @@ export class GetDatosProvider {
 
 	public url = '/api';
 
+	tbl_gastos = "CREATE TABLE IF NOT EXISTS gastos("+
+	" id INTEGER PRIMARY KEY,"+
+	" concepto_gasto_id VARCHAR(255),"+
+	" tipo_moneda VARCHAR(20),"+	
+	" Total VARCHAR(20),"+	
+	" fecha VARCHAR(20));";
+
 	tbl_user  = "CREATE TABLE IF NOT EXISTS user("+
 	" id INTEGER,"+
 	" usuario VARCHAR(255),"+
 	" pwd VARCHAR(20),"+
 	" bd VARCHAR(20),"+
-	" tipo_usuario VARCHAR(20))";
+	" tipo_usuario VARCHAR(20));";
 
 	tbl_eventos = "CREATE TABLE IF NOT EXISTS eventos_root("+
 	" id INTEGER PRIMARY KEY,"+
@@ -32,6 +39,8 @@ export class GetDatosProvider {
 	" hora_final VARCHAR(10),"+
 	" name VARCHAR(255),"+
 	" is_padre VARCHAR(5),"+
+	" is_traslado VARCHAR(5),"+
+	" is_guia VARCHAR(5),"+
 	" fecha_padre VARCHAR(20),"+	
 	" guia_id VARCHAR(255),"+
 	" chofer_id VARCHAR(255),"	+	
@@ -53,7 +62,8 @@ export class GetDatosProvider {
 	" Servicio_Gastos VARCHAR(10),"+
 	" tarjeta_eur VARCHAR(10),"+
 	" tarjeta_rub VARCHAR(10),"+
-	" tarjeta_usd VARCHAR(10))";
+	" tarjeta_usd VARCHAR(10),"+
+	" gastostoursline_ids VARCHAR(255));";
 /*
 	"tarjeta_usd_pos",
 	"Total_Rub",
@@ -87,6 +97,8 @@ export class GetDatosProvider {
 	"Total_Beneficios",
 	"tarjeta_usd_pos",
 	"Transporte",
+	"is_traslado",
+	"is_guia",
 	"hotel_id",
 	"ciudad_id",
 	"Servicio_Gastos",
@@ -142,6 +154,12 @@ export class GetDatosProvider {
 	"is_general",
 	"is_traslados"];
 
+	tbl_gastos_odoo =[
+	"concepto_gasto_id",
+	"tipo_moneda",
+	"Total",
+	"fecha"]
+
 	constructor(private sqlite: SQLite) {
 
 	}
@@ -168,7 +186,7 @@ export class GetDatosProvider {
 					});
 
 		  	}).catch(e => {
-		  		console.log('Error en CONEXION');
+		  		console.log('Error en getTable');
 		  		console.log(e.message);
 		  		reject(e)
 		  	});
@@ -190,7 +208,8 @@ export class GetDatosProvider {
 		      location: 'default'
 		    }).then((db: SQLiteObject) => {
 		      
-		      db.executeSql(self.tbl_eventos, {})
+		      var sql = [self.tbl_eventos, self.tbl_gastos];
+		      db.sqlBatch(sql)
 		      .then(
 		      	res => {
 		      		console.log('BD created - OK');
@@ -208,11 +227,11 @@ export class GetDatosProvider {
 							}else{
 								dominio = [['is_padre', '=' , false], ["guia_id", "=", usr.id]];
 							}
-				      		var sql = [];
-				      		self.search_read('rusia.eventos', dominio, //, '', 'date_begin',
-				                         self.tbl_eventos_root).then(function(eventos) {
-				      		//self.getData().then(function(eventos) {
-
+				      		sql = [];
+				      		self.search_read('rusia.eventos', dominio, self.tbl_eventos_root)
+				      		.then(function(eventos) {
+				      		
+				      			console.log('resolvio eventos');
 						  		Object.keys(eventos).forEach(key=> {
 
 								    console.log(eventos[key]);   
@@ -223,7 +242,7 @@ export class GetDatosProvider {
 								    	" chofer_id, gasto_rub, gasto_eur, gasto_usd, gasto_paypal, Comentarios_Chofer,"+
 								    	" Comentarios_Internos, Comentarios_Cliente, Comentarios_Guia, Fecha_Fin, Transporte, hotel_id,"+
 								    	" ciudad_id, Total_Representante, message, numero_pax, evento_id, Servicio_Gastos, tarjeta_eur,"+
-								    	" tarjeta_rub, tarjeta_usd)"+
+								    	" tarjeta_rub, tarjeta_usd, is_guia, is_traslado, gastostoursline_ids)"+
 								    	" VALUES (" + eventos[key].id + ", '"+ JSON.stringify(eventos[key].Datos_Cliente_id)+"', '" +
 								    	JSON.stringify(eventos[key].representante_id)+ "', '" + eventos[key].Fecha_Inicio +"','" + 
 								    	eventos[key].hora_inicio + "', '" + eventos[key].hora_final + "', '" + 
@@ -237,32 +256,61 @@ export class GetDatosProvider {
 								    	eventos[key].Transporte+"', '"+JSON.stringify(eventos[key].hotel_id)+"', '"+JSON.stringify(eventos[key].ciudad_id)+"', '"+
 								    	eventos[key].Total_Representante+"', '"+eventos[key].message+"', '"+eventos[key].numero_pax+"', '"+
 								    	JSON.stringify(eventos[key].evento_id)+"', '"+eventos[key].Servicio_Gastos+"', '"+eventos[key].tarjeta_eur+"', '"+
-								    	eventos[key].tarjeta_rub+"', '"+eventos[key].tarjeta_usd+"');");
+								    	eventos[key].tarjeta_rub+"', '"+eventos[key].tarjeta_usd+"' , '"+eventos[key].is_guia+"', '"+eventos[key].is_traslado+"', '"+ JSON.stringify(eventos[key].gastostoursline_ids)+"');");
 								});
 		 
 					   			db.sqlBatch(sql)
 						        .then(res => {
 						        	
-						        	console.log('GUARDADO SQL');
-						        	//resolve();
-						        	//resolve('Executed SQL');				          	
-									db.executeSql('SELECT * FROM eventos_root ORDER BY id DESC', {})
-										.then(res => {
+						        	
+						        	sql = [];
+						        	self.search_read('rusia.gastostoursline', [["id", "<>", '0']], self.tbl_gastos_odoo)
+						      		.then(function(gastos) {
+						      		
 
-											resolve(res);
+						      			console.log('resolvio gastos');
+//						      			resolve(true);
+								  		Object.keys(gastos).forEach(key=> {
+
+										    //console.log(JSON.stringify(gastos[key])); JSON.stringify(gastos[key].concepto_gasto_id) 
+
+
+										    sql.push("INSERT OR IGNORE INTO gastos "+
+										    	"(id, concepto_gasto_id, tipo_moneda, Total, fecha)"+
+										    	" VALUES (" + gastos[key].id + ", 'dummy', '" 
+										    	+gastos[key].tipo_moneda +"', '"+ gastos[key].Total+ "', '" + gastos[key].fecha +"');");
+										});
+									    //console.log(JSON.stringify(sql));  										   
+
+
+				 
+							   			db.sqlBatch(sql)
+								        .then(res => {
+								        									        	
+								        	resolve(true);
+												
 										}).catch(e => {
 											console.log(e.message);
 											reject(e);
 										});
-										
-									}).catch(e => {
-										console.log(e.message);
-										reject(e);
-									});
 
-							  }, function() {
-							  		console.log('Error search_read');
-							  		reject('Error search_read');
+								  	}, 
+									function() {
+								  		console.log('Error search_read');
+								  		console.log('Loading offline gastos');
+								  		resolve(true);							  		
+									});
+										
+								}).catch(e => {
+									console.log(e.message);
+									reject(e);
+								});
+
+						  	}, 
+							function() {
+						  		console.log('Error search_read');
+						  		console.log('Loading offline events');
+						  		resolve(true);							  		
 							});						
 						},
 						function(){
@@ -310,7 +358,7 @@ export class GetDatosProvider {
 
 						console.log('search_read OK');
 
-						odoo.search_read(tabla, dominio,campos).then(
+						odoo.search_read(tabla, dominio, campos).then(
 	 
 				        function (tabla) {
 
@@ -358,95 +406,101 @@ export class GetDatosProvider {
 		var self = this;//http://185.129.251.102
 		var promise = new Promise(function (resolve, reject) {
             
-            //console.log('traer datos');//Rusia.eventos,
-			
-			var odoo = new OdooApi(self.url, conexion.bd);
-			odoo.login(conexion.usuario, conexion.pwd).then(
-			function (uid) {
-				
+            
+			self.getTable('SELECT * FROM user').then(
+	    	function(usuario: {rows}){
+	    		console.log('Loading offline user - OK');
+	    		resolve(true);
+	    	},	
+	    	fail => { 
+	    		var odoo = new OdooApi(self.url, conexion.bd);
+				odoo.login(conexion.usuario, conexion.pwd).then(
+				function (uid) {
+					
 
-				odoo.search_read('res.users', [['email', '=', conexion.usuario]], //, '', 'date_begin',
-		                         self.tbl_user_odoo).then(
-	 
-			    	function (user) {
+					odoo.search_read('res.users', [['email', '=', conexion.usuario]], //, '', 'date_begin',
+			                         self.tbl_user_odoo).then(
+		 
+				    	function (user) {
 
-			    		console.log(user[0]);
-			    		console.log('get login user OK');
+				    		console.log(user[0]);
+				    		console.log('get login user OK');
 
 
-			    		var tipo = '';
+				    		var tipo = '';
 
-			    		if(user[0].is_chofer == true){
-			    			tipo = "is_chofer";
-			    		} else if(user[0].is_guia == true){
-			    			tipo = "is_guia";
-			    		}else if(user[0].is_rep == true){
-			    			tipo = "is_rep";
-			    		}else if(user[0].is_client == true){
-			    			tipo = "is_client";
-			    		}else if(user[0].is_root == true){
-			    			tipo = "is_root";
-			    		}else if(user[0].is_general == true){
-			    			tipo = "is_general";
-			    		}else if(user[0].is_traslados == true){
-			    			tipo = "is_traslados";
-			    		}else {
-			    			tipo = "is_chofer";
-			    		}
+				    		if(user[0].is_chofer == true){
+				    			tipo = "is_chofer";
+				    		} else if(user[0].is_guia == true){
+				    			tipo = "is_guia";
+				    		}else if(user[0].is_rep == true){
+				    			tipo = "is_rep";
+				    		}else if(user[0].is_client == true){
+				    			tipo = "is_client";
+				    		}else if(user[0].is_root == true){
+				    			tipo = "is_root";
+				    		}else if(user[0].is_general == true){
+				    			tipo = "is_general";
+				    		}else if(user[0].is_traslados == true){
+				    			tipo = "is_traslados";
+				    		}else {
+				    			tipo = "is_chofer";
+				    		}
 
-				        self.sqlite.create({
-				      		name: 'ionicdb.db',
-				      		location: 'default'
-				    	}).then((db: SQLiteObject) => {
-				      
-					      	db.executeSql(self.tbl_user, {})
-					      	.then(
-					      		res => {
-						      		console.log('Executed SQL');
-						      		//
-						      		var sql = [];
+					        self.sqlite.create({
+					      		name: 'ionicdb.db',
+					      		location: 'default'
+					    	}).then((db: SQLiteObject) => {
+					      
+						      	db.executeSql(self.tbl_user, {})
+						      	.then(
+						      		res => {
+							      		console.log('Executed SQL');
+							      		//
+							      		var sql = [];
 
-								    sql.push("INSERT OR IGNORE INTO user "+
-								    	"(id, usuario, pwd, bd, tipo_usuario)"+
-								    	" VALUES (" + uid +", '"+ conexion.usuario + "', '" + conexion.pwd +"', '" + conexion.bd + "', '" + tipo +	"');");
-									
-						   			db.sqlBatch(sql)
-							        .then(res => {
-							        	
-							        	resolve(true);
-											
-									}).catch(e => {
-										console.log(e.message);
-										reject(e);
-									});
+									    sql.push("INSERT OR IGNORE INTO user "+
+									    	"(id, usuario, pwd, bd, tipo_usuario)"+
+									    	" VALUES (" + uid +", '"+ conexion.usuario + "', '" + conexion.pwd +"', '" + conexion.bd + "', '" + tipo +	"');");
+										
+							   			db.sqlBatch(sql)
+								        .then(res => {
+								        	
+								        	resolve(true);
+												
+										}).catch(e => {
+											console.log(e.message);
+											reject(e);
+										});
 
-				  			}).catch(e => {
-				  				console.log('Error en CREATE TABLE');
-				  				console.log(e.message);
-				  				reject(e)
-				  			});
+					  			}).catch(e => {
+					  				console.log('Error en CREATE TABLE');
+					  				console.log(e.message);
+					  				reject(e)
+					  			});
 
-					  	}).catch(e => {
-					  		console.log('Error en CONEXION BD');
-					  		console.log(e.message);
-					  		reject(e)
-					  	});
+						  	}).catch(e => {
+						  		console.log('Error en CONEXION BD');
+						  		console.log(e.message);
+						  		reject(e)
+						  	});
 
-		        	//resolve();
-		        	
-			        },
-			    	function (){
-			    		console.log('Error get usuarios');
-			    		reject();
-			    	}
-		    	);
+			        	//resolve();
+			        	
+				        },
+				    	function (){
+				    		console.log('Error get usuarios');
+				    		reject();
+				    	}
+			    	);
 
-			},
-			function (){
-				console.log('Error conexion login');
-				reject()
-			});
-
+				},
+				function (){
+					console.log('Error conexion login');
+					reject()
+				});
+		    	}
+	    	);			
         });
 
         return promise;

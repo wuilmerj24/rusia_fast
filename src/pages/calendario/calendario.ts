@@ -31,32 +31,45 @@ export class CalendarioPage {
     constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 
         var self = this;
-        this.getDatos.crearBD().then(
-           function(eventos: {rows}) {
-               //console.log('OK!');
-               var event_format = [];
+        this.getDatos.crearBD().then(          
+           function(bol) {
 
-                for(var i=0; i<eventos.rows.length; i++) {
-                    
-                    var dateStart = new Date(String(eventos.rows.item(i).Fecha_Inicio).replace(' ', 'T'));
-                    var hora_ini = eventos.rows.item(i).hora_inicio.split(":") //<--MAC
-                    var hora_fin = eventos.rows.item(i).hora_final.split(":") //<--MAC
-                    
-                    //var dateEnd = new Date(String(eventos.rows.item(i).Fecha_Inicio).replace(' ', 'T'));
-                    event_format.push({
-                        startTime:new Date(dateStart.getFullYear(), dateStart.getMonth(), dateStart.getDate(), hora_ini[0], hora_ini[1]),
-                        endTime:new Date(dateStart.getFullYear(), dateStart.getMonth(), dateStart.getDate(), hora_fin[0], hora_fin[1]),
-                        title:eventos.rows.item(i).name,
-                        allDay:false,
-                        id:eventos.rows.item(i).id
-                    });
-                }
-                self.calendar.eventSource = event_format;
-                self.cargar = false;
+              if(bol){
+
+                self.getDatos.getTable('SELECT * FROM eventos_root ORDER BY id DESC').then(
+
+                function(eventos: {rows}){
+                 console.log('eventos loaded - OK');
+                 var event_format = [];
+
+                  for(var i=0; i<eventos.rows.length; i++) {
+                      
+                      var dateStart = new Date(String(eventos.rows.item(i).Fecha_Inicio).replace(' ', 'T'));
+                      var hora_ini = eventos.rows.item(i).hora_inicio.split(":") //<--MAC
+                      var hora_fin = eventos.rows.item(i).hora_final.split(":") //<--MAC
+                      
+                      //var dateEnd = new Date(String(eventos.rows.item(i).Fecha_Inicio).replace(' ', 'T'));
+                      event_format.push({
+                          startTime:new Date(dateStart.getFullYear(), dateStart.getMonth(), dateStart.getDate(), hora_ini[0], hora_ini[1]),
+                          endTime:new Date(dateStart.getFullYear(), dateStart.getMonth(), dateStart.getDate(), hora_fin[0], hora_fin[1]),
+                          title:eventos.rows.item(i).name,
+                          allDay:false,
+                          id:eventos.rows.item(i).id
+                      });
+                  }                  
+                  self.calendar.eventSource = event_format;
+                  self.cargar = false;
+                },
+                err =>{
+                  console.log('error after create BD');
+                });
+               }
+               
+               
            },
            function(e){
                console.log('Error en calendario');
-               //console.log(e);
+               console.log(e);
            });
     }
 

@@ -254,13 +254,13 @@
 	            <ion-textarea rows="15" name="evento.message" disabled [(ngModel)]="evento.message"> </ion-textarea>
 	        </ion-col>       
 	    </ion-row>
-<!--
+
 	     <ion-row align-items-center>  
 	        <ion-col col-6>
 	            <b>Transporte privado</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name=""  [readonly]="!editable" type="text" [(ngModel)]=""></ion-input>
+	            <ion-checkbox name="evento.is_traslado" [(ngModel)]="evento.is_traslado"></ion-checkbox>
 	        </ion-col>       
 	    </ion-row>
 
@@ -269,13 +269,42 @@
 	            <b>Guía privado</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name=""  [readonly]="!editable" type="text" [(ngModel)]=""></ion-input>
+	            <ion-checkbox name="evento.is_guia" [(ngModel)]="evento.is_guia"></ion-checkbox>
 	        </ion-col>       
 	    </ion-row>
--->
+
     </ion-grid>
 
-    <ion-grid *ngIf="categories[2].visible">
+    <ion-grid *ngIf="categories[2].visible" (click)="ejecute(item)">
+
+		<ion-row align-items-center>  
+            <ion-col col-3>
+                <b>Concepto</b>
+            </ion-col>
+            <ion-col col-3>
+                <b>Moneda</b>
+            </ion-col>       
+            <ion-col col-3>
+                <b>Total</b>
+            </ion-col>
+            <ion-col col-3>
+                <b>Fecha</b>
+            </ion-col>
+        </ion-row>        
+        <ion-row *ngFor="let gasto of gastostoursline_ids; let i = index" align-items-center >  
+            <ion-col col-3>
+                <b>{{gasto.concepto_gasto_id[1]}}</b>
+            </ion-col>
+            <ion-col col-3>
+                <b>{{gasto.tipo_moneda}}</b>
+            </ion-col>       
+            <ion-col col-3>
+                <b>{{gasto.Total}}</b>
+            </ion-col>
+            <ion-col col-3>
+                <b>{{gasto.fecha}}</b>
+            </ion-col>       
+        </ion-row>
 
     </ion-grid>
 

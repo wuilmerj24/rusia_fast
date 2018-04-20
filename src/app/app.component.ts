@@ -31,12 +31,12 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Calendario', component: CalendarioPage },
-      { title: 'Chofer adjudicado', component: ChoferPage },
+      /*{ title: 'Chofer adjudicado', component: ChoferPage },
       { title: 'Guia adjudicado',  component:GuiaPage },
       { title: 'Reservas', component: ReservasPage },
       { title: 'Ganancias', component: GananciasPage },
       { title: 'Configuración', component: ConfiPage },
-      { title: 'Acerca de', component: AcercaPage },
+      { title: 'Acerca de', component: AcercaPage },*/
       { title: 'Salir', component: 'salir' },
     ];
 

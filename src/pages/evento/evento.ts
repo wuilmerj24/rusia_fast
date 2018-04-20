@@ -52,7 +52,12 @@ export class EventoPage {
 	 Servicio_Gastos :'',
 	 tarjeta_eur :'',
 	 tarjeta_rub :'',
-	 tarjeta_usd :''}
+	 tarjeta_usd :'',
+	 is_traslado :false,
+	 is_guia:false
+	 }
+
+	 gastostoursline_ids = [];
 
 	private editable = false;
 
@@ -71,7 +76,17 @@ export class EventoPage {
 				var tmp_hotel_id = JSON.parse(eventos.rows.item(0).hotel_id);
 				var tmp_ciudad_id = JSON.parse(eventos.rows.item(0).ciudad_id);
 
-				console.log(tmp_evento_id[1])
+				var tmp_gatos = JSON.parse(eventos.rows.item(0).gastostoursline_ids);
+				var domanin = '';
+				for (var i = tmp_gatos.length - 1; i >= 0; i--) {
+
+					if(i == 0){
+						domanin = domanin + tmp_gatos[i];  
+					}else{
+						domanin = domanin + tmp_gatos[i] + ","  	
+					}
+				}
+				
 				self.evento = eventos.rows.item(0);
 				self.evento.evento_id = tmp_evento_id;
 				self.evento.cliente_id = tmp_cliente_id;
@@ -80,10 +95,22 @@ export class EventoPage {
 				self.evento.chofer_id = tmp_chofer_id;
 				self.evento.hotel_id = tmp_hotel_id;
 				self.evento.ciudad_id = tmp_ciudad_id;
+				//console.log(self.evento.name);
 
+				self.getDatos.getTable('SELECT * FROM gastos WHERE id IN (' + domanin +')').then(
+				function(gastos: {rows}){
 
-				//console.log(eventos.rows.item(0).evento_id);
-				//console.log( JSON.parse(eventos.rows.item(0).evento_id));
+					for(var i=0; i<gastos.rows.length; i++) {
+	                 
+	                     //console.log(JSON.stringify(gastos.rows.item(i)));      
+	                     self.gastostoursline_ids.push(gastos.rows.item(i));               
+	                }
+
+				},
+				fail=>{
+					console.log('Fail load gastos')
+				}
+				);
 
 			},
 			fail=>{
