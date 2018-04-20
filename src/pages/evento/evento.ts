@@ -60,12 +60,23 @@ export class EventoPage {
 	 gastostoursline_ids = [];
 
 	private editable = false;
+	private cargar = false;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
+		
+		this.initEvento();
+		this.initializeCategories();
+	}
 
+	ionViewDidLoad() {
+		console.log('ionViewDidLoad EventoPage');
+	}
+
+	private initEvento(){
 		this.evento_cal = this.navParams.get('evento');
 		var self = this;
-		this.getDatos.getTable('SELECT * FROM eventos_root WHERE id = ' + this.evento_cal.id).then(
+		self.cargar = true;
+		this.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE id = ' + this.evento_cal.id).then(
 			function(eventos: {rows}){
 
 				var tmp_evento_id = JSON.parse(eventos.rows.item(0).evento_id);
@@ -86,7 +97,7 @@ export class EventoPage {
 						domanin = domanin + tmp_gatos[i] + ","  	
 					}
 				}
-				
+
 				self.evento = eventos.rows.item(0);
 				self.evento.evento_id = tmp_evento_id;
 				self.evento.cliente_id = tmp_cliente_id;
@@ -97,7 +108,7 @@ export class EventoPage {
 				self.evento.ciudad_id = tmp_ciudad_id;
 				//console.log(self.evento.name);
 
-				self.getDatos.getTable('SELECT * FROM gastos WHERE id IN (' + domanin +')').then(
+				self.getDatos.ejecutarSQL('SELECT * FROM gastos WHERE id IN (' + domanin +')').then(
 				function(gastos: {rows}){
 
 					for(var i=0; i<gastos.rows.length; i++) {
@@ -105,6 +116,7 @@ export class EventoPage {
 	                     //console.log(JSON.stringify(gastos.rows.item(i)));      
 	                     self.gastostoursline_ids.push(gastos.rows.item(i));               
 	                }
+	                self.cargar = false;
 
 				},
 				fail=>{
@@ -116,14 +128,69 @@ export class EventoPage {
 			fail=>{
 				console.log('Fail load evento')
 			}
-			);
-
-		this.initializeCategories();
+		);	
 	}
+	
+	private editar() {
 
-	ionViewDidLoad() {
-	console.log('ionViewDidLoad EventoPage');
-	}
+        if (!this.editable) {
+            this.editable = true;
+        } else {
+            this.editable = false;
+        }
+    }
+
+    private guardar(){
+
+    	this.cargar = true;
+    	var self = this;
+		var campos = {
+			 //cliente_id :[0,''],
+			 //representante_id :[0,''],	 
+			 //Fecha_Inicio : this.evento.Fecha_Inicio,
+			 //Fecha_Fin :this.evento.Fecha_Fin,
+			 hora_inicio :this.evento.hora_inicio,
+			 hora_final :this.evento.hora_final,
+			 //name :'',
+			 //is_padre :'',
+			 //fecha_padre :'',	
+			 //guia_id :[0,''],
+			 //chofer_id :[0,''],	 
+			 gasto_rub :this.evento.gasto_rub,
+			 gasto_eur :this.evento.gasto_eur,
+			 gasto_usd :this.evento.gasto_usd,
+			 gasto_paypal :this.evento.gasto_paypal,
+			 Comentarios_Chofer :this.evento.Comentarios_Chofer,
+			 Comentarios_Internos :this.evento.Comentarios_Internos,
+			 Comentarios_Cliente :this.evento.Comentarios_Cliente,
+			 Comentarios_Guia:this.evento.Comentarios_Guia,
+			 Transporte :this.evento.Transporte,
+			 //hotel_id :[0,''],
+			 //ciudad_id :[0,''],
+			 Total_Representante :this.evento.Total_Representante,
+			 message:this.evento.message,
+			 numero_pax :this.evento.numero_pax,
+			 //evento_id : [0,''],
+			 Servicio_Gastos :this.evento.Servicio_Gastos,
+			 tarjeta_eur :this.evento.tarjeta_eur,
+			 tarjeta_rub :this.evento.tarjeta_rub,
+			 tarjeta_usd :this.evento.tarjeta_usd,
+			 is_traslado :false,
+			 is_guia:false
+		};
+		console.log('ID:' + this.evento.id)
+		console.log('usd:' + campos.gasto_usd)
+		this.getDatos.write('rusia.eventos', this.evento.id, campos).then(
+			res=>{
+				console.log('save event ok');
+				self.cargar = false;
+			},
+			fail=>{
+				console.log('error saving event');
+			}
+
+		);
+    }
 
   	initializeCategories() {
 

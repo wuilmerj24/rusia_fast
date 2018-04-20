@@ -36,7 +36,7 @@ export class CalendarioPage {
 
               if(bol){
 
-                self.getDatos.getTable('SELECT * FROM eventos_root ORDER BY id DESC').then(
+                self.getDatos.ejecutarSQL('SELECT * FROM eventos ORDER BY id DESC').then(
 
                 function(eventos: {rows}){
                  console.log('eventos loaded - OK');

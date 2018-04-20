@@ -29,7 +29,7 @@ export class GetDatosProvider {
 	" bd VARCHAR(20),"+
 	" tipo_usuario VARCHAR(20));";
 
-	tbl_eventos = "CREATE TABLE IF NOT EXISTS eventos_root("+
+	tbl_eventos = "CREATE TABLE IF NOT EXISTS eventos("+
 	" id INTEGER PRIMARY KEY,"+
 	" cliente_id VARCHAR(255),"+	
 	" representante_id VARCHAR(255),"+	
@@ -164,7 +164,7 @@ export class GetDatosProvider {
 
 	}
 
-	public getTable(select){
+	public ejecutarSQL(select){
 
 
 		var self = this;
@@ -186,7 +186,7 @@ export class GetDatosProvider {
 					});
 
 		  	}).catch(e => {
-		  		console.log('Error en getTable');
+		  		console.log('Error en ejecutarSQL');
 		  		console.log(e.message);
 		  		reject(e)
 		  	});
@@ -214,7 +214,7 @@ export class GetDatosProvider {
 		      	res => {
 		      		console.log('BD created - OK');
 
-		      		self.getTable('SELECT * FROM user').then(
+		      		self.ejecutarSQL('SELECT * FROM user').then(
 
 						function(data:{rows}){
 
@@ -226,7 +226,7 @@ export class GetDatosProvider {
 								dominio = [['is_padre', '=' , false]];								
 							}else{
 								dominio = [['is_padre', '=' , false], ["guia_id", "=", usr.id]];
-							}
+							} 
 				      		sql = [];
 				      		self.search_read('rusia.eventos', dominio, self.tbl_eventos_root)
 				      		.then(function(eventos) {
@@ -236,7 +236,7 @@ export class GetDatosProvider {
 
 								    console.log(eventos[key]);   
 
-								    sql.push("INSERT OR IGNORE INTO eventos_root "+
+								    sql.push("INSERT OR IGNORE INTO eventos "+
 								    	"(id, cliente_id, representante_id,"+
 								    	" Fecha_Inicio, hora_inicio , hora_final , name, is_padre, fecha_padre, guia_id,"+
 								    	" chofer_id, gasto_rub, gasto_eur, gasto_usd, gasto_paypal, Comentarios_Chofer,"+
@@ -338,12 +338,91 @@ export class GetDatosProvider {
 
 	}
 
+
+	write(tabla, dominio, campos){
+
+		var self = this;//http://185.129.251.102
+		var promise = new Promise(function (resolve, reject) {
+                    
+            self.ejecutarSQL('SELECT * FROM user').then(
+
+				function(data:{rows}){
+
+					var usr = data.rows.item(0);
+					//for(var i=0; i<data.rows.length; i++) {
+	                    
+	                //    self.reservas.push(data.rows.item(i));                    
+	                //}
+	                var odoo = new OdooApi(self.url, usr.bd);
+					odoo.login(usr.usuario, usr.pwd).then(
+					function (uid) {
+
+						
+
+						odoo.write(tabla, dominio, campos).then(
+	 
+				        function (ok_code) {
+
+				        	if(ok_code){
+
+				        		var set = ''
+				        		Object.keys(campos).forEach(key=> {
+
+				        			set = set + key +" = '"+campos[key]+"', ";
+				        			console.log();
+				        		});
+
+				        		var tabla_bd = tabla.split('.')[1];
+
+				        		set = set.substring(0, set.length - 2); // "12345.0"
+				        		set = set + " ";
+				        		console.log("UPDATE " + tabla_bd + " SET " + set + " WHERE id = "+ dominio);
+				        		self.ejecutarSQL("UPDATE " + tabla_bd + " SET " + set + " WHERE id = "+ dominio).then(
+				        			res =>{
+				        				console.log('write OK: ' + ok_code);
+				        				console.log(res);
+				        				resolve(res);
+				        			},
+				        			fail =>{				        				
+				        				console.log('Fail update BD');
+				        				reject();			
+				        			}
+				        		);				        		
+				        		//resolve(ok_code);				        		
+				        	}else{
+				        		console.log('Fail update Odoo');
+				        		reject();	
+				        	}							
+				        },
+				    	function (){
+				    		console.log('error');
+				    		reject();
+				    	})
+
+					},
+					function (){
+						console.log('error');
+						reject()
+					});
+				},
+				function(){
+					console.log('Error get table user');
+					reject()
+				}
+			);			
+
+        });
+
+        return promise;	        
+	}
+
+
 	public search_read(tabla, dominio, campos){
 
 		var self = this;//http://185.129.251.102
 		var promise = new Promise(function (resolve, reject) {
                     
-            self.getTable('SELECT * FROM user').then(
+            self.ejecutarSQL('SELECT * FROM user').then(
 
 				function(data:{rows}){
 
@@ -407,7 +486,7 @@ export class GetDatosProvider {
 		var promise = new Promise(function (resolve, reject) {
             
             
-			self.getTable('SELECT * FROM user').then(
+			self.ejecutarSQL('SELECT * FROM user').then(
 	    	function(usuario: {rows}){
 	    		console.log('Loading offline user - OK');
 	    		resolve(true);
