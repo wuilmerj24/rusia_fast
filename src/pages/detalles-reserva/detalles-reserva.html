@@ -47,14 +47,14 @@
 	    </ion-segment-button>
 	</ion-segment>
 
-	<ion-grid>                 
+	<ion-grid *ngIf="categories[0].visible">                 
         
         <ion-row align-items-center>  
             <ion-col col-6>
                 <b>Num. reserva</b>
             </ion-col>
-            <ion-col col-4>
-                       
+            <ion-col col-6>
+               <ion-input name="reserva.name" placeholder='0' [readonly]="!editable" type="text" [(ngModel)]="reserva.name"></ion-input>
             </ion-col>       
         </ion-row>      
         <ion-row align-items-center>  
@@ -62,7 +62,7 @@
                 <b>Represetante</b>
             </ion-col>
             <ion-col col-6>
-                
+                <ion-input name="reserva.representante_nombree" placeholder='0' [readonly]="!editable" type="text" [(ngModel)]="reserva.representante_nombre"></ion-input>
             </ion-col>       
         </ion-row>    
 
@@ -71,7 +71,7 @@
                 <b>Cliente</b>
             </ion-col>
             <ion-col col-6>
-                
+                <ion-input name="reserva.cliente_nombre" placeholder='0' [readonly]="!editable" type="text" [(ngModel)]="reserva.cliente_nombre"></ion-input>
             </ion-col>       
         </ion-row>    
         

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+	<!--[if IE ]>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<![endif]-->
+	<link rel="profile" href="http://gmpg.org/xfn/11" />
+	<title>How to install Zoom Conference on Ubuntu 16.04 LTS | lynxbee</title>
+	<!--iOS/android/handheld specific -->
+<link rel="apple-touch-icon" href="http://www.lynxbee.com/wp-content/themes/spike/apple-touch-icon.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<link rel="pingback" href="http://www.lynxbee.com/xmlrpc.php" />
+	<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//s.gravatar.com' />
+<link rel='dns-prefetch' href='//platform-api.sharethis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="lynxbee &raquo; Feed" href="http://www.lynxbee.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="lynxbee &raquo; Comments Feed" href="http://www.lynxbee.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="lynxbee &raquo; How to install Zoom Conference on Ubuntu 16.04 LTS Comments Feed" href="http://www.lynxbee.com/how-to-install-zoom-conference-on-ubuntu-16-04-lts/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/www.lynxbee.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.5"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56692,8205,9792,65039],[55357,56692,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='collapscatlist_css-css'  href='http://www.lynxbee.com/wp-content/plugins/collapsing-category-list/collapsing-category-list.css?ver=4.9.5' type='text/css' media='all' />
+<link rel='stylesheet' id='old-fontawesome-css'  href='http://www.lynxbee.com/wp-content/themes/spike/css/font-awesome.min.css?ver=4.9.5' type='text/css' media='all' />
+<link rel='stylesheet' id='stylesheet-css'  href='http://www.lynxbee.com/wp-content/themes/spike/style.css?ver=4.9.5' type='text/css' media='all' />
+<style id='stylesheet-inline-css' type='text/css'>
+
+		body {background-color:#ffffff; }
+		body {background-image: url(http://www.lynxbee.com/wp-content/themes/spike/images/nobg.png);}
+		.main-header { background-color: #FFFFFF; background-image: url(http://www.lynxbee.com/wp-content/themes/spike/images/nobg.png);}
+		footer {background-color:#F5F5F5; background-image: url(http://www.lynxbee.com/wp-content/themes/spike/images/nobg.png);}
+		#navigation ul .current-menu-item a, #navigation ul li:hover > a, #navigation ul .current-menu-item:before, #navigation ul li:hover:before, #navigation ul li:hover:after, .postauthor h5, .single_post a, .textwidget a, .pnavigation2 a, .sidebar.c-4-12 a:hover, .copyrights a:hover, footer .widget li a:hover, .sidebar.c-4-12 a:hover, .related-posts a:hover, .title a:hover, .post-info a:hover,.comm, #tabber .inside li a:hover, .readMore a:hover, a, a:hover { color:#f33e0f; }	
+			.reply a, .flex-control-paging li a.flex-active, .currenttext, .pagination a:hover, .single .pagination a:hover .currenttext, .sbutton, #searchsubmit, #commentform input#submit, .contactform #submit, .mts-subscribe input[type='submit'], #move-to-top:hover, #searchform .icon-search, .tagcloud a, a#pull, .secondary-navigation.mobile, .mobile #navigation, #load-posts > a, .pace .pace-progress, .widget_tabs2 .pagination a, .pagination .nav-previous a:hover, .pagination .nav-next a:hover, .flex-control-paging li a:hover, #featured-thumbnail .review-total-only { background-color:#f33e0f; color: #fff!important; }
+		.flex-control-thumbs .flex-active { border-top:3px solid #f33e0f;}
+		#navigation ul .current-menu-item a, #navigation > ul > li > a:hover { border-bottom: 1px solid #f33e0f; }
+		.tagcloud a .tab_count, .flex-control-paging li a, #logo, #load-posts > a:hover, #searchform .sbutton:hover, .mts-subscribe input[type='submit']:hover { background-color:#FFCA00; }
+		.pagination a {color:#FFCA00; }
+		.pagination a, .pagination2 { border: 1px solid #FFCA00; }
+		.currenttext, .pagination a:hover, .pagination2:hover, .widget_tabs2 .pagination a { border: 1px solid #f33e0f; }
+		#navigation ul ul { border-top: 1px solid #f33e0f; }
+		.slidertitle, .slidertext { background: rgba(243,62,15, 0.7) }
+		#wpmm-megamenu { border-top: 1px solid #f33e0f;}
+		#navigation > ul > li.menu-item-wpmm-megamenu > a:hover, #navigation > ul > li.wpmm-megamenu-showing > a { border: none; color: #f33e0f !important; }
+		
+		
+		
+		
+		
+		.single_post_below { float: left; width: 100%; margin-top: 27px; }
+		.single_post_below .related-posts li { margin: 0 2% 0 0; width: 23.5%; } .relatedthumb { float: left; width: 100% }
+		.post-single-content, .single_post_below .rthumb, .relatedthumb img { width: 100% }
+		.post-single-content { max-width: 850px; }
+		.single_post_below .related-posts h3 { font-weight: 700 }
+		.shareit { top: 282px; left: auto; z-index: 0; margin: 0 0 0 -123px; width: 90px; position: fixed; overflow: hidden; padding: 5px; border:none; border-right: 0;}
+		.share-item {margin: 2px;}
+		
+		.bypostauthor .commentmetadata {background: rgba(0, 0, 0, 0.02);border: 1px solid rgba(0, 0, 0, 0.06);}
+		.bypostauthor .commentmetadata:after { font-size: 12px; content: "Author"; position: absolute; right: 0; top: 0; padding: 1px 10px; background: rgba(0, 0, 0, 0.2); color: #FFF; }
+		
+		
+			
+</style>
+<link rel='stylesheet' id='responsive-css'  href='http://www.lynxbee.com/wp-content/themes/spike/css/responsive.css?ver=4.9.5' type='text/css' media='all' />
+<link rel='stylesheet' id='jetpack_css-css'  href='http://www.lynxbee.com/wp-content/plugins/jetpack/css/jetpack.css?ver=5.9' type='text/css' media='all' />
+<script type='text/javascript' src='http://www.lynxbee.com/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://www.lynxbee.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://www.lynxbee.com/wp-content/plugins/collapsing-category-list/js/dropdown.js?ver=4.9.5'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var related_posts_js_options = {"post_heading":"h4"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://www.lynxbee.com/wp-content/plugins/jetpack/_inc/build/related-posts/related-posts.min.js?ver=20150408'></script>
+<script type='text/javascript' src='http://www.lynxbee.com/wp-content/themes/spike/js/customscript.js?ver=4.9.5'></script>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#product=ga&#038;property=59a148ce87742800112257b5'></script>
+<link rel='https://api.w.org/' href='http://www.lynxbee.com/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.lynxbee.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.lynxbee.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='How to create pubDate xml tag manually using Linux date command ?' href='http://www.lynxbee.com/how-to-create-pubdate-xml-tag-manually-using-linux-date-command/' />
+<link rel='next' title='Understanding Linux File Color Coding / Meaning of different Colors in &#8220;ls&#8221; command' href='http://www.lynxbee.com/understanding-linux-file-color-coding-meaning-of-different-colors-in-ls-command/' />
+<!--Theme by MyThemeShop.com-->
+<link rel="canonical" href="http://www.lynxbee.com/how-to-install-zoom-conference-on-ubuntu-16-04-lts/" />
+<link rel='shortlink' href='https://wp.me/p6rxuU-lM' />
+<link rel="alternate" type="application/json+oembed" href="http://www.lynxbee.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.lynxbee.com%2Fhow-to-install-zoom-conference-on-ubuntu-16-04-lts%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://www.lynxbee.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.lynxbee.com%2Fhow-to-install-zoom-conference-on-ubuntu-16-04-lts%2F&#038;format=xml" />
+<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='29dff200d665ba006d86e900f8a66900271ee2002d5d490078cbed000aaebe00';j.dataset.sumoPlatform='wordpress';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+<link rel='dns-prefetch' href='//v0.wordpress.com'/>
+<link rel='dns-prefetch' href='//i0.wp.com'/>
+<link rel='dns-prefetch' href='//i1.wp.com'/>
+<link rel='dns-prefetch' href='//i2.wp.com'/>
+<style type='text/css'>img#wpstats{display:none}</style><link href="//fonts.googleapis.com/css?family=Sintony:normal|Monda:700&amp;subset=latin" rel="stylesheet" type="text/css">
+<style type="text/css">
+.menu li a { font-family: 'Sintony'; font-weight: normal; font-size: 14px; color: #999999; }
+h1 { font-family: 'Monda'; font-weight: 700; font-size: 28px; color: #444444; }
+h2 { font-family: 'Monda'; font-weight: 700; font-size: 24px; color: #444444; }
+h3 { font-family: 'Monda'; font-weight: 700; font-size: 22px; color: #444444; }
+h4 { font-family: 'Monda'; font-weight: 700; font-size: 20px; color: #444444; }
+h5 { font-family: 'Monda'; font-weight: 700; font-size: 18px; color: #444444; }
+h6 { font-family: 'Monda'; font-weight: 700; font-size: 16px; color: #444444; }
+body { font-family: 'Sintony'; font-weight: normal; font-size: 16px; color: #868686; }
+</style>
+<script type="text/javascript">document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/,'js');</script>
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="How to install Zoom Conference on Ubuntu 16.04 LTS" />
+<meta property="og:url" content="http://www.lynxbee.com/how-to-install-zoom-conference-on-ubuntu-16-04-lts/" />
+<meta property="og:description" content="Zoom is provides video communications, with a secure, easy platform for video and audio conferencing, messaging, and webinars across mobile, desktop, and room systems. With zoom we will also be abl…" />
+<meta property="article:published_time" content="2017-08-18T10:12:23+00:00" />
+<meta property="article:modified_time" content="2017-08-18T10:26:01+00:00" />
+<meta property="og:site_name" content="lynxbee" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:text:title" content="How to install Zoom Conference on Ubuntu 16.04 LTS" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="@lynxbees" />
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+</head>
+<body id ="blog" class="post-template-default single single-post postid-1350 single-format-standard main" itemscope itemtype="http://schema.org/WebPage">
+	<div class="main-container-wrap">
+		<header class="main-header">
+							<div class="rainbow"></div>
+						<div class="container">
+				<div id="header">
+											<div class="logo-wrap">
+																								  <h2 id="logo" class="text-logo">
+											<a href="http://www.lynxbee.com">lynxbee</a>
+										</h2><!-- END #logo -->
+																					</div>
+										  
+					<div class="secondary-navigation search-navigation">
+						<nav id="navigation" class="clearfix">
+															<ul id="menu-lynxbee-menu" class="menu clearfix"><li id="menu-item-957" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-957"><a href="http://www.lynxbee.com/category/kernel-device-drivers/">Device Drivers</a></li>
+</ul>														<a href="#" id="pull">Menu</a>
+															<span id="headersearch" class="search_li">
+									<form method="get" id="searchform" class="search-form" action="http://www.lynxbee.com" _lpchecked="1">
+	<fieldset>
+		<input type="text" name="s" id="s" value="" placeholder="Search the site" x-webkit-speech="x-webkit-speech" autocomplete="off" >
+		<input id="search-image" class="sbutton" type="submit" value="Search">
+	</fieldset>
+</form>								</span>
+													</nav>
+					</div>              
+				</div><!--#header-->
+			</div><!--.container-->        
+		</header>
+		<div class="main-container">
+			<div id="page" class="single">
+	<article class="article">
+		<div id="content_box" >
+							<div id="post-1350" class="g post post-1350 type-post status-publish format-standard hentry category-kernel-device-drivers tag-conference">
+					<div class="single_post">
+													<div class="breadcrumb" xmlns:v="http://rdf.data-vocabulary.org/#"><span typeof="v:Breadcrumb"><a rel="v:url" property="v:title" href="http://www.lynxbee.com" rel="nofollow"><i class="icon-home"></i>&nbsp;Home</a></span>&nbsp;>&nbsp;<span typeof="v:Breadcrumb"><a href="http://www.lynxbee.com/category/kernel-device-drivers/" rel="v:url" property="v:title">Kernel &amp; Device Drivers</a></span>&nbsp;>&nbsp;<span typeof='v:Breadcrumb'><span property='v:title'>How to install Zoom Conference on Ubuntu 16.04 LTS</span></span></div>
+												<header>
+							<h1 class="entry-title title single-title">How to install Zoom Conference on Ubuntu 16.04 LTS</h1>
+															<div class="post-info">
+																												<span class="thetime"><i class="icon-calendar"></i> August 18, 2017</span><span class="published" style="display: none;">2017-08-18T15:42:23+00:00</span><span class="updated" style="display: none;">2017-08-18T15:56:01+00:00</span>
+																												<span class="thecategory"><i class="icon-tags"></i> <a href="http://www.lynxbee.com/category/kernel-device-drivers/" rel="nofollow">Kernel &amp; Device Drivers</a></span>
+																										</div>
+													</header><!--.headline_area-->
+						<div class="post-single-content box mark-links entry-content">
+																								<div class="topad">
+										<script id="mNCC" language="javascript">
+    medianet_width = "600";
+    medianet_height = "250";
+    medianet_crid = "151474876";
+    medianet_versionId = "3111299"; 
+  </script>
+<script src="//contextual.media.net/nmedianet.js?cid=8CU64HOIG"></script>									</div>
+																													<p>Zoom is provides video communications, with a secure, easy platform for video and audio conferencing, messaging, and webinars across mobile, desktop, and room systems. With zoom we will also be able to share our screen.</p>
+<p>Below we will describe how to install Latest Zoom on latest ubuntu version,</p>
+<p>You can check your ubuntu version as,</p>
+<pre>$ lsb_release -a
+LSB Version:	core-9.20160110ubuntu0.2-ia32:core-9.20160110ubuntu0.2-noarch:security-9.20160110ubuntu0.2-ia32:security-9.20160110ubuntu0.2-noarch
+Distributor ID:	Ubuntu
+Description:	Ubuntu 16.04.2 LTS
+Release:	16.04
+Codename:	xenial
+</pre>
+<p>You can use below commands on terminal for downloading using wget as,</p>
+<p>For 64 bit Ubuntu</p>
+<pre> wget -c https://zoom.us/client/latest/zoom_amd64.deb </pre>
+<p>For 32 bit Ubuntu</p><div class='code-block code-block-2' style='margin: 8px 0; clear: both;'>
+<script id="mNCC" language="javascript">
+    medianet_width = "600";
+    medianet_height = "250";
+    medianet_crid = "151474876";
+    medianet_versionId = "3111299"; 
+  </script>
+<script src="//contextual.media.net/nmedianet.js?cid=8CU64HOIG"></script></div>
+
+<pre> wget -c https://zoom.us/client/latest/zoom_i386.deb </pre>
+<p>Or Alternatively you can download your compatible architecture deb package from Zoom download page at https://zoom.us/download</p>
+<p>Install Zoom using dpkg as,</p>
+<pre>
+$ sudo dpkg -i zoom_i386.deb 
+Selecting previously unselected package zoom.
+(Reading database ... 468305 files and directories currently installed.)
+Preparing to unpack zoom_i386.deb ...
+Unpacking zoom (2.0.98253.0707) ...
+Setting up zoom (2.0.98253.0707) ...
+run post install script, action is configure...
+Processing triggers for shared-mime-info (1.5-2ubuntu0.1) ...
+Processing triggers for desktop-file-utils (0.22-1ubuntu5.1) ...
+Processing triggers for gnome-menus (3.13.3-6ubuntu3.1) ...
+Processing triggers for mime-support (3.59ubuntu1) ...
+Processing triggers for bamfdaemon (0.5.3~bzr0+16.04.20160824-0ubuntu1) ...
+Rebuilding /usr/share/applications/bamf-2.index...
+</pre>
+<p>Now, Zoom is installed successfully on your ubuntu.</p>
+<div style="clear:both; margin-top:0em; margin-bottom:1em;"><a href="http://www.lynxbee.com/what-is-electron/" target="_blank" rel="nofollow" class="u561872dbe6a1a3b1268b9f2de940bff7"><!-- INLINE RELATED POSTS 1/1 //--><style> .u561872dbe6a1a3b1268b9f2de940bff7 { padding:0px; margin: 0; padding-top:1em!important; padding-bottom:1em!important; width:100%; display: block; font-weight:bold; background-color:#27AE60; border:0!important; border-left:4px solid #D35400!important; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.17); -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.17); -o-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.17); -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.17); text-decoration:none; } .u561872dbe6a1a3b1268b9f2de940bff7:active, .u561872dbe6a1a3b1268b9f2de940bff7:hover { opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; text-decoration:none; } .u561872dbe6a1a3b1268b9f2de940bff7 { transition: background-color 250ms; webkit-transition: background-color 250ms; opacity: 1; transition: opacity 250ms; webkit-transition: opacity 250ms; } .u561872dbe6a1a3b1268b9f2de940bff7 .ctaText { font-weight:bold; color:#000000; text-decoration:none; font-size: 16px; } .u561872dbe6a1a3b1268b9f2de940bff7 .postTitle { color:#FFFFFF; text-decoration: underline!important; font-size: 16px; } .u561872dbe6a1a3b1268b9f2de940bff7:hover .postTitle { text-decoration: underline!important; } </style><div style="padding-left:1em; padding-right:1em;"><span class="ctaText">READ</span>&nbsp; <span class="postTitle">What is Electron ?</span></div></a></div><p>You can start zoom from command line as,</p>
+<pre> $ zoom </pre>
+<p>This will open a dialog window as &#8220;Zoom Cloud Meeting&#8221; by clicking to &#8220;Signin&#8221; you can login to zoom using &#8220;Sign In Google&#8221; if you are fine with using gmail account for login or create an account and use those credentials for login.</p>
+
+<div id='jp-relatedposts' class='jp-relatedposts' >
+	<h3 class="jp-relatedposts-headline"><em>Related</em></h3>
+</div><div class='code-block code-block-1' style='margin: 8px 0; clear: both;'>
+<script id="mNCC" language="javascript">
+    medianet_width = "600";
+    medianet_height = "250";
+    medianet_crid = "151474876";
+    medianet_versionId = "3111299"; 
+  </script>
+<script src="//contextual.media.net/nmedianet.js?cid=8CU64HOIG"></script></div>
+														 
+																								<!-- Start Share Buttons -->
+									<div class="shareit">
+																				<!-- Twitter -->
+										<span class="share-item twitterbtn">
+											<a href="https://twitter.com/share" class="twitter-share-button" data-via="">Tweet</a>
+										</span>
+																														<!-- GPlus -->
+										<span class="share-item gplusbtn">
+											<g:plusone size="medium"></g:plusone>
+										</span>
+																														<!-- Facebook -->
+										<span class="share-item facebookbtn">
+											<div id="fb-root"></div>
+											<div class="fb-like" data-send="false" data-layout="button_count" data-width="150" data-show-faces="false"></div>
+										</span>
+																																																		<!-- Pinterest -->
+										<span class="share-item pinbtn">
+											<a href="http://pinterest.com/pin/create/button/?url=http://www.lynxbee.com/how-to-install-zoom-conference-on-ubuntu-16-04-lts/&media=&description=How to install Zoom Conference on Ubuntu 16.04 LTS" class="pin-it-button" count-layout="horizontal">Pin It</a>
+										</span>
+																            </div>
+									<!-- end Share Buttons -->
+																							
+							  
+							 	
+							<!-- You can start editing here. -->
+	<div id="comments">
+		<div class="total-comments">One Response</div>
+			<ol class="commentlist">
+				<div class="navigation">
+					<div class="alignleft"></div>
+					<div class="alignright"></div>
+				</div>
+					<li class="comment even thread-even depth-1" id="li-comment-2199">
+		<div id="comment-2199" style="position:relative;">
+			<div class="comment-author vcard">
+				<img alt='' src='http://2.gravatar.com/avatar/e56972270335da29ddd62580416412c4?s=68&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/e56972270335da29ddd62580416412c4?s=136&#038;d=mm&#038;r=g 2x' class='avatar avatar-68 photo' height='68' width='68' />									<span class="ago">November 6, 2017</span>
+								<span class="comment-meta">
+									</span>
+			</div>
+						<div class="commentmetadata">
+				<span class="fn"><a href='https://www.codesign2.co.uk' rel='external nofollow' class='url'>Lewis Cowles</a></span> 
+				<p>This doesn&#8217;t universally work. Here&#8217;s what I&#8217;ve needed to do on my xenial (vanilla) systems</p>
+<p>&#8220;`<br />
+cd /tmp<br />
+wget -c <a href="https://zoom.us/client/latest/zoom_amd64.deb" rel="nofollow">https://zoom.us/client/latest/zoom_amd64.deb</a><br />
+sudo apt-get update -yqq &amp;&amp; sudo apt-get install -yqq &#8211;reinstall libglib2.0-0 libxcb-shape0 libxcb-shm0 libxcb-xfixes0 libxcb-randr0 libxcb-image0 libfontconfig1 libgl1-mesa-glx libegl1-mesa libxi6 libsm6 libxrender1 libpulse0 libxcomposite1 libxslt1.1 libsqlite3-0 libxcb-keysyms1 libxcb-xtest0<br />
+sudo dpkg -i zoom_amd64.deb<br />
+&#8220;`</p>
+<p>There were two packages apt was unable to resolve so I just insisted all deps (found wiht `dpkg -I zoom_amd64.deb` were installed</p>
+				<div class="reply">
+					<a rel='nofollow' class='comment-reply-link' href='http://www.lynxbee.com/how-to-install-zoom-conference-on-ubuntu-16-04-lts/?replytocom=2199#respond' onclick='return addComment.moveForm( "comment-2199", "2199", "respond", "1350" )' aria-label='Reply to Lewis Cowles'>Reply</a>				</div>
+			</div>
+		</div>
+	</li>
+</li><!-- #comment-## -->
+			</ol>
+		</div>
+
+	<div id="commentsAdd">
+		<div id="respond" class="box m-t-6">
+				<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title"><h4><span>Leave a Reply</span></h4></h4> <small><a rel="nofollow" id="cancel-comment-reply-link" href="/how-to-install-zoom-conference-on-ubuntu-16-04-lts/#respond" style="display:none;">Cancel reply</a></small></h3>			<form action="http://www.lynxbee.com/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+				<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p><p class="comment-form-author"><label for="author">Name (required)</label><input id="author" name="author" type="text" value="" size="30" /></p>
+<p class="comment-form-email"><label for="email">Email (required)</label><input id="email" name="email" type="text" value="" size="30" /></p>
+<p class="comment-form-url"><label for="url">Website</label><input id="url" name="url" type="text" value="" size="30" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='1350' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="65c98316de" /></p><p class="comment-subscription-form"><input type="checkbox" name="subscribe_comments" id="subscribe_comments" value="subscribe" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;" /> <label class="subscribe-label" id="subscribe-label" for="subscribe_comments">Notify me of follow-up comments by email.</label></p><p class="comment-subscription-form"><input type="checkbox" name="subscribe_blog" id="subscribe_blog" value="subscribe" style="width: auto; -moz-appearance: checkbox; -webkit-appearance: checkbox;" /> <label class="subscribe-label" id="subscribe-blog-label" for="subscribe_blog">Notify me of new posts by email.</label></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="60"/></p>			</form>
+			</div><!-- #respond -->
+			</div>
+	</div>
+						</div>		
+										 	
+				</div><!--.post-content box mark-links-->	
+			</div><!--.g post-->
+		</div>
+	</article>
+	<aside class="sidebar c-4-12">
+	<div id="sidebars" class="g">
+		<div class="sidebar">
+			<ul class="sidebar_list">
+				<div id="search-3" class="widget widget_search"><form method="get" id="searchform" class="search-form" action="http://www.lynxbee.com" _lpchecked="1">
+	<fieldset>
+		<input type="text" name="s" id="s" value="" placeholder="Search the site" x-webkit-speech="x-webkit-speech" autocomplete="off" >
+		<input id="search-image" class="sbutton" type="submit" value="Search">
+	</fieldset>
+</form></div><div id="categories-2" class="widget widget_categories"><h3 class="widget-title">Categories</h3>		<ul>
+	<li class="cat-item cat-item-304 current-cat current-cat-parent current-cat-parent"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/android/"">Android</a> (6)
+</li>
+	<li class="cat-item cat-item-364 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/android/android-java-applications/"">Android Java Applications</a> (1)
+</li>
+	<li class="cat-item cat-item-323 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/scripting-and-automation/bash-shell-scripts/"">Bash / Shell Scripts</a> (3)
+</li>
+	<li class="cat-item cat-item-317 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/linux-kernel/linux-device-drivers/bluetooth-device-driver/"">Bluetooth driver</a> (2)
+</li>
+	<li class="cat-item cat-item-298 current-cat current-cat-parent current-cat-parent"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/build-frameworks/"">Build Frameworks</a> (25)
+</li>
+	<li class="cat-item cat-item-333 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/programming-languages/c-programs/"">C Programs</a> (9)
+</li>
+	<li class="cat-item cat-item-306 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/linux-system-administration/sysadmin-commands/"">Commands</a> (17)
+</li>
+	<li class="cat-item cat-item-292 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/linux-kernel/core-kernel/""title="Core Kernel">Core Kernel</a> (10)
+</li>
+	<li class="cat-item cat-item-324 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/build-frameworks/development-environment-setup/"">Development Environment Setup</a> (9)
+</li>
+	<li class="cat-item cat-item-307 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/documents-books/"">Documents / Books</a> (1)
+</li>
+	<li class="cat-item cat-item-337 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/errors-failures/"">Errors &amp; Failures</a> (12)
+</li>
+	<li class="cat-item cat-item-327 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/hardware-platforms/external-peripherals/"">External Peripherals</a> (1)
+</li>
+	<li class="cat-item cat-item-343 current-cat-parent current-cat-parent current-cat current-cat-parent current-cat-parent current-cat-parent current-cat-parent current-cat-parent current-cat-parent"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/file-systems/"">File Systems</a> (2)
+</li>
+	<li class="cat-item cat-item-359 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/socurce-code-management-scm/git/"">git</a> (5)
+</li>
+	<li class="cat-item cat-item-361 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/programming-languages/go-language-programs/"">Go Language Programs</a> (3)
+</li>
+	<li class="cat-item cat-item-294 current-cat-parent current-cat-parent current-cat current-cat-parent"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/hardware-platforms/"">Hardware Platforms</a> (7)
+</li>
+	<li class="cat-item cat-item-1 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/kernel-device-drivers/"">Kernel &amp; Device Drivers</a> (157)
+</li>
+	<li class="cat-item cat-item-305 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/linux-kernel/linux-kernel-booting-and-porting/"">Kernel Booting and Porting</a> (4)
+</li>
+	<li class="cat-item cat-item-293 current-cat-parent current-cat-parent current-cat-parent current-cat-parent current-cat-parent current-cat-parent current-cat current-cat-parent current-cat-parent current-cat-parent current-cat-parent current-cat-parent current-cat-parent current-cat-parent current-cat-parent"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/linux-kernel/linux-device-drivers/""title="Linux Device Drivers">Linux Device Drivers</a> (14)
+</li>
+	<li class="cat-item cat-item-291 current-cat-parent current-cat-parent current-cat-parent current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/linux-kernel/""title="Linux Kernel">Linux Kernel</a> (18)
+</li>
+	<li class="cat-item cat-item-303 current-cat-parent current-cat current-cat-parent"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/linux-system-administration/"">Linux System Administration</a> (23)
+</li>
+	<li class="cat-item cat-item-295 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/middleware-libraries/"">Middleware Libraries</a> (11)
+</li>
+	<li class="cat-item cat-item-365 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/android/ndk-middleware-hal/"">NDK / Middleware / HAL</a> (3)
+</li>
+	<li class="cat-item cat-item-328 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/linux-system-administration/packages/"">Packages</a> (6)
+</li>
+	<li class="cat-item cat-item-340 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/web-design-and-development/php/"">PHP</a> (1)
+</li>
+	<li class="cat-item cat-item-344 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/file-systems/proc-filesystem/"">Procfs Filesystem</a> (1)
+</li>
+	<li class="cat-item cat-item-332 current-cat-parent current-cat-parent current-cat-parent current-cat-parent current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/programming-languages/"">Programming Languages</a> (12)
+</li>
+	<li class="cat-item cat-item-325 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/hardware-platforms/raspberrypi/"">RaspberryPi</a> (4)
+</li>
+	<li class="cat-item cat-item-321 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/linux-kernel/linux-device-drivers/rtc-device-driver/"">RTC driver</a> (1)
+</li>
+	<li class="cat-item cat-item-322 current-cat-parent current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/scripting-and-automation/"">Scripting and Automation</a> (3)
+</li>
+	<li class="cat-item cat-item-353 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/web-design-and-development/search-engine-optimisation-seo/"">Search Engine Optimisation ( SEO )</a> (2)
+</li>
+	<li class="cat-item cat-item-302 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/social-media/"">Social Media</a> (1)
+</li>
+	<li class="cat-item cat-item-358 current-cat-parent current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/socurce-code-management-scm/"">Socurce Code Management ( SCM )</a> (5)
+</li>
+	<li class="cat-item cat-item-345 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/file-systems/sysfs-filesystem/"">Sysfs filesystem</a> (1)
+</li>
+	<li class="cat-item cat-item-297 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/testing-and-debugging/"">Testing and Debugging</a> (17)
+</li>
+	<li class="cat-item cat-item-301 current-cat-parent current-cat-parent current-cat-parent current-cat-parent current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/web-design-and-development/"">Web design and development</a> (4)
+</li>
+	<li class="cat-item cat-item-299 current-cat"><img src="http://www.lynxbee.com/wp-content/plugins/collapsing-category-list//images/nothing.gif" width="9px" height="9px" /> <a href="http://www.lynxbee.com/category/build-frameworks/yocto-bitbake-openembedded/"">Yocto / Bitbake / Openembedded</a> (21)
+</li>
+		</ul>
+</div><div id="mts_related_posts_widget-2" class="widget widget_mts_related_posts_widget"><h3 class="widget-title">Related Posts</h3><ul class="related-posts-widget">		<li>
+			<a href="http://www.lynxbee.com/writing-and-understanding-first-c-program-helloworld-c/">
+				                                                                        <img src="http://www.lynxbee.com/wp-content/themes/spike/images/smallthumb.png" alt="Writing and Understanding First C program &#8211; helloworld.c" class="wp-post-image" />
+                                                                            Writing and Understanding First C program &#8211; helloworld.c			</a>
+			<div class="meta">
+									August 24, 2017													 &bull; 
+													No Comment											</div> <!--end .entry-meta-->
+		</li>	
+				<li>
+			<a href="http://www.lynxbee.com/linux-apt-get-command-usage/">
+				                                                                        <img src="http://www.lynxbee.com/wp-content/themes/spike/images/smallthumb.png" alt="Linux apt-get command usage" class="wp-post-image" />
+                                                                            Linux apt-get command usage			</a>
+			<div class="meta">
+									August 20, 2014													 &bull; 
+													No Comment											</div> <!--end .entry-meta-->
+		</li>	
+				<li>
+			<a href="http://www.lynxbee.com/android-useful-commands/">
+				                                                                        <img src="http://www.lynxbee.com/wp-content/themes/spike/images/smallthumb.png" alt="Android useful commands" class="wp-post-image" />
+                                                                            Android useful commands			</a>
+			<div class="meta">
+									July 28, 2015													 &bull; 
+													No Comment											</div> <!--end .entry-meta-->
+		</li>	
+				<li>
+			<a href="http://www.lynxbee.com/how-does-your-website-looks-on-different-mobile-devices-and-is-your-website-website-mobile-friendly/">
+				                                                                        <img src="http://www.lynxbee.com/wp-content/themes/spike/images/smallthumb.png" alt="how does your website looks on different mobile devices and is your website website mobile friendly ?" class="wp-post-image" />
+                                                                            how does your website looks on different mobile devices and is your website website mobile friendly ?			</a>
+			<div class="meta">
+									July 16, 2015													 &bull; 
+													No Comment											</div> <!--end .entry-meta-->
+		</li>	
+				<li>
+			<a href="http://www.lynxbee.com/send-data-using-http-post-from-client-and-receive-response-from-server-using-netcat-over-specific-port/">
+				                                                                        <img src="http://www.lynxbee.com/wp-content/themes/spike/images/smallthumb.png" alt="send data using http POST from client and receive response from server using netcat over specific port" class="wp-post-image" />
+                                                                            send data using http POST from client and receive response from server using netcat over specific port			</a>
+			<div class="meta">
+									November 9, 2017													 &bull; 
+													No Comment											</div> <!--end .entry-meta-->
+		</li>	
+		</ul>
+</div><div id="text-3" class="widget widget_text">			<div class="textwidget"><p><script id="mNCC" language="javascript">
+medianet_width = "300";
+medianet_height = "250";
+medianet_crid = "562935772";
+medianet_versionId = "111299";
+(function() {
+var isSSL = 'https:' == document.location.protocol;
+var mnSrc = (isSSL ? 'https:' : 'http:') + '//contextual.media.net/nmedianet.js?cid=8CU64HOIG' + (isSSL ? '&https=1' : '');
+document.write('<scr' + 'ipt type="text/javascript" id="mNSC" src="' + mnSrc + '"></scr' + 'ipt>');
+})();
+</script></p>
+</div>
+		</div>		
+<div id="tabs2-2" class="widget widget_tabs2">	<div id="tabs2-wrapper">	
+		<ul class="has-3 tabs">
+                        <li class="tab_title"><a href="#" id="popular-tab">Popular</a></li>
+			            			<li class="tab_title"><a href="#" id="recent-tab">Recent</a></li>
+                                                <li class="tab_title"><a href="#" id="tags-tab">Tags</a></li>
+                    </ul> <!--end .tabs-->
+		<div class="clear"></div>
+        
+		<div class="inside">
+            			<div id="popular-tab-content" class="tab-content">
+							
+		    </div> <!--end #popular-tab-content-->
+                        
+            		    <div id="recent-tab-content" class="tab-content"> 
+		        	
+		    </div> <!--end #recent-tab-content-->
+			            
+                        
+                        <div id="tags-tab-content" class="tab-content tagcloud"> 
+		        <ul>
+                    
+				</ul>	
+		    </div> <!--end #tags-tab-content-->
+            			<div class="clear"></div>
+		</div> <!--end .inside -->
+		<div class="clear"></div>
+	</div><!--end #tabber -->
+    
+        <script type="text/javascript">
+    jQuery(function($) {
+        $('#tabs2-2').data('args', {"allow_pagination":"1","post_num":"4","comment_num":"5","show_thumb4":"1","show_date":"1","show_comment_num":"1","show_avatar":"1"});
+    });
+    </script>
+    
+</div>
+			</ul>
+		</div>
+	</div><!--sidebars-->
+</aside>	</div><!--#page-->
+</div><!--.main-container-->
+<footer>
+			<div class="rainbow"></div>
+			<div class="copyrights">
+		<!--start copyrights-->
+<div class="row" id="copyright-note">
+<span><a href="http://www.lynxbee.com/" title="" rel="nofollow">lynxbee</a> Copyright &copy; 2018.</span>
+<div class="top"> <a href="#top" class="toplink" rel="nofollow">Back to Top</a></div>
+</div>
+<!--end copyrights-->
+	</div> 
+</footer><!--footer-->
+</div><!--.main-container-wrap-->
+<div class="secondary-navigation mobile">
+	<nav id="navigation" class="clearfix">
+					<ul id="menu-lynxbee-menu-1" class="menu clearfix"><li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-957"><a href="http://www.lynxbee.com/category/kernel-device-drivers/">Device Drivers</a></li>
+</ul>			</nav>
+</div>
+	<div style="display:none">
+	<div class="grofile-hash-map-e56972270335da29ddd62580416412c4">
+	</div>
+	</div>
+<script>
+    jQuery(document).ready(function () {
+		jQuery.post('http://www.lynxbee.com?ga_action=googleanalytics_get_script', {action: 'googleanalytics_get_script'}, function(response) {
+			var F = new Function ( response );
+			return( F() );
+		});
+    });
+</script><link rel='stylesheet' id='tabswidgetv2-css'  href='http://www.lynxbee.com/wp-content/themes/spike/css/widget-tabs2.css?ver=4.9.5' type='text/css' media='all' />
+<script type='text/javascript' src='http://www.lynxbee.com/wp-content/plugins/jetpack/_inc/build/photon/photon.min.js?ver=20130122'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201816'></script>
+<script type='text/javascript' src='http://s.gravatar.com/js/gprofiles.js?ver=2018Apraa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://www.lynxbee.com/wp-content/plugins/jetpack/modules/wpgroho.js?ver=4.9.5'></script>
+<script type='text/javascript' src='http://www.lynxbee.com/wp-includes/js/comment-reply.min.js?ver=4.9.5'></script>
+<script type='text/javascript' src='http://www.lynxbee.com/wp-includes/js/wp-embed.min.js?ver=4.9.5'></script>
+<script async="async" type='text/javascript' src='http://www.lynxbee.com/wp-content/plugins/akismet/_inc/form.js?ver=4.0.3'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var tabswidget = {"ajax_url":"http:\/\/www.lynxbee.com\/wp-admin\/admin-ajax.php"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://www.lynxbee.com/wp-content/themes/spike/js/widget-tabs2.js?ver=4.9.5'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var mts_ajax_search = {"url":"http:\/\/www.lynxbee.com\/wp-admin\/admin-ajax.php"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://www.lynxbee.com/wp-content/themes/spike/js/ajax.js?ver=4.9.5'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201816.js' async='async' defer='defer'></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:5.9',blog:'95221640',post:'1350',tz:'5.5',srv:'www.lynxbee.com'} ]);
+	_stq.push([ 'clickTrackerInit', '95221640', '1350' ]);
+</script>
+</body>
+</html>

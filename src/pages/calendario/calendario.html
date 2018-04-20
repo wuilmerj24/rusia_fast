@@ -39,7 +39,8 @@
         [formatDayHeader]="calendar.formatDayHeader"            
         [formatMonthTitle]="calendar.formatMonthTitle"
         [noEventsLabel]="calendar.noEventsLabel"  
-        (onTitleChanged)="onViewTitleChanged($event)"       
+        (onTitleChanged)="onViewTitleChanged($event)"    
+        (onEventSelected)="onEventSelected($event)"   
         step="30">
     </calendar>
 

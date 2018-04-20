@@ -19,9 +19,24 @@ var ChoferPage = /** @class */ (function () {
     function ChoferPage(navCtrl, navParams) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
+        this.cargar = false;
+        this.viewTitle = '';
+        this.calendar = {
+            eventSource: [],
+            mode: 'month',
+            currentDate: new Date(),
+            formatDayHeader: 'E',
+            noEventsLabel: 'Sin Eventos',
+            formatMonthTitle: 'MMMM yyyy',
+            allDayLabel: 'Todo el día',
+            formatWeekTitle: 'MMMM yyyy, Se $n'
+        };
     }
     ChoferPage.prototype.ionViewDidLoad = function () {
         console.log('ionViewDidLoad ChoferPage');
+    };
+    ChoferPage.prototype.onViewTitleChanged = function (title) {
+        this.viewTitle = title;
     };
     ChoferPage = __decorate([
         Component({

@@ -21,7 +21,8 @@ export class ReservasPage {
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 		
 		var self = this;
-		this.getDatos.getTable('WHERE is_padre = "true"', '  ORDER BY id DESC').then(
+        //WHERE is_padre = "true"
+		this.getDatos.getTable('SELECT * FROM eventos_root ORDER BY id DESC').then(
 
 			function(data:{rows}){
 
@@ -40,9 +41,9 @@ export class ReservasPage {
 		console.log('ionViewDidLoad ReservasPage');
 	}
 
-	private abrir_reserva(){
+	private abrir_reserva(reserva){
 		var self = this;
-        let profileModal = this.modalCtrl.create(DetallesReservaPage, {item:false});
+        let profileModal = this.modalCtrl.create(DetallesReservaPage, {reserva:reserva});
         profileModal.onDidDismiss(data => {
             if (data != null) {
                 //if (data.nuevo == true) {

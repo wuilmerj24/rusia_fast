@@ -8,44 +8,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 /**
- * Generated class for the GuiaPage page.
+ * Generated class for the TabsPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var GuiaPage = /** @class */ (function () {
-    function GuiaPage(navCtrl, navParams) {
+var TabsPage = /** @class */ (function () {
+    function TabsPage(navCtrl, navParams) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
-        this.cargar = false;
-        this.viewTitle = '';
-        this.calendar = {
-            eventSource: [],
-            mode: 'month',
-            currentDate: new Date(),
-            formatDayHeader: 'E',
-            noEventsLabel: 'Sin Eventos',
-            formatMonthTitle: 'MMMM yyyy',
-            allDayLabel: 'Todo el día',
-            formatWeekTitle: 'MMMM yyyy, Se $n'
-        };
     }
-    GuiaPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad GuiaPage');
+    TabsPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad TabsPage');
     };
-    GuiaPage.prototype.onViewTitleChanged = function (title) {
-        this.viewTitle = title;
-    };
-    GuiaPage = __decorate([
+    TabsPage = __decorate([
+        IonicPage(),
         Component({
-            selector: 'page-guia',
-            templateUrl: 'guia.html',
+            selector: 'page-tabs',
+            templateUrl: 'tabs.html',
         }),
         __metadata("design:paramtypes", [NavController, NavParams])
-    ], GuiaPage);
-    return GuiaPage;
+    ], TabsPage);
+    return TabsPage;
 }());
-export { GuiaPage };
-//# sourceMappingURL=guia.js.map
+export { TabsPage };
+//# sourceMappingURL=tabs.js.map

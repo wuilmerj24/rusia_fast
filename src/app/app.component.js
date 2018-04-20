@@ -18,28 +18,29 @@ import { GuiaPage } from '../pages/guia/guia';
 import { GananciasPage } from '../pages/ganancias/ganancias';
 import { ReservasPage } from '../pages/reservas/reservas';
 import { AcercaPage } from '../pages/acerca/acerca';
+import { LoginPage } from '../pages/login/login';
 var MyApp = /** @class */ (function () {
     function MyApp(platform, statusBar, splashScreen) {
         this.platform = platform;
         this.statusBar = statusBar;
         this.splashScreen = splashScreen;
-        this.rootPage = CalendarioPage;
         this.initializeApp();
         // used for an example of ngFor and navigation
         this.pages = [
             { title: 'Calendario', component: CalendarioPage },
-            { title: 'Chofer adjudicado', GuiaPage: ChoferPage },
-            { title: 'Guia adjudicado', GuiaPage: GuiaPage },
+            { title: 'Chofer adjudicado', component: ChoferPage },
+            { title: 'Guia adjudicado', component: GuiaPage },
             { title: 'Reservas', component: ReservasPage },
             { title: 'Ganancias', component: GananciasPage },
             { title: 'Configuración', component: ConfiPage },
             { title: 'Acerca de', component: AcercaPage },
-            { title: 'Salir', component: HomePage },
+            { title: 'Salir', component: 'salir' },
         ];
     }
     MyApp.prototype.initializeApp = function () {
         var _this = this;
         this.platform.ready().then(function () {
+            _this.rootPage = LoginPage;
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
             _this.statusBar.styleDefault();
@@ -49,7 +50,12 @@ var MyApp = /** @class */ (function () {
     MyApp.prototype.openPage = function (page) {
         // Reset the content nav to have just this page
         // we wouldn't want the back button to show in this scenario
-        this.nav.setRoot(page.component);
+        if (page.component == 'salir') {
+            this.nav.setRoot(LoginPage, { operacion: 'salir' });
+        }
+        else {
+            this.nav.setRoot(page.component);
+        }
     };
     __decorate([
         ViewChild(Nav),

@@ -1,0 +1,339 @@
+<!--
+  Generated template for the EventoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Detalles Reserva</ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only (click)="closeModal('x')">
+                <ion-icon item-right name="ios-close-outline"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+
+	<ion-toolbar>
+        <ion-row class="filters">
+            <ion-col class="col-with-arrow" (click)="slidePrev()" no-padding col-1>
+                <ion-icon *ngIf="showLeftButton" name="ios-arrow-back"></ion-icon>
+            </ion-col>
+            <ion-col no-padding col-10>
+                <ion-slides (ionSlideDidChange)="slideChanged()" slidesPerView="3">
+                    <ion-slide (click)="filterData(category.id)" *ngFor="let category of categories">
+                        <p [class.selected]="selectedCategory?.id === category.id">{{ category.name }}</p>
+                    </ion-slide>
+                </ion-slides>
+            </ion-col>
+            <ion-col class="col-with-arrow" (click)="slideNext()" no-padding col-1>
+                <ion-icon *ngIf="showRightButton" name="ios-arrow-forward"></ion-icon>
+            </ion-col>
+        </ion-row>
+
+    </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+	<ion-segment [(ngModel)]="relationship" color="primary" (ionChange)="segmentChanged($event)">
+	    <ion-segment-button value="friends">
+	      Editar
+	    </ion-segment-button>
+	    <ion-segment-button value="enemies">
+	      Eliminar
+	    </ion-segment-button>
+	</ion-segment>
+
+	<ion-grid *ngIf="categories[0].visible">                 
+	    
+	    <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Cliente</b>
+	        </ion-col>
+	        <ion-col col-6>
+	           <ion-input name="evento.cliente_id"  [readonly]="!editable" type="text" [(ngModel)]="evento.cliente_id[1]"></ion-input>
+	        </ion-col>       
+	    </ion-row>  
+
+	    <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Evento Padre</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.evento_id"  [readonly]="!editable" type="text" [(ngModel)]="evento.evento_id[1]"></ion-input>
+	        </ion-col>       
+	    </ion-row>    
+<!--
+	    <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Tipo de servicio</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento."  [readonly]="!editable" type="text" [(ngModel)]="evento."></ion-input>
+	        </ion-col>       
+	    </ion-row>    
+-->
+	    <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Transporte</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.Transporte"  [readonly]="!editable" type="text" [(ngModel)]="evento.Transporte"></ion-input>
+	        </ion-col>       
+	    </ion-row>    
+
+	    <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Fecha</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.Fecha_Inicio"  [readonly]="!editable" type="text" [(ngModel)]="evento.Fecha_Inicio"></ion-input>
+	        </ion-col>       
+	    </ion-row>    
+
+	    <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Hora inicio</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.hora_inicio"  [readonly]="!editable" type="text" [(ngModel)]="evento.hora_inicio"></ion-input>
+	        </ion-col>       
+	    </ion-row>    
+
+	    <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Hora fin</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.hora_final"  [readonly]="!editable" type="text" [(ngModel)]="evento.hora_final"></ion-input>
+	        </ion-col>       
+	    </ion-row>    
+
+	    <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Guía</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.guia_id"  [readonly]="!editable" type="text" [(ngModel)]="evento.guia_id[1]"></ion-input>
+	        </ion-col>       
+	    </ion-row>    
+
+	    <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Chofer</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.chofer_id"  [readonly]="!editable" type="text" [(ngModel)]="evento.chofer_id[1]"></ion-input>
+	        </ion-col>       
+	    </ion-row>    
+
+	     <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Hotel</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.hotel_id"  [readonly]="!editable" type="text" [(ngModel)]="evento.hotel_id[1]"></ion-input>
+	        </ion-col>       
+	    </ion-row>
+
+	     <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Numero de personas</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.numero_pax"  [readonly]="!editable" type="text" [(ngModel)]="evento.numero_pax"></ion-input>
+	        </ion-col>       
+	    </ion-row>
+
+	     <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Ciudad</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.ciudad_id"  [readonly]="!editable" type="text" [(ngModel)]="evento.ciudad_id[1]"></ion-input>
+	        </ion-col>       
+	    </ion-row>
+
+	     <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Servicios (gastos)</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.Servicio_Gastos"  [readonly]="!editable" type="text" [(ngModel)]="evento.Servicio_Gastos"></ion-input>
+	        </ion-col>       
+	    </ion-row>
+	    
+	     <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Gastos RUB</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.gasto_rub"  [readonly]="!editable" type="text" [(ngModel)]="evento.gasto_rub"></ion-input>
+	        </ion-col>       
+	    </ion-row>
+
+	     <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Gastos USD</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.gasto_usd"  [readonly]="!editable" type="text" [(ngModel)]="evento.gasto_usd"></ion-input>
+	        </ion-col>       
+	    </ion-row>
+
+	     <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Gastos EUR</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.gasto_eur"  [readonly]="!editable" type="text" [(ngModel)]="evento.gasto_eur"></ion-input>
+	        </ion-col>       
+	    </ion-row>
+
+	     <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Gastos TC RUB</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.tarjeta_rub"  [readonly]="!editable" type="text" [(ngModel)]="evento.tarjeta_rub"></ion-input>
+	        </ion-col>       
+	    </ion-row>
+
+	     <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Gastos TC USD</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.tarjeta_usd"  [readonly]="!editable" type="text" [(ngModel)]="evento.tarjeta_usd"></ion-input>
+	        </ion-col>       
+	    </ion-row>
+
+	     <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Gastos TC EUR</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.tarjeta_eur"  [readonly]="!editable" type="text" [(ngModel)]="evento.tarjeta_eur"></ion-input>
+	        </ion-col>       
+	    </ion-row>
+
+	    <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Gastos PayPal</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.gasto_paypal"  [readonly]="!editable" type="text" [(ngModel)]="evento.gasto_paypal"></ion-input>
+	        </ion-col>       
+	    </ion-row>
+
+	     <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Total Representante</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.Total_Representante"  [readonly]="!editable" type="text" [(ngModel)]="evento.Total_Representante"></ion-input>
+	        </ion-col>       
+	    </ion-row>	    
+
+    </ion-grid>
+
+    <ion-grid *ngIf="categories[1].visible">
+
+ 		<ion-row align-items-center>  
+	        <ion-col col-12>
+	            <b>Descripción del servicio</b>
+	        </ion-col>
+	    </ion-row>
+
+	    <ion-row align-items-center>  
+	        <ion-col col-12>
+	            <ion-textarea rows="15" name="evento.message" disabled [(ngModel)]="evento.message"> </ion-textarea>
+	        </ion-col>       
+	    </ion-row>
+<!--
+	     <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Transporte privado</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name=""  [readonly]="!editable" type="text" [(ngModel)]=""></ion-input>
+	        </ion-col>       
+	    </ion-row>
+
+	     <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Guía privado</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name=""  [readonly]="!editable" type="text" [(ngModel)]=""></ion-input>
+	        </ion-col>       
+	    </ion-row>
+-->
+    </ion-grid>
+
+    <ion-grid *ngIf="categories[2].visible">
+
+    </ion-grid>
+
+    <ion-grid *ngIf="categories[3].visible">
+
+    </ion-grid>
+
+    <ion-grid *ngIf="categories[4].visible">
+
+		<ion-row align-items-center>  
+	        <ion-col col-12>
+	            <b>Comentarios internos</b>
+	        </ion-col>
+	    </ion-row>
+
+	    <ion-row align-items-center>  
+	        <ion-col col-12>
+	            <ion-textarea name="evento.Comentarios_Internos" [(ngModel)]="evento.Comentarios_Internos"> </ion-textarea>
+	        </ion-col>       
+	    </ion-row>
+
+	    <ion-row align-items-center>  
+	        <ion-col col-12>
+	            <b>Comentarios guía</b>
+	        </ion-col>
+	    </ion-row>
+
+	    <ion-row align-items-center>  
+	        <ion-col col-12>
+	            <ion-textarea name="evento.Comentarios_Guia" [(ngModel)]="evento.Comentarios_Guia"> </ion-textarea>
+	        </ion-col>       
+	    </ion-row>
+
+	    <ion-row align-items-center>  
+	        <ion-col col-12>
+	            <b>Comentarios cliente</b>
+	        </ion-col>
+	    </ion-row>
+
+	    <ion-row align-items-center>  
+	        <ion-col col-12>
+	            <ion-textarea name="evento.Comentarios_Cliente" [(ngModel)]="evento.Comentarios_Cliente"> </ion-textarea>
+	        </ion-col>       
+	    </ion-row>
+
+		<ion-row align-items-center>  
+	        <ion-col col-12>
+	            <b>Comentarios chofer</b>
+	        </ion-col>
+	    </ion-row>
+
+	    <ion-row align-items-center>  
+	        <ion-col col-12>
+	            <ion-textarea name="evento.Comentarios_Chofer" [(ngModel)]="evento.Comentarios_Chofer"> </ion-textarea>
+	        </ion-col>       
+	    </ion-row>
+    
+	    
+    </ion-grid>
+
+</ion-content>

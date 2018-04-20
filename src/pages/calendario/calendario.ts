@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { GetDatosProvider } from '../../providers/get-datos/get-datos'
+import { GetDatosProvider } from '../../providers/get-datos/get-datos';
+import { EventoPage } from '../../pages/evento/evento';
 /**
  * Generated class for the CalendarioPage page.
  *
@@ -46,7 +47,8 @@ export class CalendarioPage {
                         startTime:new Date(dateStart.getFullYear(), dateStart.getMonth(), dateStart.getDate(), hora_ini[0], hora_ini[1]),
                         endTime:new Date(dateStart.getFullYear(), dateStart.getMonth(), dateStart.getDate(), hora_fin[0], hora_fin[1]),
                         title:eventos.rows.item(i).name,
-                        allDay:false
+                        allDay:false,
+                        id:eventos.rows.item(i).id
                     });
                 }
                 self.calendar.eventSource = event_format;
@@ -63,6 +65,12 @@ export class CalendarioPage {
     }
     onViewTitleChanged(title) {
         this.viewTitle = title;
+    }
+
+    onEventSelected(evt) {
+        
+        this.navCtrl.push(EventoPage, {evento: evt});
+
     }
 
 

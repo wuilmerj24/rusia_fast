@@ -1,0 +1,32 @@
+page-evento {
+
+}
+.filters {
+
+    ion-col {
+        text-align: center;
+        font-size: 1.6rem;
+        line-height: 1.6rem;
+
+        ion-icon {
+            color: #ccc;
+        }
+
+        &.col-with-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    p {
+        color: #cc1616;
+        margin: 0;
+        font-size: 1.6rem;
+        line-height: 1.6rem;
+    }
+
+    .selected {
+        font-weight: 700;
+    }
+}

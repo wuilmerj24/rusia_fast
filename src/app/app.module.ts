@@ -11,6 +11,8 @@ import { GananciasPage } from '../pages/ganancias/ganancias';
 import { ReservasPage } from '../pages/reservas/reservas';
 import { AcercaPage } from '../pages/acerca/acerca';
 import { DetallesReservaPage } from '../pages/detalles-reserva//detalles-reserva';
+import { LoginPage } from '../pages/login/login';
+import { EventoPage } from '../pages/evento/evento';
 
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -29,7 +31,9 @@ import { SQLite } from '@ionic-native/sqlite';
     GananciasPage,
     ReservasPage,
     AcercaPage,
-    DetallesReservaPage
+    DetallesReservaPage,
+    LoginPage,
+    EventoPage
   ],
   imports: [
     BrowserModule,
@@ -46,7 +50,9 @@ import { SQLite } from '@ionic-native/sqlite';
     GananciasPage,
     ReservasPage,
     AcercaPage,
-    DetallesReservaPage
+    DetallesReservaPage,
+    LoginPage,
+    EventoPage
   ],
   providers: [
     SQLite,

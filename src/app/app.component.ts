@@ -12,6 +12,8 @@ import { GananciasPage } from '../pages/ganancias/ganancias';
 import { ReservasPage } from '../pages/reservas/reservas';
 import { AcercaPage } from '../pages/acerca/acerca';
 import { DetallesReservaPage } from '../pages/detalles-reserva/detalles-reserva';
+import { LoginPage } from '../pages/login/login';
+
 
 @Component({
   templateUrl: 'app.html'
@@ -42,7 +44,7 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.rootPage = CalendarioPage;
+      this.rootPage = LoginPage;
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
@@ -53,6 +55,12 @@ export class MyApp {
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+    if(page.component == 'salir'){
+      
+      this.nav.setRoot(LoginPage, {operacion:'salir'});
+    }else{
+      this.nav.setRoot(page.component);  
+    }
+    
   }
 }

@@ -19,18 +19,28 @@ export class DetallesReservaPage {
 	@ViewChild(Slides) slides: Slides;
 
 	
-    public categories = [{id:1, name:'Resumen'},{id:2, name:'Descripción'},{id:3, name:'Documentos'},{id:4, name:'Costos Generales'},{id:5, name:'Costos por ciudad'},{id:6, name:'Gatos extras'},{id:7, name:'Comentarios'}];
+    public categories = [{id:1, name:'Resumen', visible:false},
+    {id:2, name:'Descripción', visible:false},
+    {id:3, name:'Documentos', visible:false},
+    {id:4, name:'Costos Generales', visible:false},
+    {id:5, name:'Costos por ciudad', visible:false},
+    {id:6, name:'Gatos extras', visible:false},
+    {id:7, name:'Comentarios', visible:false}];
     public selectedCategory;
     public showLeftButton: boolean;
     public showRightButton: boolean;
 
-  constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
-  	this.initializeCategories();
-  }
+    private reserva;
+    private editable = false;
+	constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad DetallesReservaPage');
-  }
+		this.reserva = this.navParams.get('reserva');
+		this.initializeCategories();
+	}
+
+  	ionViewDidLoad() {
+    	console.log('ionViewDidLoad DetallesReservaPage');
+  	}
 
   	closeModal(x) {
 	    if (x == 'x') {
@@ -40,11 +50,12 @@ export class DetallesReservaPage {
 	    }
 	}
 
-  initializeCategories() {
+  	initializeCategories() {
 
         // Select it by defaut
         console.log(this.categories)
         this.selectedCategory = this.categories[0];
+        this.selectedCategory.visible = true;
 
         // Check which arrows should be shown
         this.showLeftButton = false;
@@ -53,7 +64,17 @@ export class DetallesReservaPage {
 
     public filterData(categoryId: number): void {
         // Handle what to do when a category is selected
-        console.log(categoryId);
+        //console.log(categoryId);
+
+        Object.keys(this.categories).forEach(key=> {
+
+        	if(this.categories[key].id == categoryId){
+        		this.categories[key].visible = true;
+        	}else{
+        		this.categories[key].visible = false;
+        	}
+		    //console.log(this.categories[key]);
+		});
     }
 
     // Method executed when the slides are changed
