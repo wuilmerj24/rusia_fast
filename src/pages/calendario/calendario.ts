@@ -33,8 +33,13 @@ export class CalendarioPage {
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 
+        this.initCalendario();
+    }
+
+    private initCalendario(){
         var self = this;
-        this.getDatos.crearBD().then(          
+        self.cargar = true;
+        this.getDatos.cargarCalendario().then(          
           function(permisos:'') {
             
             self.permisos = permisos;
@@ -72,7 +77,8 @@ export class CalendarioPage {
            function(e){
                console.log('Error en calendario');
                console.log(e);
-           });
+           }
+        );
     }
 
     ionViewDidLoad() {
@@ -85,7 +91,18 @@ export class CalendarioPage {
     onEventSelected(evt) {
         
         this.navCtrl.push(EventoPage, {evento: evt, permisos:this.permisos});
+    }
 
+    refresh(){
+        var self = this;
+        this.getDatos.borrarTablas(["gastostoursline", "eventos"]).then(
+            res=>{
+                self.initCalendario();
+            },
+            fail=>{
+                console.log('Error refresh tables');
+            }
+        );
     }
 
 

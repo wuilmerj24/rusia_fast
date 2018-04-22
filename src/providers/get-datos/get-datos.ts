@@ -54,7 +54,44 @@ export class GetDatosProvider {
 
 	}
 
-	public crearBD(){
+	public borrarTablas(tablas){
+		var self = this;
+		var promise = new Promise(function (resolve, reject) {
+            
+            
+			self.sqlite.create({
+		      name: 'ionicdb.db',
+		      location: 'default'
+		    }).then((db: SQLiteObject) => {
+		      
+
+		      	var sql = [];
+		      	Object.keys(tablas).forEach(key=> {
+
+		      		//sql.push('DROP TABLE IF EXISTS '+tablas[key]);
+		      		console.log('DROP TABLE IF EXISTS '+tablas[key]);
+		      	});
+
+		      	db.sqlBatch(sql).then(
+	      		res => {
+		      		console.log('----------Drop tables - OK---------');
+		      		resolve();
+		      	}).catch(e => {
+	  				console.log('Error Drop tables');
+	  				console.log(e.message);
+	  				reject(e)
+	  			});
+  			}).catch(e => {
+		  		console.log('Error en conexion bd');
+		  		console.log(e.message);
+		  		reject(e)
+		  	});
+	  	});
+
+	  	return promise;
+	}
+
+	public cargarCalendario(){
 
 		var self = this;
 		var promise = new Promise(function (resolve, reject) {
@@ -134,7 +171,7 @@ export class GetDatosProvider {
 										    //console.log(JSON.stringify(gastos[key])); JSON.stringify(gastos[key].concepto_gasto_id) 
 
 
-										    sql.push("INSERT OR IGNORE INTO gastos "+
+										    sql.push("INSERT OR IGNORE INTO gastostoursline "+
 										    	"(id, concepto_gasto_id, tipo_moneda, Total, fecha, ciudad_id, observaciones)"+
 										    	" VALUES (" + gastos[key].id + ", '"+JSON.stringify(gastos[key].concepto_gasto_id)+"', '" 
 										    	+gastos[key].tipo_moneda +"', '"+ gastos[key].Total+ "', '" + gastos[key].fecha +"', '"+

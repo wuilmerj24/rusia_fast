@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, Slides, NavController, NavParams,ViewController } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
-import { DetallesReservaPage } from '../../pages/detalles-reserva/detalles-reserva';
 import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 
 @IonicPage()
@@ -20,7 +19,7 @@ export class EventoPage {
 	public showRightButton: boolean;
 
 	private evento_cal;
-	private evento = {id:0,
+	private evento = {id:-1,
 	 cliente_id :[0,''],
 	 representante_id :[0,''],	 
 	 Fecha_Inicio :'',
@@ -126,7 +125,7 @@ export class EventoPage {
 				self.evento.ciudad_id = tmp_ciudad_id;
 				//console.log(self.evento.name);
 
-				self.getDatos.ejecutarSQL('SELECT * FROM gastos WHERE id IN (' + domanin +')').then(
+				self.getDatos.ejecutarSQL('SELECT * FROM gastostoursline WHERE id IN (' + domanin +')').then(
 				function(gastos: {rows}){
 
 					for(var i=0; i<gastos.rows.length; i++) {
@@ -260,8 +259,13 @@ export class EventoPage {
     }
 
     public abrirGasto(item){
-    	item.concepto_gasto_id = JSON.stringify(item.concepto_gasto_id);
-    	this.navCtrl.push(GatosTourPage, {gasto:item});
+    	//item.concepto_gasto_id = JSON.stringify(item.concepto_gasto_id);
+    	this.navCtrl.push(GatosTourPage, {gasto:item, ver_segmento:this.editable});
+    }
+
+    private agregarGasto(){
+
+    	this.navCtrl.push(GatosTourPage, {gasto:'nuevo', ver_segmento:this.editable});	
     }
 
 }

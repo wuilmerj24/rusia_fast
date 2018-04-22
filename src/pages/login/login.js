@@ -10,7 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
-import { CalendarioPage } from '../../pages/calendario/calendario';
+//import { CalendarioPage } from '../../pages/calendario/calendario';
+import { PanelPage } from '../../pages/panel/panel';
 /**
  * Generated class for the LoginPage page.
  *
@@ -18,19 +19,25 @@ import { CalendarioPage } from '../../pages/calendario/calendario';
  * Ionic pages and navigation.
  */
 var LoginPage = /** @class */ (function () {
-    //    conexion = {usuario: '', bd: 'rusia3', pwd: ''};
+    //admin
+    //conexion = {usuario: 'jdmas@maui.com.mx', bd: 'rusia3', pwd: 'rusia@2018'};
+    //cliente
+    //conexion = {usuario: 'denisepirowicz@hotmail.com', bd: 'rusia3', pwd: '123456'};
     function LoginPage(navCtrl, navParams, getData) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.getData = getData;
         this.cargar = false;
         //guia
-        //conexion = {usuario: 'alekseevadar@gmail.com', bd: 'rusia3', pwd: '123456'};
-        //admin
-        this.conexion = { usuario: 'jdmas@maui.com.mx', bd: 'rusia3', pwd: 'rusia@2018' };
+        this.conexion = { usuario: 'alekseevadar@gmail.com', bd: 'rusia3', pwd: '123456' };
         var operacion = this.navParams.get('operacion');
         if (operacion != null && operacion == 'salir') {
             this.getData.deleteBD();
+        }
+        else {
+            if (this.conexion.usuario != "") {
+                this.conectarApp();
+            }
         }
     }
     LoginPage.prototype.ionViewDidLoad = function () {
@@ -38,8 +45,10 @@ var LoginPage = /** @class */ (function () {
     };
     LoginPage.prototype.conectarApp = function () {
         var self = this;
+        self.cargar = true;
         this.getData.login(this.conexion).then(function (res) {
-            self.navCtrl.setRoot(CalendarioPage);
+            self.cargar = false;
+            self.navCtrl.setRoot(PanelPage, { usr: res });
         }).catch(function (e) {
             console.log(e.message);
             console.log('error');

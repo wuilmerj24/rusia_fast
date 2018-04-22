@@ -26,7 +26,7 @@ var ReservasPage = /** @class */ (function () {
         this.reservas = [];
         var self = this;
         //WHERE is_padre = "true"
-        this.getDatos.getTable('SELECT * FROM eventos_root ORDER BY id DESC').then(function (data) {
+        this.getDatos.ejecutarSQL('SELECT * FROM eventos_root ORDER BY id DESC').then(function (data) {
             for (var i = 0; i < data.rows.length; i++) {
                 self.reservas.push(data.rows.item(i));
             }

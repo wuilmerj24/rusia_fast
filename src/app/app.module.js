@@ -18,11 +18,14 @@ import { AcercaPage } from '../pages/acerca/acerca';
 import { DetallesReservaPage } from '../pages/detalles-reserva//detalles-reserva';
 import { LoginPage } from '../pages/login/login';
 import { EventoPage } from '../pages/evento/evento';
+import { GatosTourPage } from '../pages/gatos-tour/gatos-tour';
+import { PanelPage } from '../pages/panel/panel';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { NgCalendarModule } from 'ionic2-calendar';
 import { GetDatosProvider } from '../providers/get-datos/get-datos';
 import { SQLite } from '@ionic-native/sqlite';
+import { TablasProvider } from '../providers/tablas/tablas';
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -39,7 +42,9 @@ var AppModule = /** @class */ (function () {
                 AcercaPage,
                 DetallesReservaPage,
                 LoginPage,
-                EventoPage
+                EventoPage,
+                GatosTourPage,
+                PanelPage
             ],
             imports: [
                 BrowserModule,
@@ -58,14 +63,17 @@ var AppModule = /** @class */ (function () {
                 AcercaPage,
                 DetallesReservaPage,
                 LoginPage,
-                EventoPage
+                EventoPage,
+                GatosTourPage,
+                PanelPage
             ],
             providers: [
                 SQLite,
                 StatusBar,
                 SplashScreen,
                 { provide: ErrorHandler, useClass: IonicErrorHandler },
-                GetDatosProvider
+                GetDatosProvider,
+                TablasProvider
             ]
         })
     ], AppModule);

@@ -12,11 +12,11 @@
 
    <ion-segment *ngIf="ver_segmento">
         <ion-segment-button  value="camera" icon-start (click)="guardar()">
-                <ion-icon ios="ios-create" md="md-create"></ion-icon>
+                <ion-icon name="ios-create" md="md-create"></ion-icon>
             Guardar
         </ion-segment-button>
         <ion-segment-button value="bookmark" icon-start (click)="eliminar()">
-                <ion-icon ios="ios-cloud-upload" md="md-cloud-upload"></ion-icon>
+                <ion-icon name="ios-trash" ></ion-icon>
             Eliminar
         </ion-segment-button>
     </ion-segment>
@@ -25,13 +25,19 @@
 
 
 <ion-content>
-	<ion-grid>
+
+	<div *ngIf="cargar" style="text-align: center">    
+        <ion-spinner name="circles"></ion-spinner><br>
+        <b>Guardando...</b>
+	</div>
+
+	<ion-grid *ngIf="!cargar">
 		<ion-row align-items-center>  
 	        <ion-col col-4>
 	            <b>Concepto gasto</b>
 	        </ion-col>
 	        <ion-col col-8>	        	
-	            <ion-select name="gasto.concepto_gasto_id" [(ngModel)]="gasto.concepto_gasto_id[1]">	            
+	            <ion-select name="gasto.concepto_gasto_id" [disabled]="!ver_segmento" [(ngModel)]="gasto.concepto_gasto_id[0]">	            
 					<ion-option value="1">Comision Getyourgide</ion-option>
 					<ion-option value="2">Entradas Kremlin</ion-option>
 					<ion-option value="3">Salario Guía</ion-option>
@@ -57,7 +63,7 @@
 	            <b>Total</b>
 	        </ion-col>
 	        <ion-col col-8>
-	            <ion-input name="gasto.Total" type="number" [(ngModel)]="gasto.Total"></ion-input>
+	            <ion-input name="gasto.Total" type="number" [readonly]="!ver_segmento" [(ngModel)]="gasto.Total"></ion-input>
 	        </ion-col>    
 	    </ion-row>            	
 	    <ion-row align-items-center>  
@@ -65,7 +71,7 @@
 	            <b>Moneda</b>
 	        </ion-col>
 	        <ion-col col-8>	            	            
-	            <ion-select name="gasto.tipo_moneda" [(ngModel)]="gasto.tipo_moneda">	            	
+	            <ion-select name="gasto.tipo_moneda" [disabled]="!ver_segmento" [(ngModel)]="gasto.tipo_moneda">	            	
 	            	<ion-option value="usd">USD</ion-option>
 	            	<ion-option value="eur">EUR</ion-option>
 	            	<ion-option value="rub">RUB</ion-option>
@@ -81,7 +87,7 @@
 	            <b>Ciudad</b>
 	        </ion-col>
 	        <ion-col col-8>
-	            <ion-select name="gasto.ciudad_id" [(ngModel)]="gasto.ciudad_id[1]">	            	
+	            <ion-select name="gasto.ciudad_id" [disabled]="!ver_segmento" [(ngModel)]="gasto.ciudad_id[1]">	            	
 	            	<ion-option value="3">Moscu</ion-option>
 	            	<ion-option value="2">San petersburgo</ion-option>
 	            	<ion-option value="4">Sochi</ion-option>
@@ -95,7 +101,7 @@
 	            <b>Fecha usuario</b>
 	        </ion-col>
 	        <ion-col col-8>
-	            <ion-input name="gasto.fecha" type="text" [(ngModel)]="gasto.fecha"></ion-input>
+	            <ion-input name="gasto.fecha" type="text" [readonly]="!ver_segmento" [(ngModel)]="gasto.fecha"></ion-input>
 	        </ion-col>    
 	    </ion-row>        	     
 
@@ -107,7 +113,7 @@
 
 		<ion-row align-items-center>  
 			<ion-col col-12>
-				<ion-textarea name="evento.observaciones" [(ngModel)]="gasto.observaciones"> </ion-textarea>
+				<ion-textarea name="evento.observaciones" [readonly]="!ver_segmento" [(ngModel)]="gasto.observaciones"> </ion-textarea>
 			</ion-col>       
 		</ion-row>
 

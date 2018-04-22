@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class TablasProvider {
 
-	private tbl_gastos = "CREATE TABLE IF NOT EXISTS gastos("+
+	private tbl_gastos = "CREATE TABLE IF NOT EXISTS gastostoursline("+
 	" id INTEGER PRIMARY KEY,"+
 	" concepto_gasto_id VARCHAR(255),"+
 	" tipo_moneda VARCHAR(20),"+	
@@ -18,7 +18,7 @@ export class TablasProvider {
 	" ciudad_id VARCHAR(50),"+
 	" observaciones TEXT);";
 
-	tbl_gastos_odoo =[
+	private tbl_gastos_odoo =[
 	"concepto_gasto_id",
 	"tipo_moneda",
 	"Total",
@@ -32,6 +32,15 @@ export class TablasProvider {
 	" pwd VARCHAR(20),"+
 	" bd VARCHAR(20),"+
 	" tipo_usuario VARCHAR(20));";
+
+	private tbl_user_odoo = ["email",
+	"is_chofer",
+	"is_guia",
+	"is_rep",
+	"is_client",
+	"is_root",
+	"is_general",
+	"is_traslados"];
 
 	private tbl_eventos = "CREATE TABLE IF NOT EXISTS eventos("+
 	" id INTEGER PRIMARY KEY,"+
@@ -97,7 +106,7 @@ export class TablasProvider {
 	"is_adjudicado"*/
 
 	
-	tbl_eventos_odoo = ["Comentarios_Chofer",
+	private tbl_eventos_odoo = ["Comentarios_Chofer",
 	"Total_Beneficios",
 	"tarjeta_usd_pos",
 	"Transporte",
@@ -147,18 +156,6 @@ export class TablasProvider {
 	"hora_inicio",
 	"hora_final", 
 	"is_adjudicado"];
-
-
-	tbl_user_odoo = ["email",
-	"is_chofer",
-	"is_guia",
-	"is_rep",
-	"is_client",
-	"is_root",
-	"is_general",
-	"is_traslados"];
-
-
 
 	constructor() {
     	console.log('Hello TablasProvider Provider');

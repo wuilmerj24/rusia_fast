@@ -315,8 +315,15 @@
 	            <ion-col col-3>
 	                {{gasto.fecha}}
 	            </ion-col>       
-	        </ion-row>
+	        </ion-row>	        
+	    	<ion-row *ngIf="editable" align-items-center>  
+	            <ion-col col-4>
+                    <button ion-button color="danger" type="button" (click)="agregarGasto()" >Agregar</button>
+	            </ion-col>
+	        </ion-row>	
     	</div>
+
+
     			
     </ion-grid>
 
