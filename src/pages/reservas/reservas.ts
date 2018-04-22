@@ -20,9 +20,9 @@ export class ReservasPage {
 	reservas = [];
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 		
-		var self = this;
+		var self = this; 
         //WHERE is_padre = "true"
-		this.getDatos.getTable('SELECT * FROM eventos_root ORDER BY id DESC').then(
+		this.getDatos.ejecutarSQL('SELECT * FROM eventos_root ORDER BY id DESC').then(
 
 			function(data:{rows}){
 

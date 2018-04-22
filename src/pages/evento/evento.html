@@ -35,7 +35,7 @@
         </ion-row>
 
     </ion-toolbar>
-    <ion-segment >
+    <ion-segment *ngIf="ver_segmento">
         <ion-segment-button  value="camera" icon-start (click)="editar()">
                             <ion-icon ios="ios-create" md="md-create"></ion-icon>
             Editar
@@ -49,7 +49,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content >
 
 	<div *ngIf="cargar" style="text-align: center">    
         <ion-spinner name="circles"></ion-spinner><br>
@@ -182,7 +182,7 @@
 	            <b>Gastos RUB</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name="evento.gasto_rub"  [readonly]="!editable" type="number" [(ngModel)]="evento.gasto_rub"></ion-input>
+	            <ion-input name="evento.gasto_rub"  readonly type="number" [(ngModel)]="evento.gasto_rub"></ion-input>
 	        </ion-col>       
 	    </ion-row>
 
@@ -191,7 +191,7 @@
 	            <b>Gastos USD</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name="evento.gasto_usd"  [readonly]="!editable" type="number" [(ngModel)]="evento.gasto_usd"></ion-input>
+	            <ion-input name="evento.gasto_usd"  readonly type="number" [(ngModel)]="evento.gasto_usd"></ion-input>
 	        </ion-col>       
 	    </ion-row>
 
@@ -200,7 +200,7 @@
 	            <b>Gastos EUR</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name="evento.gasto_eur"  [readonly]="!editable" type="number" [(ngModel)]="evento.gasto_eur"></ion-input>
+	            <ion-input name="evento.gasto_eur"  readonly type="number" [(ngModel)]="evento.gasto_eur"></ion-input>
 	        </ion-col>       
 	    </ion-row>
 
@@ -209,7 +209,7 @@
 	            <b>Gastos TC RUB</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name="evento.tarjeta_rub"  [readonly]="!editable" type="number" [(ngModel)]="evento.tarjeta_rub"></ion-input>
+	            <ion-input name="evento.tarjeta_rub"  readonly type="number" [(ngModel)]="evento.tarjeta_rub"></ion-input>
 	        </ion-col>       
 	    </ion-row>
 
@@ -218,7 +218,7 @@
 	            <b>Gastos TC USD</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name="evento.tarjeta_usd"  [readonly]="!editable" type="number" [(ngModel)]="evento.tarjeta_usd"></ion-input>
+	            <ion-input name="evento.tarjeta_usd"  readonly type="number" [(ngModel)]="evento.tarjeta_usd"></ion-input>
 	        </ion-col>       
 	    </ion-row>
 
@@ -227,7 +227,7 @@
 	            <b>Gastos TC EUR</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name="evento.tarjeta_eur"  [readonly]="!editable" type="number" [(ngModel)]="evento.tarjeta_eur"></ion-input>
+	            <ion-input name="evento.tarjeta_eur"  readonly type="number" [(ngModel)]="evento.tarjeta_eur"></ion-input>
 	        </ion-col>       
 	    </ion-row>
 
@@ -236,7 +236,7 @@
 	            <b>Gastos PayPal</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name="evento.gasto_paypal"  [readonly]="!editable" type="number" [(ngModel)]="evento.gasto_paypal"></ion-input>
+	            <ion-input name="evento.gasto_paypal"  readonly type="number" [(ngModel)]="evento.gasto_paypal"></ion-input>
 	        </ion-col>       
 	    </ion-row>
 
@@ -270,7 +270,7 @@
 	            <b>Transporte privado</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-checkbox name="evento.is_traslado" [(ngModel)]="evento.is_traslado"></ion-checkbox>
+	            <ion-checkbox name="evento.is_traslado" [disabled] = "!editable" [(ngModel)]="evento.is_traslado"></ion-checkbox>
 	        </ion-col>       
 	    </ion-row>
 
@@ -279,43 +279,45 @@
 	            <b>Guía privado</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-checkbox name="evento.is_guia" [(ngModel)]="evento.is_guia"></ion-checkbox>
+	            <ion-checkbox name="evento.is_guia"  [disabled] = "!editable" [(ngModel)]="evento.is_guia"></ion-checkbox>
 	        </ion-col>       
 	    </ion-row>
 
     </ion-grid>
 
-    <ion-grid *ngIf="categories[2].visible" (click)="ejecute(item)">
+    <ion-grid *ngIf="categories[2].visible">
 
-		<ion-row align-items-center>  
-            <ion-col col-3>
-                <b>Concepto</b>
-            </ion-col>
-            <ion-col col-3>
-                <b>Moneda</b>
-            </ion-col>       
-            <ion-col col-3>
-                <b>Total</b>
-            </ion-col>
-            <ion-col col-3>
-                <b>Fecha</b>
-            </ion-col>
-        </ion-row>        
-        <ion-row *ngFor="let gasto of gastostoursline_ids; let i = index" align-items-center >  
-            <ion-col col-3>
-                <b>{{gasto.concepto_gasto_id[1]}}</b>
-            </ion-col>
-            <ion-col col-3>
-                <b>{{gasto.tipo_moneda}}</b>
-            </ion-col>       
-            <ion-col col-3>
-                <b>{{gasto.Total}}</b>
-            </ion-col>
-            <ion-col col-3>
-                <b>{{gasto.fecha}}</b>
-            </ion-col>       
-        </ion-row>
-
+    	<div *ngIf="ver_segmento">
+    		<ion-row align-items-center>  
+	            <ion-col col-4>
+	                <b>Concepto</b>
+	            </ion-col>
+	            <ion-col col-2>
+	                <b>Moneda</b>
+	            </ion-col>       
+	            <ion-col col-3>
+	                <b>Total</b>
+	            </ion-col>
+	            <ion-col col-3>
+	                <b>Fecha</b>
+	            </ion-col>
+	        </ion-row>        
+	        <ion-row class="borde" *ngFor="let gasto of gastostoursline_ids; let i = index" align-items-center (click)="abrirGasto(gasto)">  
+	            <ion-col col-4>
+	                {{gasto.concepto_gasto_id[1]}}
+	            </ion-col>
+	            <ion-col col-2>
+	                {{gasto.tipo_moneda}}
+	            </ion-col>       
+	            <ion-col col-3>
+	                {{gasto.Total}}
+	            </ion-col>
+	            <ion-col col-3>
+	                {{gasto.fecha}}
+	            </ion-col>       
+	        </ion-row>
+    	</div>
+    			
     </ion-grid>
 
     <ion-grid *ngIf="categories[3].visible">
@@ -324,31 +326,7 @@
 
     <ion-grid *ngIf="categories[4].visible">
 
-		<ion-row align-items-center>  
-	        <ion-col col-12>
-	            <b>Comentarios internos</b>
-	        </ion-col>
-	    </ion-row>
-
-	    <ion-row align-items-center>  
-	        <ion-col col-12>
-	            <ion-textarea name="evento.Comentarios_Internos" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Internos"> </ion-textarea>
-	        </ion-col>       
-	    </ion-row>
-
-	    <ion-row align-items-center>  
-	        <ion-col col-12>
-	            <b>Comentarios guía</b>
-	        </ion-col>
-	    </ion-row>
-
-	    <ion-row align-items-center>  
-	        <ion-col col-12>
-	            <ion-textarea name="evento.Comentarios_Guia" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Guia"> </ion-textarea>
-	        </ion-col>       
-	    </ion-row>
-
-	    <ion-row align-items-center>  
+    	<ion-row align-items-center>  
 	        <ion-col col-12>
 	            <b>Comentarios cliente</b>
 	        </ion-col>
@@ -359,19 +337,45 @@
 	            <ion-textarea name="evento.Comentarios_Cliente" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Cliente"> </ion-textarea>
 	        </ion-col>       
 	    </ion-row>
+	    <div *ngIf="ver_segmento">
+	    	<ion-row align-items-center>  
+		        <ion-col col-12>
+		            <b>Comentarios internos</b>
+		        </ion-col>
+		    </ion-row>
 
-		<ion-row align-items-center>  
-	        <ion-col col-12>
-	            <b>Comentarios chofer</b>
-	        </ion-col>
-	    </ion-row>
+		    <ion-row align-items-center>  
+		        <ion-col col-12>
+		            <ion-textarea name="evento.Comentarios_Internos" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Internos"> </ion-textarea>
+		        </ion-col>       
+		    </ion-row>
 
-	    <ion-row align-items-center>  
-	        <ion-col col-12>
-	            <ion-textarea name="evento.Comentarios_Chofer" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Chofer"> </ion-textarea>
-	        </ion-col>       
-	    </ion-row>
+		    <ion-row align-items-center>  
+		        <ion-col col-12>
+		            <b>Comentarios guía</b>
+		        </ion-col>
+		    </ion-row>
+
+		    <ion-row align-items-center>  
+		        <ion-col col-12>
+		            <ion-textarea name="evento.Comentarios_Guia" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Guia"> </ion-textarea>
+		        </ion-col>       
+		    </ion-row>	    
+
+			<ion-row align-items-center>  
+		        <ion-col col-12>
+		            <b>Comentarios chofer</b>
+		        </ion-col>
+		    </ion-row>
+
+		    <ion-row align-items-center>  
+		        <ion-col col-12>
+		            <ion-textarea name="evento.Comentarios_Chofer" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Chofer"> </ion-textarea>
+		        </ion-col>       
+		    </ion-row>
     
+	    </div>
+		
 	    
     </ion-grid>
 

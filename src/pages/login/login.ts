@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
-import { CalendarioPage } from '../../pages/calendario/calendario';
-
+//import { CalendarioPage } from '../../pages/calendario/calendario';
+import { PanelPage } from '../../pages/panel/panel';
 /**
  * Generated class for the LoginPage page.
  *
@@ -24,7 +24,8 @@ export class LoginPage {
     conexion = {usuario: 'alekseevadar@gmail.com', bd: 'rusia3', pwd: '123456'};
     //admin
     //conexion = {usuario: 'jdmas@maui.com.mx', bd: 'rusia3', pwd: 'rusia@2018'};
-//    conexion = {usuario: '', bd: 'rusia3', pwd: ''};
+    //cliente
+    //conexion = {usuario: 'denisepirowicz@hotmail.com', bd: 'rusia3', pwd: '123456'};
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getData:GetDatosProvider) {
 
 		var operacion = this.navParams.get('operacion');
@@ -45,13 +46,15 @@ export class LoginPage {
 
 		var self = this;
 		self.cargar = true;
-		this.getData.login(this.conexion).then(res => {
-			self.cargar = false;
-			self.navCtrl.setRoot(CalendarioPage);							
-		}).catch(e => {
-			console.log(e.message);
-			console.log('error');
-		});
+		this.getData.login(this.conexion).then(
+			function(res){
+				self.cargar = false;
+				self.navCtrl.setRoot(PanelPage, {usr:res});							
+			}).catch(e => {
+				console.log(e.message);
+				console.log('error');
+			}
+		);
 	}
 
 }

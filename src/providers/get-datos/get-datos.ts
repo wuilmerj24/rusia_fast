@@ -1,6 +1,8 @@
 //import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { TablasProvider } from '../tablas/tablas';
+
 declare var OdooApi: any;
 /*
   Generated class for the GetDatosProvider provider.
@@ -15,152 +17,7 @@ export class GetDatosProvider {
 
 	public url = '/api';
 
-	tbl_gastos = "CREATE TABLE IF NOT EXISTS gastos("+
-	" id INTEGER PRIMARY KEY,"+
-	" concepto_gasto_id VARCHAR(255),"+
-	" tipo_moneda VARCHAR(20),"+	
-	" Total VARCHAR(20),"+	
-	" fecha VARCHAR(20));";
-
-	tbl_user  = "CREATE TABLE IF NOT EXISTS user("+
-	" id INTEGER,"+
-	" usuario VARCHAR(255),"+
-	" pwd VARCHAR(20),"+
-	" bd VARCHAR(20),"+
-	" tipo_usuario VARCHAR(20));";
-
-	tbl_eventos = "CREATE TABLE IF NOT EXISTS eventos("+
-	" id INTEGER PRIMARY KEY,"+
-	" cliente_id VARCHAR(255),"+	
-	" representante_id VARCHAR(255),"+	
-	" Fecha_Inicio VARCHAR(20),"+
-	" Fecha_Fin VARCHAR(20),"+
-	" hora_inicio VARCHAR(10),"+
-	" hora_final VARCHAR(10),"+
-	" name VARCHAR(255),"+
-	" is_padre VARCHAR(5),"+
-	" is_traslado VARCHAR(5),"+
-	" is_guia VARCHAR(5),"+
-	" fecha_padre VARCHAR(20),"+	
-	" guia_id VARCHAR(255),"+
-	" chofer_id VARCHAR(255),"	+	
-	" gasto_rub VARCHAR(10),"+
-	" gasto_eur VARCHAR(10),"+
-	" gasto_usd VARCHAR(10),"+
-	" gasto_paypal VARCHAR(10),"+
-	" Comentarios_Chofer TEXT,"+
-	" Comentarios_Internos TEXT,"+
-	" Comentarios_Cliente TEXT,"+
-	" Comentarios_Guia TEXT,"+
-	" Transporte VARCHAR(255),"+
-	" hotel_id VARCHAR(255),"+
-	" ciudad_id VARCHAR(255),"+
-	" Total_Representante VARCHAR(25),"+
-	" message TEXT,"+
-	" numero_pax VARCHAR(5),"+
-	" evento_id VARCHAR(100),"+
-	" Servicio_Gastos VARCHAR(10),"+
-	" tarjeta_eur VARCHAR(10),"+
-	" tarjeta_rub VARCHAR(10),"+
-	" tarjeta_usd VARCHAR(10),"+
-	" gastostoursline_ids VARCHAR(255));";
-/*
-	"tarjeta_usd_pos",
-	"Total_Rub",
-	"tarjeta_usd",
-	"tarjeta_rub",
-	"tarjeta_eur_pos",
-	"Total_Beneficios",
-	"Total_Pagado_Web",
-	"Total_Tarjeta",
-	"Total_Pago_Clientes",
-	"Total_Paypal",
-	"",
-	"gastostoursline_ids",
-	"evento_ids",		
-	"is_padre",	
-	"representante_id",	
-	"gastos_ids",	
-	"documentos_ids",
-	"gastos_reps_ids",
-	"Total_Euros",
-	"name",
-	"Total_Usd",
-	"tarjeta_eur",	
-	"display_name",
-	"__last_update",
-	"fecha_padre",,, 
-	"is_adjudicado"*/
-
-	
-	tbl_eventos_root = ["Comentarios_Chofer",
-	"Total_Beneficios",
-	"tarjeta_usd_pos",
-	"Transporte",
-	"is_traslado",
-	"is_guia",
-	"hotel_id",
-	"ciudad_id",
-	"Servicio_Gastos",
-	"message",
-	"numero_pax",
-	"Total_Rub",
-	"tarjeta_usd",
-	"tarjeta_rub",
-	"Total_Pagado_Web",
-	"gastostoursline_ids",
-	"evento_ids",
-	"evento_id",
-	"tarjeta_eur_pos",
-	"Comentarios_Internos",
-	"is_padre",
-	"Total_Tarjeta",
-	"Total_Pago_Clientes",
-	"Total_Paypal",
-	"Total_Representante",
-	"representante_id",
-	"Comentarios_Cliente",
-	"gastos_ids",
-	"Comentarios_Guia",
-	"gasto_usd",
-	"documentos_ids",
-	"gastos_reps_ids",
-	"Datos_Cliente_id",
-	"Total_Euros",
-	"name",
-	"Total_Usd",
-	"tarjeta_eur",
-	"gasto_rub",
-	"gasto_eur",
-	"gasto_paypal",
-	"display_name",
-	"__last_update",
-	"fecha_padre",
-	"guia_id", 
-	"chofer_id", 
-	"Fecha_Inicio", 
-	"Fecha_Fin",
-	"hora_inicio",
-	"hora_final", 
-	"is_adjudicado"];
-
-
-	tbl_user_odoo = ["email",
-	"is_chofer",
-	"is_guia",
-	"is_rep",
-	"is_client",
-	"is_root",
-	"is_general",
-	"is_traslados"];
-
-	tbl_gastos_odoo =[
-	"concepto_gasto_id",
-	"tipo_moneda",
-	"Total",
-	"fecha"]
-
-	constructor(private sqlite: SQLite) {
+	constructor(private sqlite: SQLite, private tablas:TablasProvider) {
 
 	}
 
@@ -208,7 +65,7 @@ export class GetDatosProvider {
 		      location: 'default'
 		    }).then((db: SQLiteObject) => {
 		      
-		      var sql = [self.tbl_eventos, self.tbl_gastos];
+		      var sql = [self.tablas.Tbl_eventos, self.tablas.Tbl_gastos];
 		      db.sqlBatch(sql)
 		      .then(
 		      	res => {
@@ -223,12 +80,14 @@ export class GetDatosProvider {
 							console.log(usr.id);
 							var dominio;
 							if(usr.tipo_usuario == 'is_root'){
-								dominio = [['is_padre', '=' , false]];								
-							}else{
+								dominio = [['is_padre', '=' , false]];
+							}if(usr.tipo_usuario == 'is_client'){
+								dominio = [['is_padre', '=' , false],["Datos_Cliente_id", "=", usr.id]];
+							}else {
 								dominio = [['is_padre', '=' , false], ["guia_id", "=", usr.id]];
 							} 
 				      		sql = [];
-				      		self.search_read('rusia.eventos', dominio, self.tbl_eventos_root)
+				      		self.search_read('rusia.eventos', dominio, self.tablas.Tbl_eventos_odoo)
 				      		.then(function(eventos) {
 				      		
 				      			console.log('resolvio eventos');
@@ -264,7 +123,7 @@ export class GetDatosProvider {
 						        	
 						        	
 						        	sql = [];
-						        	self.search_read('rusia.gastostoursline', [["id", "<>", '0']], self.tbl_gastos_odoo)
+						        	self.search_read('rusia.gastostoursline', [["id", "<>", '0']], self.tablas.Tbl_gastos_odoo)
 						      		.then(function(gastos) {
 						      		
 
@@ -276,9 +135,10 @@ export class GetDatosProvider {
 
 
 										    sql.push("INSERT OR IGNORE INTO gastos "+
-										    	"(id, concepto_gasto_id, tipo_moneda, Total, fecha)"+
-										    	" VALUES (" + gastos[key].id + ", 'dummy', '" 
-										    	+gastos[key].tipo_moneda +"', '"+ gastos[key].Total+ "', '" + gastos[key].fecha +"');");
+										    	"(id, concepto_gasto_id, tipo_moneda, Total, fecha, ciudad_id, observaciones)"+
+										    	" VALUES (" + gastos[key].id + ", '"+JSON.stringify(gastos[key].concepto_gasto_id)+"', '" 
+										    	+gastos[key].tipo_moneda +"', '"+ gastos[key].Total+ "', '" + gastos[key].fecha +"', '"+
+										    	JSON.stringify(gastos[key].ciudad_id)+"', '"+gastos[key].observaciones+"');");
 										});
 									    //console.log(JSON.stringify(sql));  										   
 
@@ -286,8 +146,8 @@ export class GetDatosProvider {
 				 
 							   			db.sqlBatch(sql)
 								        .then(res => {
-								        									        	
-								        	resolve(true);
+								        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+								        	resolve(usr.tipo_usuario);
 												
 										}).catch(e => {
 											console.log(e.message);
@@ -298,7 +158,8 @@ export class GetDatosProvider {
 									function() {
 								  		console.log('Error search_read');
 								  		console.log('Loading offline gastos');
-								  		resolve(true);							  		
+								  		//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+								  		resolve(usr.tipo_usuario);							  		
 									});
 										
 								}).catch(e => {
@@ -376,7 +237,7 @@ export class GetDatosProvider {
 
 				        		set = set.substring(0, set.length - 2); // "12345.0"
 				        		set = set + " ";
-				        		console.log("UPDATE " + tabla_bd + " SET " + set + " WHERE id = "+ dominio);
+				        		//console.log("UPDATE " + tabla_bd + " SET " + set + " WHERE id = "+ dominio);
 				        		self.ejecutarSQL("UPDATE " + tabla_bd + " SET " + set + " WHERE id = "+ dominio).then(
 				        			res =>{
 				        				console.log('write OK: ' + ok_code);
@@ -489,7 +350,7 @@ export class GetDatosProvider {
 			self.ejecutarSQL('SELECT * FROM user').then(
 	    	function(usuario: {rows}){
 	    		console.log('Loading offline user - OK');
-	    		resolve(true);
+	    		resolve(usuario.rows.item(0).tipo_usuario);
 	    	},	
 	    	fail => { 
 	    		var odoo = new OdooApi(self.url, conexion.bd);
@@ -498,7 +359,7 @@ export class GetDatosProvider {
 					
 
 					odoo.search_read('res.users', [['email', '=', conexion.usuario]], //, '', 'date_begin',
-			                         self.tbl_user_odoo).then(
+			                         self.tablas.Tbl_user_odoo).then(
 		 
 				    	function (user) {
 
@@ -523,7 +384,7 @@ export class GetDatosProvider {
 				    		}else if(user[0].is_traslados == true){
 				    			tipo = "is_traslados";
 				    		}else {
-				    			tipo = "is_chofer";
+				    			tipo = "is_client";
 				    		}
 
 					        self.sqlite.create({
@@ -531,7 +392,7 @@ export class GetDatosProvider {
 					      		location: 'default'
 					    	}).then((db: SQLiteObject) => {
 					      
-						      	db.executeSql(self.tbl_user, {})
+						      	db.executeSql(self.tablas.Tbl_user, {})
 						      	.then(
 						      		res => {
 							      		console.log('Executed SQL');
@@ -545,7 +406,7 @@ export class GetDatosProvider {
 							   			db.sqlBatch(sql)
 								        .then(res => {
 								        	
-								        	resolve(true);
+								        	resolve(tipo);
 												
 										}).catch(e => {
 											console.log(e.message);

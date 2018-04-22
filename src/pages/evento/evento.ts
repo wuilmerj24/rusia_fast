@@ -1,6 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, Slides, NavController, NavParams,ViewController } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
+import { DetallesReservaPage } from '../../pages/detalles-reserva/detalles-reserva';
+import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 
 @IonicPage()
 @Component({
@@ -12,11 +14,7 @@ export class EventoPage {
 	@ViewChild(Slides) slides: Slides;
 
 
-	public categories = [{id:1, name:'Resumen', visible:false},
-	{id:2, name:'Descripción', visible:false},
-	{id:3, name:'Gastos', visible:false},
-	{id:4, name:'Documentos', visible:false},	
-	{id:5, name:'Comentarios', visible:false}];
+	public categories;
 	public selectedCategory;
 	public showLeftButton: boolean;
 	public showRightButton: boolean;
@@ -57,13 +55,33 @@ export class EventoPage {
 	 is_guia:false
 	 }
 
-	 gastostoursline_ids = [];
+	gastostoursline_ids = [];
 
 	private editable = false;
 	private cargar = false;
+	private permisos = '';
+	private ver_segmento = true;
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 		
+		
+		this.permisos = this.navParams.get('permisos');
+		//console.log('permisos:'+ this.permisos);
+		if(this.permisos == 'is_client'){
+			this.ver_segmento = false;
+			this.categories = [{id:1, name:'Resumen', visible:false},
+			{id:2, name:'Descripción', visible:false},
+			{id:3, name:'Gastos', visible:false},
+			{id:4, name:'Documentos', visible:false},	
+			{id:5, name:'Comentarios', visible:false}];
+
+		}else{
+			this.categories = [{id:1, name:'Resumen', visible:false},
+			{id:2, name:'Descripción', visible:false},
+			{id:3, name:'Gastos', visible:false},
+			{id:4, name:'Documentos', visible:false},	
+			{id:5, name:'Comentarios', visible:false}];
+		}
 		this.initEvento();
 		this.initializeCategories();
 	}
@@ -112,9 +130,14 @@ export class EventoPage {
 				function(gastos: {rows}){
 
 					for(var i=0; i<gastos.rows.length; i++) {
-	                 
-	                     //console.log(JSON.stringify(gastos.rows.item(i)));      
-	                     self.gastostoursline_ids.push(gastos.rows.item(i));               
+	                 	
+	                 	console.log(JSON.stringify(gastos.rows.item(i)));                    
+	                 	var tmp_concepto_gasto_id = JSON.parse(gastos.rows.item(i).concepto_gasto_id)
+	                 	var concepto = gastos.rows.item(i);
+	                 	concepto.concepto_gasto_id = tmp_concepto_gasto_id;
+
+	                    self.gastostoursline_ids.push(concepto);               
+	                    
 	                }
 	                self.cargar = false;
 
@@ -156,10 +179,10 @@ export class EventoPage {
 			 //fecha_padre :'',	
 			 //guia_id :[0,''],
 			 //chofer_id :[0,''],	 
-			 gasto_rub :this.evento.gasto_rub,
-			 gasto_eur :this.evento.gasto_eur,
-			 gasto_usd :this.evento.gasto_usd,
-			 gasto_paypal :this.evento.gasto_paypal,
+			 //gasto_rub :this.evento.gasto_rub,
+			 //gasto_eur :this.evento.gasto_eur,
+			 //gasto_usd :this.evento.gasto_usd,
+			 //gasto_paypal :this.evento.gasto_paypal,
 			 Comentarios_Chofer :this.evento.Comentarios_Chofer,
 			 Comentarios_Internos :this.evento.Comentarios_Internos,
 			 Comentarios_Cliente :this.evento.Comentarios_Cliente,
@@ -172,14 +195,14 @@ export class EventoPage {
 			 numero_pax :this.evento.numero_pax,
 			 //evento_id : [0,''],
 			 Servicio_Gastos :this.evento.Servicio_Gastos,
-			 tarjeta_eur :this.evento.tarjeta_eur,
-			 tarjeta_rub :this.evento.tarjeta_rub,
-			 tarjeta_usd :this.evento.tarjeta_usd,
-			 is_traslado :false,
-			 is_guia:false
+			 //tarjeta_eur :this.evento.tarjeta_eur,
+			 //tarjeta_rub :this.evento.tarjeta_rub,
+			 //tarjeta_usd :this.evento.tarjeta_usd,
+			 is_traslado :this.evento.is_traslado,
+			 is_guia:this.evento.is_guia
 		};
-		console.log('ID:' + this.evento.id)
-		console.log('usd:' + campos.gasto_usd)
+		//console.log('ID:' + this.evento.id)
+		//console.log('usd:' + campos.gasto_usd)
 		this.getDatos.write('rusia.eventos', this.evento.id, campos).then(
 			res=>{
 				console.log('save event ok');
@@ -225,7 +248,7 @@ export class EventoPage {
         this.showLeftButton = currentIndex !== 0;
         this.showRightButton = currentIndex !== Math.ceil(this.slides.length() / 3);
     }
-
+ 
     // Method that shows the next slide
     public slideNext(): void {
         this.slides.slideNext();
@@ -234,6 +257,11 @@ export class EventoPage {
     // Method that shows the previous slide
     public slidePrev(): void {
         this.slides.slidePrev();
+    }
+
+    public abrirGasto(item){
+    	item.concepto_gasto_id = JSON.stringify(item.concepto_gasto_id);
+    	this.navCtrl.push(GatosTourPage, {gasto:item});
     }
 
 }

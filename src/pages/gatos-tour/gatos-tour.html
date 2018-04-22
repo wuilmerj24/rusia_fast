@@ -1,0 +1,117 @@
+<!--
+  Generated template for the GatosTourPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Detalle Gastos</ion-title>
+  </ion-navbar>
+
+   <ion-segment *ngIf="ver_segmento">
+        <ion-segment-button  value="camera" icon-start (click)="guardar()">
+                <ion-icon ios="ios-create" md="md-create"></ion-icon>
+            Guardar
+        </ion-segment-button>
+        <ion-segment-button value="bookmark" icon-start (click)="eliminar()">
+                <ion-icon ios="ios-cloud-upload" md="md-cloud-upload"></ion-icon>
+            Eliminar
+        </ion-segment-button>
+    </ion-segment>
+
+</ion-header>
+
+
+<ion-content>
+	<ion-grid>
+		<ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Concepto gasto</b>
+	        </ion-col>
+	        <ion-col col-8>	        	
+	            <ion-select name="gasto.concepto_gasto_id" [(ngModel)]="gasto.concepto_gasto_id[1]">	            
+					<ion-option value="1">Comision Getyourgide</ion-option>
+					<ion-option value="2">Entradas Kremlin</ion-option>
+					<ion-option value="3">Salario Guía</ion-option>
+					<ion-option value="4">Comision Paykepeer</ion-option>
+					<ion-option value="5">Entradas San Basilio</ion-option>
+					<ion-option value="6">Servicio chofer</ion-option>
+					<ion-option value="7">Billetes Metro</ion-option>
+					<ion-option value="8">Salario Chofer</ion-option>
+					<ion-option value="9">Entradas Museo Segunda Guerra Mundial</ion-option>
+					<ion-option value="10">Entradas Museo Cosmonautica</ion-option>
+					<ion-option value="11">Permiso Foto Museo Cosmonautica</ion-option>
+					<ion-option value="12">Hermitage</ion-option>
+					<ion-option value="13">Compra de Entradas a Shows</ion-option>
+					<ion-option value="14">Coste billetes de tren</ion-option>
+					<ion-option value="15">Monasterio Novodevichy</ion-option>
+					<ion-option value="16">Entradas Monasterio LAVRA</ion-option>
+					<ion-option value="17">Entradas Barco rio</ion-option>
+	            </ion-select>    
+	        </ion-col>    
+	    </ion-row>            	
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Total</b>
+	        </ion-col>
+	        <ion-col col-8>
+	            <ion-input name="gasto.Total" type="number" [(ngModel)]="gasto.Total"></ion-input>
+	        </ion-col>    
+	    </ion-row>            	
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Moneda</b>
+	        </ion-col>
+	        <ion-col col-8>	            	            
+	            <ion-select name="gasto.tipo_moneda" [(ngModel)]="gasto.tipo_moneda">	            	
+	            	<ion-option value="usd">USD</ion-option>
+	            	<ion-option value="eur">EUR</ion-option>
+	            	<ion-option value="rub">RUB</ion-option>
+	            	<ion-option value="pp">PayPal</ion-option>
+	            	<ion-option value="card">Tarjeta RUB</ion-option>
+	            	<ion-option value="cardeu">Tarjeta EUR</ion-option>
+	            	<ion-option value="cardusd">Tarjeta USD</ion-option>
+	            </ion-select>
+	        </ion-col>    
+	    </ion-row>            	
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Ciudad</b>
+	        </ion-col>
+	        <ion-col col-8>
+	            <ion-select name="gasto.ciudad_id" [(ngModel)]="gasto.ciudad_id[1]">	            	
+	            	<ion-option value="3">Moscu</ion-option>
+	            	<ion-option value="2">San petersburgo</ion-option>
+	            	<ion-option value="4">Sochi</ion-option>
+	            	<ion-option value="5">Kasan</ion-option>
+	            	<ion-option value="6">Samara</ion-option>	            	
+	            </ion-select>
+	        </ion-col>    
+	    </ion-row>            	
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Fecha usuario</b>
+	        </ion-col>
+	        <ion-col col-8>
+	            <ion-input name="gasto.fecha" type="text" [(ngModel)]="gasto.fecha"></ion-input>
+	        </ion-col>    
+	    </ion-row>        	     
+
+		<ion-row align-items-center>  
+			<ion-col col-12>
+				<b>Observaciones</b>
+			</ion-col>
+		</ion-row>
+
+		<ion-row align-items-center>  
+			<ion-col col-12>
+				<ion-textarea name="evento.observaciones" [(ngModel)]="gasto.observaciones"> </ion-textarea>
+			</ion-col>       
+		</ion-row>
+
+    			
+    </ion-grid>
+
+</ion-content>
