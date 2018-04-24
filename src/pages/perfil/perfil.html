@@ -14,6 +14,119 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+
+	<ion-grid >                 
+	    
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Nombre</b>
+	        </ion-col>
+	        <ion-col col-8>
+	           <ion-input name="user.name" readonly type="text" [(ngModel)]="user.name"></ion-input>
+	        </ion-col>       
+	    </ion-row>  
+
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Login</b>
+	        </ion-col>
+	        <ion-col col-8>
+	           <ion-input name="user.login" readonly type="text" [(ngModel)]="user.login"></ion-input>
+	        </ion-col>       
+	    </ion-row> 
+
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Email</b>
+	        </ion-col>
+	        <ion-col col-8>
+	           <ion-input name="user.email" readonly type="text" [(ngModel)]="user.email"></ion-input>
+	        </ion-col>       
+	    </ion-row> 
+
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Notificaciones por correo</b>
+	        </ion-col>
+	        <ion-col col-8>
+	        	<ion-checkbox name="user.is_correo" disabled [(ngModel)]="user.is_correo"></ion-checkbox>
+	           <!--ion-input name="user.is_correo" readonly type="text" [(ngModel)]="user.is_correo"></ion-input-->
+	        </ion-col>       
+	    </ion-row> 
+
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Teléfono</b>
+	        </ion-col>
+	        <ion-col col-8>
+	           <ion-input name="user.phone" readonly type="text" [(ngModel)]="user.phone"></ion-input>
+	        </ion-col>       
+	    </ion-row> 
+
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Móvil</b>
+	        </ion-col>
+	        <ion-col col-8>
+	           <ion-input name="user.mobile" readonly type="text" [(ngModel)]="user.mobile"></ion-input>
+	        </ion-col>       
+	    </ion-row> 
+
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Fax</b>
+	        </ion-col>
+	        <ion-col col-8>
+	           <ion-input name="user.fax" readonly type="text" [(ngModel)]="user.fax"></ion-input>
+	        </ion-col>       
+	    </ion-row> 
+<!--
+	    <ion-row align-items-center>  
+	        <ion-col col-8>
+	            <b></b>
+	        </ion-col>
+	        <ion-col col-8>
+	           <ion-input name="user." readonly type="text" [(ngModel)]="user."></ion-input>
+	        </ion-col>       
+	    </ion-row> 
+
+	    <ion-row align-items-center>  
+	        <ion-col col-8>
+	            <b></b>
+	        </ion-col>
+	        <ion-col col-8>
+	           <ion-input name="user." readonly type="text" [(ngModel)]="user."></ion-input>
+	        </ion-col>       
+	    </ion-row> 
+
+	    <ion-row align-items-center>  
+	        <ion-col col-8>
+	            <b></b>
+	        </ion-col>
+	        <ion-col col-8>
+	           <ion-input name="user." readonly type="text" [(ngModel)]="user."></ion-input>
+	        </ion-col>       
+	    </ion-row> 
+
+	    <ion-row align-items-center>  
+	        <ion-col col-8>
+	            <b></b>
+	        </ion-col>
+	        <ion-col col-8>
+	           <ion-input name="user." readonly type="text" [(ngModel)]="user."></ion-input>
+	        </ion-col>       
+	    </ion-row> 
+
+	    <ion-row align-items-center>  
+	        <ion-col col-8>
+	            <b></b>
+	        </ion-col>
+	        <ion-col col-8>
+	           <ion-input name="user." readonly type="text" [(ngModel)]="user."></ion-input>
+	        </ion-col>       
+	    </ion-row> 
+-->
+	</ion-grid>
 
 </ion-content>

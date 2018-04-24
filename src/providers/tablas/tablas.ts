@@ -48,7 +48,7 @@ export class TablasProvider {
 	"eventos_id"];
 
 	private tbl_user  = "CREATE TABLE IF NOT EXISTS user("+
-	" id INTEGER,"+
+	" id INTEGER PRIMARY KEY,"+
 	" usuario VARCHAR(255),"+
 	" pwd VARCHAR(20),"+
 	" bd VARCHAR(20),"+

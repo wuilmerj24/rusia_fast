@@ -28,12 +28,13 @@ export class GetDatosProvider {
 
 		var self = this;
 
-		console.log('constructor creado primero');
-    	self.ejecutarSQL("SELECT * FROM user;").then(
+		//console.log('constructor creado primero');
+    	self.ejecutarSQL("SELECT * FROM user").then(
 
 			function(data:{rows}){
 				console.log(JSON.stringify(data));
 				self.usr = data.rows.item(0);
+				console.log(JSON.stringify(data.rows.item(0)));
 			},
 			function(){
 				console.log('Error get table user');				
