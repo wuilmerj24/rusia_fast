@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, Slides, NavController, NavParams,ViewController } from 'ionic-angular';
+import { Slides, NavController, NavParams,ViewController } from 'ionic-angular';
 import { AcercaPage } from '../../pages/acerca/acerca';
 
 /**
@@ -9,7 +9,6 @@ import { AcercaPage } from '../../pages/acerca/acerca';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-detalles-reserva',
   templateUrl: 'detalles-reserva.html',

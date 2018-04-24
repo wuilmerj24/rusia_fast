@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 import { EventoPage } from '../../pages/evento/evento';
 /**
@@ -9,7 +9,7 @@ import { EventoPage } from '../../pages/evento/evento';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+//@IonicPage()
 @Component({
   selector: 'page-calendario',
   templateUrl: 'calendario.html',

@@ -25,7 +25,7 @@ export class GatosTourPage {
 
 	closeModal(dato) {
         if (dato == 'x') {
-            this.viewCtrl.dismiss(null);
+            this.viewCtrl.dismiss('x');
         } else {
             this.viewCtrl.dismiss(dato);
         }

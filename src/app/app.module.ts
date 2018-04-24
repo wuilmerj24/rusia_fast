@@ -20,6 +20,8 @@ import { PerfilPage } from '../pages/perfil/perfil';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { File } from '@ionic-native/file';
+
 import { NgCalendarModule } from 'ionic2-calendar';
 import { GetDatosProvider } from '../providers/get-datos/get-datos';
 import { SQLite } from '@ionic-native/sqlite';
@@ -64,7 +66,8 @@ import { TablasProvider } from '../providers/tablas/tablas';
     PanelPage,
     PerfilPage
   ],
-  providers: [
+  providers: [ 
+    File,   
     SQLite,
     StatusBar,
     SplashScreen,

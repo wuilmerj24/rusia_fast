@@ -2,6 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, Slides, NavController, NavParams,ViewController, ModalController } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
+import { File } from '@ionic-native/file';
+
 
 @IonicPage()
 @Component({
@@ -62,20 +64,28 @@ export class EventoPage {
 	private cargar = false;
 	private permisos = '';
 	private ver_segmento = true;
+	private ver_gastos= false;
+	private ver_resumen = false;
+	private ver_descripcion = false;
+	private ver_documentos = false;
+	private ver_comentarios = false;
+
+	private ver_download = false;
 
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
+	constructor(private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 		
 		this.evento_cal = this.navParams.get('evento');
 		this.permisos = this.navParams.get('permisos');
 		//console.log('permisos:'+ this.permisos);
 		if(this.permisos == 'is_client'){
 			this.ver_segmento = false;
-			this.categories = [{id:1, name:'Resumen', visible:false},
-			{id:2, name:'Descripción', visible:false},
-			{id:3, name:'Gastos', visible:false},
-			{id:4, name:'Documentos', visible:false},	
-			{id:5, name:'Comentarios', visible:false}];
+
+			this.categories = [{id:1, name:'Resumen', visible:false},//0
+			{id:2, name:'Descripción', visible:false},//1
+			//{id:3, name:'Gastos', visible:false},
+			{id:4, name:'Documentos', visible:false},	//2
+			{id:5, name:'Comentarios', visible:false}];//3
 
 		}else{
 			this.categories = [{id:1, name:'Resumen', visible:false},
@@ -135,6 +145,7 @@ export class EventoPage {
 				self.evento.chofer_id = tmp_chofer_id;
 				self.evento.hotel_id = tmp_hotel_id;
 				self.evento.ciudad_id = tmp_ciudad_id;
+
 				//self.evento.gastostoursline_ids = tmp_gatos;
 
 				//self.evento.Fecha_Inicio = new Date(self.evento.Fecha_Inicio).toISOString();
@@ -204,10 +215,6 @@ export class EventoPage {
 				console.log('Fail load evento')
 			}
 		);	
-	}
-
-	private abrirAttachment(){
-		
 	}
 	
 	private editar() {
@@ -298,31 +305,55 @@ export class EventoPage {
     	
     }
 
-  	initializeCategories() {
+  	private initializeCategories() {
 
         // Select it by defaut
         //console.log(this.categories)
         this.selectedCategory = this.categories[0];
-        this.selectedCategory.visible = true;
+        this.ver_resumen = true;
+        //this.selectedCategory.visible = true;        
 
         // Check which arrows should be shown
         this.showLeftButton = false;
         this.showRightButton = this.categories.length > 3;
     }
 
-    public filterData(categoryId: number): void {
+    private allHide(){
+    	this.ver_resumen = false;
+    	this.ver_descripcion = false;
+    	this.ver_gastos  = false;
+    	this.ver_comentarios = false;
+    	this.ver_documentos = false;
+    }
+
+    private filterData(categoryId: number): void {
         // Handle what to do when a category is selected
         //console.log(categoryId);
-
-        Object.keys(this.categories).forEach(key=> {
-
-        	if(this.categories[key].id == categoryId){
-        		this.categories[key].visible = true;
-        	}else{
-        		this.categories[key].visible = false;
-        	}
-		    //console.log(this.categories[key]);
-		});
+		switch (categoryId) {
+			case 1:
+				this.allHide();
+				this.ver_resumen = true;
+				break;
+			case 2:
+				this.allHide();
+				this.ver_descripcion = true;
+				break;
+			case 3:
+				this.allHide();
+				this.ver_gastos = true;
+				break;
+			case 4:
+				this.allHide();
+				this.ver_documentos = true;
+				break;
+			case 5:
+				this.allHide();
+				this.ver_comentarios = true;
+				break;
+			default:
+				this.allHide();
+				break;
+		}
     }
 
     // Method executed when the slides are changed
@@ -427,5 +458,27 @@ export class EventoPage {
 
         profileModal.present();       
     }
+
+    private descargarAtt(att){
+
+    	var self  = this;
+
+    	self.getDatos.search_read('ir.attachment', [["id", "=", att.id]], ["datas", "mimetype"]).then(
+
+    		(res : [{datas:'', mimetype:''}])=>{
+    			//var tabla = 
+    			console.log(JSON.stringify(res[0].datas));
+
+
+    			var blob = new Blob([res[0].datas], {type: res[0].mimetype});
+    			self.file.writeFile(self.file.externalDataDirectory, att.name, blob, {replace:true})
+
+    		},
+    		fail=>{
+    			console.log('Fail downloading att');
+    		}
+		);
+
+    }    
 
 }

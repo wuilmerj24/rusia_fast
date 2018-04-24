@@ -27,7 +27,7 @@ export class LoginPage {
     //admin
     //conexion = {usuario: 'jdmas@maui.com.mx', bd: 'rusia3', pwd: 'rusia@2018'};
     //cliente
-    //conexion = {usuario: 'denisepirowicz@hotmail.com', bd: 'rusia3', pwd: '123456'};
+    //conexion = {usuario: 'ceballosdavid@gmail.com', bd: 'rusia3', pwd: '123456'};
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getData:GetDatosProvider) {
 
 		var operacion = this.navParams.get('operacion');

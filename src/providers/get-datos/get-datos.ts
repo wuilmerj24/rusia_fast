@@ -247,6 +247,11 @@ export class GetDatosProvider {
     	
 	}
 
+	private parseDato(dato){
+		//console.log(typeof dato)
+		//console.log((dato == 'false'));
+		return ((dato == 'false')?"":dato);
+	}
 
 
 	public cargarCalendario(borrar){
@@ -291,9 +296,9 @@ export class GetDatosProvider {
 					    	eventos[key].fecha_padre +"', '" + JSON.stringify(eventos[key].guia_id)+ "' , '" + 
 					    	JSON.stringify(eventos[key].chofer_id) + "' , '" + eventos[key].gasto_rub + "' , '" + 
 					    	eventos[key].gasto_eur + "' , '" + eventos[key].gasto_usd + "' , '" + 
-					    	eventos[key].gasto_paypal + "', '" + eventos[key].Comentarios_Chofer + "', '" + 
-					    	eventos[key].Comentarios_Internos + "', '" + eventos[key].Comentarios_Cliente + "', '" + 
-					    	eventos[key].Comentarios_Guia + "', '" + eventos[key].Fecha_Fin + "', '"+
+					    	eventos[key].gasto_paypal + "', '" + self.parseDato(eventos[key].Comentarios_Chofer) + "', '" + 
+					    	self.parseDato(eventos[key].Comentarios_Internos) + "', '" + self.parseDato(eventos[key].Comentarios_Cliente) + "', '" + 
+					    	self.parseDato(eventos[key].Comentarios_Guia) + "', '" + eventos[key].Fecha_Fin + "', '"+
 					    	eventos[key].Transporte+"', '"+JSON.stringify(eventos[key].hotel_id)+"', '"+JSON.stringify(eventos[key].ciudad_id)+"', '"+
 					    	eventos[key].Total_Representante+"', '"+eventos[key].message+"', '"+eventos[key].numero_pax+"', '"+
 					    	JSON.stringify(eventos[key].evento_id)+"', '"+eventos[key].Servicio_Gastos+"', '"+eventos[key].tarjeta_eur+"', '"+
