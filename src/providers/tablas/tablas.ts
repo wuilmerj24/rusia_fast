@@ -22,6 +22,17 @@ export class TablasProvider {
 	" eventos_id VARCHAR(5));";
 
 
+	private tbl_attachment = "CREATE TABLE IF NOT EXISTS attachment("+
+	" id INTEGER PRIMARY KEY,"+
+	" datas VARCHAR(20),"+
+	" name VARCHAR(255));";
+
+	private tbl_attachment_odoo = [
+	"id",
+	"datas",
+	"name"];
+
+
 	private tbl_gastos_odoo =[
 	"id",
 	"tipo_moneda",
@@ -32,7 +43,7 @@ export class TablasProvider {
 	"observaciones",
 	"Total",
 	"evento_padre", 
-	"eventos_id"]
+	"eventos_id"];
 
 	private tbl_user  = "CREATE TABLE IF NOT EXISTS user("+
 	" id INTEGER,"+
@@ -189,6 +200,14 @@ export class TablasProvider {
   	
   	public get Tbl_eventos() : string {
   	 	return this.tbl_eventos;
+  	}
+
+  	public get Tbl_attachment_odoo() : string[] {
+  		return this.tbl_attachment_odoo;
+  	}
+
+  	public get Tbl_attachment() : string {
+  		return this.tbl_attachment;
   	}
 
 }

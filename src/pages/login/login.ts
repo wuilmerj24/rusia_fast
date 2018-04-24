@@ -20,8 +20,10 @@ export class LoginPage {
 
     cargar = false;    
    
+
+	//"proxyUrl": "http://185.129.251.102"
    	//guia
-    conexion = {usuario: 'alekseevadar@gmail.com', bd: 'rusia3', pwd: '123456'};
+    conexion = {usuario: 'joselugar8@hotmail.com', bd: 'rusia3', pwd: '123456'};
     //admin
     //conexion = {usuario: 'jdmas@maui.com.mx', bd: 'rusia3', pwd: 'rusia@2018'};
     //cliente

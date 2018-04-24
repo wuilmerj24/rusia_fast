@@ -40,7 +40,7 @@
                             <ion-icon ios="ios-create" md="md-create"></ion-icon>
             Editar
         </ion-segment-button>
-        <ion-segment-button value="bookmark" icon-start (click)="guardar_btn()">
+        <ion-segment-button value="bookmark" icon-start (click)="guardar(null)">
                             <ion-icon ios="ios-cloud-upload" md="md-cloud-upload"></ion-icon>
             Guardar
         </ion-segment-button>
@@ -101,6 +101,8 @@
 	            <b>Fecha</b>
 	        </ion-col>
 	        <ion-col col-6>
+	        	<!--ion-datetime  name="evento.Fecha_Inicio" displayFormat="YYYY-MM-DD"  [disabled]="!editable" [(ngModel)]="evento.Fecha_Inicio"></ion-datetime-->
+
 	            <ion-input name="evento.Fecha_Inicio"  [readonly]="!editable" type="text" [(ngModel)]="evento.Fecha_Inicio"></ion-input>
 	        </ion-col>       
 	    </ion-row>    
@@ -110,6 +112,8 @@
 	            <b>Hora inicio</b>
 	        </ion-col>
 	        <ion-col col-6>
+	        	<!--ion-datetime  name="evento.hora_inicio" displayFormat="HH:mm"  [disabled]="!editable" [(ngModel)]="evento.hora_inicio"></ion-datetime-->
+
 	            <ion-input name="evento.hora_inicio"  [readonly]="!editable" type="text" [(ngModel)]="evento.hora_inicio"></ion-input>
 	        </ion-col>       
 	    </ion-row>    

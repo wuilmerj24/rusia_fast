@@ -72,7 +72,7 @@ export class GetDatosProvider {
 
 	}
 
-	public borrarTablas(tablas){
+	/*public borrarTablas(tablas){
 		var self = this;
 		var promise = new Promise(function (resolve, reject) {
             
@@ -104,13 +104,75 @@ export class GetDatosProvider {
 	  	});
 
 	  	return promise;
+	}*/
+
+	public cargarAttachment(borrar){
+
+		var self = this;
+		var sql = [];
+		var promise = new Promise(function (resolve, reject) {
+            
+            
+			self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
+
+		    	self.search_read('ir.attachment', [["id", "<>", 0]], self.tablas.Tbl_attachment)
+			  		.then(function(attachment) {
+			  		
+
+			  			//console.log('resolvio gastos');
+			  			if(borrar == true){
+				  			sql.push('DELETE FROM attachment;');
+			  			}	
+			            
+				  		Object.keys(attachment).forEach(key=> {
+
+						    /*console.log("INSERT OR IGNORE INTO gastostoursline "+
+						    	"(id, concepto_gasto_id, tipo_moneda, Total, fecha, ciudad_id, observaciones, usuario_id, evento_padre, eventos_id)"+
+						    	" VALUES (" + gastos[key].id + ", '"+JSON.stringify(gastos[key].concepto_gasto_id)+"', '" 
+						    	+gastos[key].tipo_moneda +"', '"+ gastos[key].Total+ "', '" + gastos[key].fecha +"', '"+
+						    	JSON.stringify(gastos[key].ciudad_id)+"', '"+gastos[key].observaciones+"', '"+JSON.stringify(gastos[key].usuario_id)+"', '"+gastos[key].evento_padre+"', '"+ JSON.stringify(gastos[key].eventos_id) +"');"); */
+
+
+						    sql.push("INSERT OR IGNORE INTO attachment "+
+						    	"(id, datas, name)"+
+						    	" VALUES (" + attachment[key].id + ", '"+attachment[key].datas+"', '" 
+						    	+attachment[key].name +"');");
+						}); 
+					    //console.log(JSON.stringify(sql));  										   
+
+
+
+			   			db.sqlBatch(sql)
+				        .then(res => {
+				        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+				        	resolve();
+								
+						}).catch(e => {
+							console.log(e.message);
+							reject(e);
+						});
+
+				  	}, 
+					function() {
+				  		
+				  		console.log('Error search_read - Loading offline attachment');
+				  		//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+				  		resolve();							  		
+					});
+
+		    	}).catch(e => {
+		  		console.log('Error en conexion Odoo');
+		  		console.log(e.message);
+		  		reject(e)
+		  	});
+
+        });
+
+        return promise;	
+    
 	}
 
-	public cargarEventos(){
-
-	}
-
-	public cargarGastos(){
+	public cargarGastos(borrar){
 		var self = this;
 		var sql = [];
 		var promise = new Promise(function (resolve, reject) {
@@ -122,8 +184,11 @@ export class GetDatosProvider {
 			  		.then(function(gastos) {
 			  		
 
-			  			console.log('resolvio gastos');
-			            sql.push('DELETE FROM gastostoursline;');
+			  			//console.log('resolvio gastos');
+			  			if(borrar == true){
+				  			sql.push('DELETE FROM gastostoursline;');
+			  			}	
+			            
 				  		Object.keys(gastos).forEach(key=> {
 
 						    /*console.log("INSERT OR IGNORE INTO gastostoursline "+
@@ -175,93 +240,90 @@ export class GetDatosProvider {
 
 
 
-	public cargarCalendario(){
+	public cargarCalendario(borrar){
 
 		var self = this;
 		var promise = new Promise(function (resolve, reject) {
             
             
 			self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
-		      
-		      var sql = [self.tablas.Tbl_eventos, self.tablas.Tbl_gastos];
-		      db.sqlBatch(sql)
-		      .then(
-		      	res => {
+		      		       
+				//console.log(self.usr.id);
+				var dominio;
+				if(self.usr.tipo_usuario == 'is_root'){
+					dominio = [['is_padre', '=' , false]];
+				}if(self.usr.tipo_usuario == 'is_client'){
+					dominio = [['is_padre', '=' , false],["Datos_Cliente_id", "=", self.usr.id]];
+				}else {
+					dominio = [['is_padre', '=' , false], ["guia_id", "=", self.usr.id]];
+				} 
+	      		var sql = [];
+	      		self.search_read('rusia.eventos', dominio, self.tablas.Tbl_eventos_odoo)
+	      		.then(function(eventos) {
+	      		
+	      			console.log('resolvio eventos');
+			  		Object.keys(eventos).forEach(key=> {
 
-					console.log(self.usr.id);
-					var dominio;
-					if(self.usr.tipo_usuario == 'is_root'){
-						dominio = [['is_padre', '=' , false]];
-					}if(self.usr.tipo_usuario == 'is_client'){
-						dominio = [['is_padre', '=' , false],["Datos_Cliente_id", "=", self.usr.id]];
-					}else {
-						dominio = [['is_padre', '=' , false], ["guia_id", "=", self.usr.id]];
-					} 
-		      		sql = [];
-		      		self.search_read('rusia.eventos', dominio, self.tablas.Tbl_eventos_odoo)
-		      		.then(function(eventos) {
-		      		
-		      			console.log('resolvio eventos');
-				  		Object.keys(eventos).forEach(key=> {
+			  			if(borrar == true){
+			  				sql.push('DELETE FROM eventos;');	
+			  			}
+					    				  							  			
+					    sql.push("INSERT OR IGNORE INTO eventos "+
+					    	"(id, cliente_id, representante_id,"+
+					    	" Fecha_Inicio, hora_inicio , hora_final , name, is_padre, fecha_padre, guia_id,"+
+					    	" chofer_id, gasto_rub, gasto_eur, gasto_usd, gasto_paypal, Comentarios_Chofer,"+
+					    	" Comentarios_Internos, Comentarios_Cliente, Comentarios_Guia, Fecha_Fin, Transporte, hotel_id,"+
+					    	" ciudad_id, Total_Representante, message, numero_pax, evento_id, Servicio_Gastos, tarjeta_eur,"+
+					    	" tarjeta_rub, tarjeta_usd, is_guia, is_traslado, gastostoursline_ids)"+
+					    	" VALUES (" + eventos[key].id + ", '"+ JSON.stringify(eventos[key].Datos_Cliente_id)+"', '" +
+					    	JSON.stringify(eventos[key].representante_id)+ "', '" + eventos[key].Fecha_Inicio +"','" + 
+					    	eventos[key].hora_inicio + "', '" + eventos[key].hora_final + "', '" + 
+					    	eventos[key].name + "', '" + eventos[key].is_padre +"', '" + 
+					    	eventos[key].fecha_padre +"', '" + JSON.stringify(eventos[key].guia_id)+ "' , '" + 
+					    	JSON.stringify(eventos[key].chofer_id) + "' , '" + eventos[key].gasto_rub + "' , '" + 
+					    	eventos[key].gasto_eur + "' , '" + eventos[key].gasto_usd + "' , '" + 
+					    	eventos[key].gasto_paypal + "', '" + eventos[key].Comentarios_Chofer + "', '" + 
+					    	eventos[key].Comentarios_Internos + "', '" + eventos[key].Comentarios_Cliente + "', '" + 
+					    	eventos[key].Comentarios_Guia + "', '" + eventos[key].Fecha_Fin + "', '"+
+					    	eventos[key].Transporte+"', '"+JSON.stringify(eventos[key].hotel_id)+"', '"+JSON.stringify(eventos[key].ciudad_id)+"', '"+
+					    	eventos[key].Total_Representante+"', '"+eventos[key].message+"', '"+eventos[key].numero_pax+"', '"+
+					    	JSON.stringify(eventos[key].evento_id)+"', '"+eventos[key].Servicio_Gastos+"', '"+eventos[key].tarjeta_eur+"', '"+
+					    	eventos[key].tarjeta_rub+"', '"+eventos[key].tarjeta_usd+"' , '"+eventos[key].is_guia+"', '"+eventos[key].is_traslado+"', '"+ JSON.stringify(eventos[key].gastostoursline_ids)+"');");
+					});
 
-						    //console.log(eventos[key]);   
+		   			db.sqlBatch(sql)
+			        .then(res => {
+			        	
+			        	
+			        	self.cargarGastos(false).then(
+			        		res=>{
+			        			self.cargarAttachment(false).then(
+					        		res=>{
+					        			resolve(self.usr.tipo_usuario);
+					        		},
+					        		fail=>{
 
-						    sql.push("INSERT OR IGNORE INTO eventos "+
-						    	"(id, cliente_id, representante_id,"+
-						    	" Fecha_Inicio, hora_inicio , hora_final , name, is_padre, fecha_padre, guia_id,"+
-						    	" chofer_id, gasto_rub, gasto_eur, gasto_usd, gasto_paypal, Comentarios_Chofer,"+
-						    	" Comentarios_Internos, Comentarios_Cliente, Comentarios_Guia, Fecha_Fin, Transporte, hotel_id,"+
-						    	" ciudad_id, Total_Representante, message, numero_pax, evento_id, Servicio_Gastos, tarjeta_eur,"+
-						    	" tarjeta_rub, tarjeta_usd, is_guia, is_traslado, gastostoursline_ids)"+
-						    	" VALUES (" + eventos[key].id + ", '"+ JSON.stringify(eventos[key].Datos_Cliente_id)+"', '" +
-						    	JSON.stringify(eventos[key].representante_id)+ "', '" + eventos[key].Fecha_Inicio +"','" + 
-						    	eventos[key].hora_inicio + "', '" + eventos[key].hora_final + "', '" + 
-						    	eventos[key].name + "', '" + eventos[key].is_padre +"', '" + 
-						    	eventos[key].fecha_padre +"', '" + JSON.stringify(eventos[key].guia_id)+ "' , '" + 
-						    	JSON.stringify(eventos[key].chofer_id) + "' , '" + eventos[key].gasto_rub + "' , '" + 
-						    	eventos[key].gasto_eur + "' , '" + eventos[key].gasto_usd + "' , '" + 
-						    	eventos[key].gasto_paypal + "', '" + eventos[key].Comentarios_Chofer + "', '" + 
-						    	eventos[key].Comentarios_Internos + "', '" + eventos[key].Comentarios_Cliente + "', '" + 
-						    	eventos[key].Comentarios_Guia + "', '" + eventos[key].Fecha_Fin + "', '"+
-						    	eventos[key].Transporte+"', '"+JSON.stringify(eventos[key].hotel_id)+"', '"+JSON.stringify(eventos[key].ciudad_id)+"', '"+
-						    	eventos[key].Total_Representante+"', '"+eventos[key].message+"', '"+eventos[key].numero_pax+"', '"+
-						    	JSON.stringify(eventos[key].evento_id)+"', '"+eventos[key].Servicio_Gastos+"', '"+eventos[key].tarjeta_eur+"', '"+
-						    	eventos[key].tarjeta_rub+"', '"+eventos[key].tarjeta_usd+"' , '"+eventos[key].is_guia+"', '"+eventos[key].is_traslado+"', '"+ JSON.stringify(eventos[key].gastostoursline_ids)+"');");
-						});
- 
-			   			db.sqlBatch(sql)
-				        .then(res => {
-				        	
-				        	
-				        	self.cargarGastos().then(
-				        		res=>{
-				        			resolve(self.usr.tipo_usuario);
-				        		},
-				        		fail=>{
+					        			reject();
+					        		}
+					        	);
+			        		},
+			        		fail=>{
 
-				        			reject();
-				        		}
-				        	);
-								
-						}).catch(e => {
-							console.log(e.message);
-							reject(e);
-						});
+			        			reject();
+			        		}
+			        	);
+							
+					}).catch(e => {
+						console.log(e.message);
+						reject(e);
+					});
 
-				  	}, 
-					function() {
-				  		console.log('Error search_read');
-				  		console.log('Loading offline events');
-				  		resolve(self.usr.tipo_usuario);							  		
-					});						
-						
-		      		
-
-	  			}).catch(e => {
-	  				console.log('Error en CREATE TABLE');
-	  				console.log(e.message);
-	  				reject(e)
-	  			});
+			  	}, 
+				function() {
+			  		console.log('Error search_read');
+			  		console.log('Loading offline events');
+			  		resolve(self.usr.tipo_usuario);							  		
+				});						
 
 		  	}).catch(e => {
 		  		console.log('Error en CONEXION');
@@ -577,9 +639,13 @@ export class GetDatosProvider {
 				    			tipo = "is_client";
 				    		}
 
+				    		//creo todas las tablas
+
 					        self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
 					      
-						      	db.executeSql(self.tablas.Tbl_user, {})
+					      		var sql = [self.tablas.Tbl_eventos, self.tablas.Tbl_gastos, self.tablas.Tbl_user, self.tablas.Tbl_attachment];
+
+						      	db.sqlBatch(sql)
 						      	.then(
 						      		res => {
 							      		console.log('Executed SQL');

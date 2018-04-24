@@ -8,7 +8,7 @@
 	"proxies": [
 	    {
 	        "path": "/api",
-	        "proxyUrl": "http://185.129.251.102"
+	        "proxyUrl":"http://odoo.devoptions.mx"
 	    }
 	]
 }

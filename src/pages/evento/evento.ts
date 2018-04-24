@@ -127,34 +127,71 @@ export class EventoPage {
 				self.evento.hotel_id = tmp_hotel_id;
 				self.evento.ciudad_id = tmp_ciudad_id;
 				self.evento.gastostoursline_ids = tmp_gatos;
+
+				//self.evento.Fecha_Inicio = new Date(self.evento.Fecha_Inicio).toISOString();
+				/*var tmp_hora_inicio = new Date();
+				tmp_hora_inicio.setHours(parseInt(self.evento.hora_inicio.split(':')[0]));
+				tmp_hora_inicio.setMinutes(parseInt(self.evento.hora_inicio.split(':')[1]));
+				
+				console.log(parseInt(self.evento.hora_inicio.split(':')[0]));
+
+				tmp_hora_inicio.setHours(15, 35, 1);
+				console.log(tmp_hora_inicio);
+
+				self.evento.hora_inicio = new Date(tmp_hora_inicio).toISOString();*/
 				//console.log(self.evento.name);
 
 				//console.log('self.gastostoursline_ids' + JSON.stringify(self.gastostoursline_ids));
 
 				self.getDatos.ejecutarSQL('SELECT * FROM gastostoursline WHERE eventos_id = "' + self.evento.id +'"').then(
-				function(gastos: {rows}){
+					function(gastos: {rows}){
 
-					
+						
 
-					for(var i=0; i<gastos.rows.length; i++) {
-	                 	
-	                	console.log(JSON.stringify(gastos.rows.item(i)));                     	
-	                 	var tmp_concepto_gasto_id = JSON.parse(gastos.rows.item(i).concepto_gasto_id)
-	                 	var tmp_ciudad_id = JSON.parse(gastos.rows.item(i).ciudad_id)
-	                 	
-	                 	var concepto = gastos.rows.item(i);
-	                 	concepto.concepto_gasto_id = tmp_concepto_gasto_id;
-	                 	concepto.ciudad_id = tmp_ciudad_id;
+						for(var i=0; i<gastos.rows.length; i++) {
+		                 	
+		                	//console.log(JSON.stringify(gastos.rows.item(i)));                     	
+		                 	var tmp_concepto_gasto_id = JSON.parse(gastos.rows.item(i).concepto_gasto_id)
+		                 	var tmp_ciudad_id = JSON.parse(gastos.rows.item(i).ciudad_id)
+		                 	
+		                 	var concepto = gastos.rows.item(i);
+		                 	concepto.concepto_gasto_id = tmp_concepto_gasto_id;
+		                 	concepto.ciudad_id = tmp_ciudad_id;
 
-	                    self.gastostoursline_ids.push(concepto);               
-	                    
-	                }
-	                self.cargar = false;
+		                    self.gastostoursline_ids.push(concepto);               
+		                    
+		                }
+		                //self.cargar = false;
+		                self.getDatos.ejecutarSQL('SELECT * FROM attachment').then(
+							function(attachment: {rows}){
 
-				},
-				fail=>{
-					console.log('Fail load gastos')
-				}
+								
+
+								/*for(var i=0; i<gastos.rows.length; i++) {
+				                 	
+				                	//console.log(JSON.stringify(gastos.rows.item(i)));                     	
+				                 	var tmp_concepto_gasto_id = JSON.parse(gastos.rows.item(i).concepto_gasto_id)
+				                 	var tmp_ciudad_id = JSON.parse(gastos.rows.item(i).ciudad_id)
+				                 	
+				                 	var concepto = gastos.rows.item(i);
+				                 	concepto.concepto_gasto_id = tmp_concepto_gasto_id;
+				                 	concepto.ciudad_id = tmp_ciudad_id;
+
+				                    self.gastostoursline_ids.push(concepto);               
+				                    
+				                }*/
+				                self.cargar = false;
+
+							},
+							fail=>{
+								console.log('Fail load gastos')
+							}
+						);
+
+					},
+					fail=>{
+						console.log('Fail load gastos')
+					}
 				);
 
 			},
@@ -173,16 +210,6 @@ export class EventoPage {
         }
     }
 
-    private guardar_btn(){
-    	this.guardar(this).then(
-		res=>{
-			console.log('save event ok');					
-		},
-		).catch(e => {
-			console.log(e);					
-		});
-    }
-
     private guardar(dato){
 
     	var self = this;
@@ -191,85 +218,71 @@ export class EventoPage {
 
     	var promise = new Promise(function (resolve, reject) {
 
-			console.log('------------------------------campos ----------------');
-			/*
-			var campos = {
-				 //cliente_id :[0,''],
-				 //representante_id :[0,''],	 
-				 //Fecha_Inicio : this.evento.Fecha_Inicio,
-				 //Fecha_Fin :this.evento.Fecha_Fin,
-				 //hora_inicio :self.evento.hora_inicio,
-				 //hora_final :self.evento.hora_final,
-				 //name :'',
-				 //is_padre :'',
-				 //fecha_padre :'',	
-				 //guia_id :[0,''],
-				 //chofer_id :[0,''],	 
-				 //gasto_rub :this.evento.gasto_rub,
-				 //gasto_eur :this.evento.gasto_eur,
-				 //gasto_usd :this.evento.gasto_usd,
-				 //gasto_paypal :this.evento.gasto_paypal,
-				 //Comentarios_Chofer :self.evento.Comentarios_Chofer,
-				 //Comentarios_Internos :self.evento.Comentarios_Internos,
-				 //Comentarios_Cliente :self.evento.Comentarios_Cliente,
-				 //Comentarios_Guia:self.evento.Comentarios_Guia,
-				 //Transporte :self.evento.Transporte,
-				 //hotel_id :[0,''],
-				 //ciudad_id :[0,''],
-				 //Total_Representante :self.evento.Total_Representante,
-				 //message:self.evento.message,
-				 //numero_pax :self.evento.numero_pax,
-				 //evento_id : [0,''],
-				 //Servicio_Gastos :self.evento.Servicio_Gastos,
-				 //tarjeta_eur :this.evento.tarjeta_eur, 
-				 //tarjeta_rub :this.evento.tarjeta_rub,
-				 //tarjeta_usd :this.evento.tarjeta_usd,
-				 //is_traslado :self.evento.is_traslado,
-				 //is_guia:self.evento.is_guia,
-				 gastostoursline_ids:[6, 0, self.evento.gastostoursline_ids]
-
-			};*/
-			/*
-			var existing_value_id = [69,70,71];
-'value_ids'=>array(array(6,0,array($existing_value_id)))*/
-                                                 
-			//var campos = {"gastostoursline_ids":[6,0,[69,70,71,101,105,106,107]]}
-			/*var campos = {
-				gastostoursline_ids: [[0,0,{
-					Total:10,
-					ciudad_id:3,
-					concepto_gasto_id:1,
-					evento_padre:"AR001180409-11",
-					fecha:"2018-04-14",
-					observaciones:false,
-					tipo_moneda:"pp",
-					usuario_id:false}]]
-			};*/
-
-
-
+    		if(self.editable){
+    			var campos;
 			
+				if (dato == null){
+					campos = {
+					 //cliente_id :[0,''],
+					 //representante_id :[0,''],	 
+					 Fecha_Inicio : self.evento.Fecha_Inicio,
+					 //Fecha_Fin :this.evento.Fecha_Fin,
+					 hora_inicio :self.evento.hora_inicio,
+					 hora_final :self.evento.hora_final,
+					 //name :'',
+					 //is_padre :'',
+					 //fecha_padre :'',	
+					 //guia_id :[0,''],
+					 //chofer_id :[0,''],	 
+					 //gasto_rub :this.evento.gasto_rub,
+					 //gasto_eur :this.evento.gasto_eur,
+					 //gasto_usd :this.evento.gasto_usd,
+					 //gasto_paypal :this.evento.gasto_paypal,
+					 Comentarios_Chofer :self.evento.Comentarios_Chofer,
+					 Comentarios_Internos :self.evento.Comentarios_Internos,
+					 Comentarios_Cliente :self.evento.Comentarios_Cliente,
+					 Comentarios_Guia:self.evento.Comentarios_Guia,
+					 Transporte :self.evento.Transporte,
+					 //hotel_id :[0,''],
+					 //ciudad_id :[0,''],
+					 //Total_Representante :self.evento.Total_Representante,
+					 message:self.evento.message,
+					 numero_pax :self.evento.numero_pax,
+					 //evento_id : [0,''],
+					 //Servicio_Gastos :self.evento.Servicio_Gastos,
+					 //tarjeta_eur :this.evento.tarjeta_eur, 
+					 //tarjeta_rub :this.evento.tarjeta_rub,
+					 //tarjeta_usd :this.evento.tarjeta_usd,
+					 is_traslado :self.evento.is_traslado,
+					 is_guia:self.evento.is_guia
 
+					};
+				}else{
+					campos = {
+						gastostoursline_ids: [[0,0,dato]]
+					}
+				}						
 
-			var campos = {
-				gastostoursline_ids: [[0,0,dato]]
-			}
+				console.log(JSON.stringify(campos));
+				//console.log('ID:' + this.evento.id)
+				//console.log('usd:' + campos.gasto_usd)
+				self.getDatos.write('rusia.eventos', self.evento.id, campos).then(
+					res=>{
+						console.log('save event ok');
+						self.cargar = false;
+						resolve();
+					},
+					fail=>{
+						console.log('error saving event');
+						reject();
+					} 
 
-			console.log(JSON.stringify(campos));
-			//console.log('ID:' + this.evento.id)
-			//console.log('usd:' + campos.gasto_usd)
-			self.getDatos.write('rusia.eventos', self.evento.id, campos).then(
-				res=>{
-					console.log('save event ok');
-					self.cargar = false;
-					resolve();
-				},
-				fail=>{
-					console.log('error saving event');
-					reject();
-				} 
-
-			);
+				);
+    		}else{
+    			console.log('editable is false');
+    			reject();
+    		}
+    		
     	});
 
     	return promise;
@@ -343,7 +356,7 @@ export class EventoPage {
             if (data > 0) {
             	
             	self.cargar = true;
-            	self.getDatos.cargarGastos().then(
+            	self.getDatos.cargarGastos(true).then(
 	        		res=>{
 	        			self.initEvento();
 	        		},
@@ -367,23 +380,23 @@ export class EventoPage {
 			concepto_gasto_id:[],
 			Total:'',
 			tipo_moneda:'',
-			ciudad_id:[],
+			ciudad_id:self.evento.ciudad_id,
 			usuario_id:[],
 			observaciones:'',		
 			evento_padre:this.evento.name,
 			eventos_id:this.evento.id,
 			fecha:new Date().toISOString()
 		}//gasto:{, , , id:nul
-        let profileModal = this.modalCtrl.create(GatosTourPage, {gasto:gasto, ver_segmento:this.editable});
+        let profileModal = this.modalCtrl.create(GatosTourPage, {gasto:gasto, ver_segmento:self.editable});
         
         profileModal.onDidDismiss(data => {
-        	
-			
+        				
             if (data != 'x') {
+            	self.cargar = true;
             	self.guardar(data).then(
 	        		res=>{
 
-	        			self.getDatos.cargarGastos().then(
+	        			self.getDatos.cargarCalendario(false).then(
 			        		res=>{
 			        			console.log('Update complete');
 			        			self.initEvento();

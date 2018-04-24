@@ -39,7 +39,7 @@ export class CalendarioPage {
     private initCalendario(){
         var self = this;
         self.cargar = true;
-        this.getDatos.cargarCalendario().then(          
+        this.getDatos.cargarCalendario(false).then(          
           function(permisos:'') {
             
             self.permisos = permisos;
