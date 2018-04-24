@@ -52,15 +52,17 @@ export class EventoPage {
 	 tarjeta_usd :'',
 	 is_traslado :false,
 	 is_guia:false,
-	 gastostoursline_ids:[]
+	 //gastostoursline_ids:[]
 	 }
 
 	gastostoursline_ids = [];
+	attachment = [];
 
 	private editable = false;
 	private cargar = false;
 	private permisos = '';
 	private ver_segmento = true;
+
 
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 		
@@ -90,6 +92,13 @@ export class EventoPage {
 		console.log('ionViewDidLoad EventoPage');
 	}
 
+	private bytesToSize(bytes:number) {
+	   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+	   if (bytes == 0) return '0 Byte';
+	   var i = Math.floor(Math.log(bytes) / Math.log(1024));
+	   return Math.round((bytes / Math.pow(1024, i))) + ' ' + sizes[i];
+	};
+
 	private initEvento(){
 		
 		var self = this;
@@ -106,9 +115,9 @@ export class EventoPage {
 				var tmp_hotel_id = JSON.parse(eventos.rows.item(0).hotel_id);
 				var tmp_ciudad_id = JSON.parse(eventos.rows.item(0).ciudad_id);
 
-				var tmp_gatos = JSON.parse(eventos.rows.item(0).gastostoursline_ids);
+				//var tmp_gatos = JSON.parse(eventos.rows.item(0).gastostoursline_ids);
 
-				var domanin = '';
+				/*var domanin = '';
 				for (var i = tmp_gatos.length - 1; i >= 0; i--) {
 
 					if(i == 0){
@@ -116,7 +125,7 @@ export class EventoPage {
 					}else{
 						domanin = domanin + tmp_gatos[i] + ","  	
 					}
-				}
+				}*/
 
 				self.evento = eventos.rows.item(0);
 				self.evento.evento_id = tmp_evento_id;
@@ -126,7 +135,7 @@ export class EventoPage {
 				self.evento.chofer_id = tmp_chofer_id;
 				self.evento.hotel_id = tmp_hotel_id;
 				self.evento.ciudad_id = tmp_ciudad_id;
-				self.evento.gastostoursline_ids = tmp_gatos;
+				//self.evento.gastostoursline_ids = tmp_gatos;
 
 				//self.evento.Fecha_Inicio = new Date(self.evento.Fecha_Inicio).toISOString();
 				/*var tmp_hora_inicio = new Date();
@@ -162,24 +171,20 @@ export class EventoPage {
 		                    
 		                }
 		                //self.cargar = false;
-		                self.getDatos.ejecutarSQL('SELECT * FROM attachment').then(
+		                console.log('SELECT * FROM attachment WHERE cliente_id = "' + self.evento.cliente_id[0] +'"');
+		                self.getDatos.ejecutarSQL('SELECT * FROM attachment WHERE cliente_id = "' + self.evento.cliente_id[0] +'"').then(
 							function(attachment: {rows}){
 
-								
+															 
+								for(var i=0; i<attachment.rows.length; i++) {
 
-								/*for(var i=0; i<gastos.rows.length; i++) {
-				                 	
-				                	//console.log(JSON.stringify(gastos.rows.item(i)));                     	
-				                 	var tmp_concepto_gasto_id = JSON.parse(gastos.rows.item(i).concepto_gasto_id)
-				                 	var tmp_ciudad_id = JSON.parse(gastos.rows.item(i).ciudad_id)
-				                 	
-				                 	var concepto = gastos.rows.item(i);
-				                 	concepto.concepto_gasto_id = tmp_concepto_gasto_id;
-				                 	concepto.ciudad_id = tmp_ciudad_id;
-
-				                    self.gastostoursline_ids.push(concepto);               
-				                    
-				                }*/
+									var att = attachment.rows.item(i)
+									att.file_size = self.bytesToSize(parseInt(att.file_size))
+									//var tmp_file_size = attachment.rows.item(i).file_size;
+									//console.log('file size:' + );
+				                	//console.log(JSON.stringify(attachment.rows.item(i)));  	
+				                   	self.attachment.push(att);               				                    
+				                }
 				                self.cargar = false;
 
 							},
@@ -199,6 +204,10 @@ export class EventoPage {
 				console.log('Fail load evento')
 			}
 		);	
+	}
+
+	private abrirAttachment(){
+		
 	}
 	
 	private editar() {

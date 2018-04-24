@@ -17,7 +17,7 @@ export class GetDatosProvider {
 
 	private url = '/api';
 
-	private usr = null;
+	public usr = null;	
 
 	private bd_conf = {
       name: 'ionicdb.db',
@@ -113,58 +113,66 @@ export class GetDatosProvider {
 		var promise = new Promise(function (resolve, reject) {
             
             
-			self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
+            self.search_read('ir.attachment', [["id", "<>", 0], ["cliente_id", "<>", false]], self.tablas.Tbl_attachment_odoo)
+	  		.then(function(attachment) {
+	  		
 
-		    	self.search_read('ir.attachment', [["id", "<>", 0]], self.tablas.Tbl_attachment)
-			  		.then(function(attachment) {
-			  		
+	  			//console.log('resolvio gastos');
+	  			//console.log('-----------------entro3 ---------------');
+	  			//console.log(JSON.stringify(attachment));
+	  			if(borrar == true){
+		  			sql.push('DELETE FROM attachment;');
+	  			}	
+	            
+		  		Object.keys(attachment).forEach(key=> {
 
-			  			//console.log('resolvio gastos');
-			  			if(borrar == true){
-				  			sql.push('DELETE FROM attachment;');
-			  			}	
-			            
-				  		Object.keys(attachment).forEach(key=> {
-
-						    /*console.log("INSERT OR IGNORE INTO gastostoursline "+
-						    	"(id, concepto_gasto_id, tipo_moneda, Total, fecha, ciudad_id, observaciones, usuario_id, evento_padre, eventos_id)"+
-						    	" VALUES (" + gastos[key].id + ", '"+JSON.stringify(gastos[key].concepto_gasto_id)+"', '" 
-						    	+gastos[key].tipo_moneda +"', '"+ gastos[key].Total+ "', '" + gastos[key].fecha +"', '"+
-						    	JSON.stringify(gastos[key].ciudad_id)+"', '"+gastos[key].observaciones+"', '"+JSON.stringify(gastos[key].usuario_id)+"', '"+gastos[key].evento_padre+"', '"+ JSON.stringify(gastos[key].eventos_id) +"');"); */
-
-
-						    sql.push("INSERT OR IGNORE INTO attachment "+
-						    	"(id, datas, name)"+
-						    	" VALUES (" + attachment[key].id + ", '"+attachment[key].datas+"', '" 
-						    	+attachment[key].name +"');");
-						}); 
-					    //console.log(JSON.stringify(sql));  										   
+				    console.log("INSERT OR IGNORE INTO attachment "+
+				    	"(id, cliente_id, file_size, name)"+
+				    	" VALUES (" + attachment[key].id + ", '"+attachment[key].cliente_id[0]+"', '" +attachment[key].file_size+"', '" 
+				    	+attachment[key].name +"');"); 
 
 
+				    sql.push("INSERT OR IGNORE INTO attachment "+
+				    	"(id, cliente_id, file_size, name)"+
+				    	" VALUES (" + attachment[key].id + ", '"+attachment[key].cliente_id[0]+"', '" +attachment[key].file_size+"', '" 
+				    	+attachment[key].name +"');");
+				}); 
 
-			   			db.sqlBatch(sql)
-				        .then(res => {
-				        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
-				        	resolve();
-								
-						}).catch(e => {
-							console.log(e.message);
-							reject(e);
-						});
+				self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
 
-				  	}, 
-					function() {
-				  		
-				  		console.log('Error search_read - Loading offline attachment');
-				  		//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
-				  		resolve();							  		
+			    	db.sqlBatch(sql)
+			        .then(res => {
+			        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+			        	resolve();
+							
+					}).catch(e => {
+						console.log(e.message);
+						reject(e);
 					});
 
 		    	}).catch(e => {
-		  		console.log('Error en conexion Odoo');
-		  		console.log(e.message);
-		  		reject(e)
-		  	});
+			  		console.log('Error en conexion DB');
+			  		console.log(e.message);
+			  		reject(e)
+			  	});
+
+				//console.log('-----------------Fin ---------------');
+				//resolve();
+			    //console.log(JSON.stringify(sql));  										   
+
+
+
+	   			
+
+		  	}, 
+			function() {
+		  		
+		  		console.log('Error search_read - Loading offline attachment');
+		  		//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+		  		reject();							  		
+			});
+
+			
 
         });
 
@@ -294,9 +302,11 @@ export class GetDatosProvider {
 		   			db.sqlBatch(sql)
 			        .then(res => {
 			        	
-			        	
+			        	console.log('-----------------entro1 ---------------');
 			        	self.cargarGastos(false).then(
 			        		res=>{
+
+			        			console.log('-----------------entro2 ---------------');
 			        			self.cargarAttachment(false).then(
 					        		res=>{
 					        			resolve(self.usr.tipo_usuario);
@@ -610,7 +620,7 @@ export class GetDatosProvider {
 				function (uid) {
 					
 
-					odoo.search_read('res.users', [['email', '=', conexion.usuario]], //, '', 'date_begin',
+					odoo.search_read('res.users', [['login', '=', conexion.usuario]], //, '', 'date_begin',
 			                         self.tablas.Tbl_user_odoo).then(
 		 
 				    	function (user) {
@@ -653,8 +663,13 @@ export class GetDatosProvider {
 							      		var sql = [];
 							      		//console.log('-----------------------------2');
 									    sql.push("INSERT OR IGNORE INTO user "+
-									    	"(id, usuario, pwd, bd, tipo_usuario)"+
-									    	" VALUES (" + uid +", '"+ conexion.usuario + "', '" + conexion.pwd +"', '" + conexion.bd + "', '" + tipo +	"');");
+									    	"(id, usuario, pwd, bd, tipo_usuario, gastos_users_ids,"+
+									    	" company_id, ciudades, fax, is_correo, name, eventos_ids, state,"+
+									    	"email, active, reps_gastos_ids, login, phone, mobile) VALUES (" + uid +", '"+ conexion.usuario + "', '" 
+									    	+ conexion.pwd +"', '" + conexion.bd + "', '" + tipo +	"', '"+JSON.stringify(user[0].gastos_users_ids)+"', '"+
+									    	JSON.stringify(user[0].company_id)+"', '"+user[0].ciudades+"', '"+user[0].fax+"', '"+user[0].is_correo+"', '"+
+									    	user[0].name+"', '"+JSON.stringify(user[0].eventos_ids)+"', '"+user[0].state+"', '"+user[0].email+"', '"+
+									    	user[0].active+"', '"+JSON.stringify(user[0].reps_gastos_ids)+"', '"+user[0].login+"' ,'"+user[0].phone+"', '"+user[0].mobile+"' );");
 										
 							   			db.sqlBatch(sql)
 								        .then(res => {

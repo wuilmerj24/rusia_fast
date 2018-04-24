@@ -24,13 +24,15 @@ export class TablasProvider {
 
 	private tbl_attachment = "CREATE TABLE IF NOT EXISTS attachment("+
 	" id INTEGER PRIMARY KEY,"+
-	" datas VARCHAR(20),"+
+	" file_size VARCHAR(20),"+
+	" cliente_id VARCHAR(20),"+
 	" name VARCHAR(255));";
 
 	private tbl_attachment_odoo = [
 	"id",
-	"datas",
-	"name"];
+	"file_size",
+	"name",
+	"cliente_id"];
 
 
 	private tbl_gastos_odoo =[
@@ -50,7 +52,21 @@ export class TablasProvider {
 	" usuario VARCHAR(255),"+
 	" pwd VARCHAR(20),"+
 	" bd VARCHAR(20),"+
-	" tipo_usuario VARCHAR(20));";
+	" tipo_usuario VARCHAR(20),"+
+	" gastos_users_ids  VARCHAR(255),"+
+	" company_id VARCHAR(255),"+
+	" ciudades VARCHAR(255),"+
+	" fax VARCHAR(20),"+
+	" is_correo VARCHAR(255),"+
+	" name VARCHAR(255),"+
+	" eventos_ids VARCHAR(255),"+
+	" state VARCHAR(20),"+
+	" email VARCHAR(255),"+
+	" active VARCHAR(20),"+
+	" reps_gastos_ids VARCHAR(255),"+
+	" login VARCHAR(255),"+
+	" phone VARCHAR(20),"+
+	" mobile VARCHAR(20));";
 
 	private tbl_user_odoo = ["email",
 	"is_chofer",
@@ -59,7 +75,23 @@ export class TablasProvider {
 	"is_client",
 	"is_root",
 	"is_general",
-	"is_traslados"];
+	"is_traslados",
+	"gastos_users_ids",
+	"company_id",
+	"ciudades",
+	"fax",
+	"is_correo",
+	"name",
+	"eventos_ids",
+	"state",
+	"email",
+	"active",
+	"reps_gastos_ids",
+	"login",
+	"phone",
+	"mobile"];
+
+
 
 	private tbl_eventos = "CREATE TABLE IF NOT EXISTS eventos("+
 	" id INTEGER PRIMARY KEY,"+

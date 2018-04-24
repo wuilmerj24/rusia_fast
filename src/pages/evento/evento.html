@@ -333,6 +333,30 @@
 
     <ion-grid *ngIf="categories[3].visible">
 
+		
+		<ion-row align-items-center>  
+            <ion-col col-8>
+                <b>Nombre</b>
+            </ion-col>
+            <ion-col col-4>
+                <b>Decargar</b>
+            </ion-col>                  
+        </ion-row>        
+        <ion-row class="borde" *ngFor="let att of attachment; let i = index" align-items-center >  
+            <ion-col col-8>
+                {{att.name}}
+            </ion-col>
+            <ion-col col-4>
+                <a (click)="abrirAttachment(att)">Descargar: {{att.file_size}}</a>
+            </ion-col>                    
+        </ion-row>	        
+    	<ion-row *ngIf="editable" align-items-center>  
+            <ion-col col-4>
+                <button ion-button color="danger" type="button" (click)="agregarAttachment()" >Agregar</button>
+            </ion-col>
+        </ion-row>	
+    	
+
     </ion-grid>
 
     <ion-grid *ngIf="categories[4].visible">

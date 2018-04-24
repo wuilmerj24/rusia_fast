@@ -33,6 +33,7 @@ export class LoginPage {
 		var operacion = this.navParams.get('operacion');
 		if(operacion != null && operacion == 'salir'){
 			this.getData.deleteBD();
+			this.getData.usr = null;
 		}else{
 			if(this.conexion.usuario != ""){
 				this.conectarApp();	
@@ -51,6 +52,7 @@ export class LoginPage {
 		this.getData.login(this.conexion).then(
 			function(res){
 				self.cargar = false;
+				console.log(JSON.stringify(res));
 				self.navCtrl.setRoot(PanelPage, {usr:res});							
 			}).catch(e => {
 				console.log(e.message);

@@ -38,28 +38,28 @@ export class PanelPage {
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
         { title: 'Mi Perfil', component: PerfilPage },
-        { title: 'Acerca de', component: AcercaPage },
+        //{ title: 'Acerca de', component: AcercaPage },
         { title: 'Salir', component: 'salir' },
       ];
     } else if("is_guia" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
         { title: 'Mi Perfil', component: PerfilPage },
-        { title: 'Acerca de', component: AcercaPage },
+        //{ title: 'Acerca de', component: AcercaPage },
         { title: 'Salir', component: 'salir' },
       ];
     }else if("is_rep" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
         { title: 'Mi Perfil', component: PerfilPage },
-        { title: 'Acerca de', component: AcercaPage },
+        //{ title: 'Acerca de', component: AcercaPage },
         { title: 'Salir', component: 'salir' },
       ];
     }else if("is_client" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
         { title: 'Mi Perfil', component: PerfilPage },
-        { title: 'Acerca de', component: AcercaPage },
+        //{ title: 'Acerca de', component: AcercaPage },
         { title: 'Salir', component: 'salir' },
       ];
     }else if("is_root" == tipo_usuario){
@@ -72,28 +72,28 @@ export class PanelPage {
         { title: 'Configuración', component: ConfiPage },
         { title: 'Gastos Temporal',  component:GatosTourPage },
         { title: 'Mi Perfil', component: PerfilPage },
-        { title: 'Acerca de', component: AcercaPage },
+        //{ title: 'Acerca de', component: AcercaPage },
         { title: 'Salir', component: 'salir' },
       ];
     }else if("is_general" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
         { title: 'Mi Perfil', component: PerfilPage },
-        { title: 'Acerca de', component: AcercaPage },       
+        //{ title: 'Acerca de', component: AcercaPage },       
         { title: 'Salir', component: 'salir' },
       ];
     }else if("is_traslados" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
         { title: 'Mi Perfil', component: PerfilPage },
-        { title: 'Acerca de', component: AcercaPage },        
+        //{ title: 'Acerca de', component: AcercaPage },        
         { title: 'Salir', component: 'salir' },
       ];
     }else {
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
         { title: 'Mi Perfil', component: PerfilPage },
-        { title: 'Acerca de', component: AcercaPage },
+        //{ title: 'Acerca de', component: AcercaPage },
         { title: 'Salir', component: 'salir' },
       ];
     }

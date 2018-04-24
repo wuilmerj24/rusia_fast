@@ -95,6 +95,8 @@ export class CalendarioPage {
 
     refresh(){
         var self = this;
+        self.initCalendario();
+        /*var self = this;
         this.getDatos.borrarTablas(["gastostoursline", "eventos"]).then(
             res=>{
                 self.initCalendario();
@@ -102,7 +104,7 @@ export class CalendarioPage {
             fail=>{
                 console.log('Error refresh tables');
             }
-        );
+        );*/
     }
 
 
