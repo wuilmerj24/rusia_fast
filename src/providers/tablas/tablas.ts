@@ -16,15 +16,23 @@ export class TablasProvider {
 	" Total VARCHAR(20),"+	
 	" fecha VARCHAR(20),"+
 	" ciudad_id VARCHAR(50),"+
-	" observaciones TEXT);";
+	" observaciones TEXT, "+
+	" usuario_id VARCHAR(255),"+
+	" evento_padre VARCHAR(50),"+
+	" eventos_id VARCHAR(5));";
+
 
 	private tbl_gastos_odoo =[
-	"concepto_gasto_id",
+	"id",
 	"tipo_moneda",
-	"Total",
 	"fecha",
 	"ciudad_id",
-	"observaciones"]
+	"usuario_id",
+	"concepto_gasto_id",
+	"observaciones",
+	"Total",
+	"evento_padre", 
+	"eventos_id"]
 
 	private tbl_user  = "CREATE TABLE IF NOT EXISTS user("+
 	" id INTEGER,"+

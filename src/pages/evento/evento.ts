@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, Slides, NavController, NavParams,ViewController } from 'ionic-angular';
+import { IonicPage, Slides, NavController, NavParams,ViewController, ModalController } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 
@@ -51,7 +51,8 @@ export class EventoPage {
 	 tarjeta_rub :'',
 	 tarjeta_usd :'',
 	 is_traslado :false,
-	 is_guia:false
+	 is_guia:false,
+	 gastostoursline_ids:[]
 	 }
 
 	gastostoursline_ids = [];
@@ -61,9 +62,9 @@ export class EventoPage {
 	private permisos = '';
 	private ver_segmento = true;
 
-	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 		
-		
+		this.evento_cal = this.navParams.get('evento');
 		this.permisos = this.navParams.get('permisos');
 		//console.log('permisos:'+ this.permisos);
 		if(this.permisos == 'is_client'){
@@ -90,10 +91,11 @@ export class EventoPage {
 	}
 
 	private initEvento(){
-		this.evento_cal = this.navParams.get('evento');
+		
 		var self = this;
+		self.gastostoursline_ids = [];
 		self.cargar = true;
-		this.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE id = ' + this.evento_cal.id).then(
+		self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE id = ' + self.evento_cal.id).then(
 			function(eventos: {rows}){
 
 				var tmp_evento_id = JSON.parse(eventos.rows.item(0).evento_id);
@@ -105,6 +107,7 @@ export class EventoPage {
 				var tmp_ciudad_id = JSON.parse(eventos.rows.item(0).ciudad_id);
 
 				var tmp_gatos = JSON.parse(eventos.rows.item(0).gastostoursline_ids);
+
 				var domanin = '';
 				for (var i = tmp_gatos.length - 1; i >= 0; i--) {
 
@@ -123,17 +126,25 @@ export class EventoPage {
 				self.evento.chofer_id = tmp_chofer_id;
 				self.evento.hotel_id = tmp_hotel_id;
 				self.evento.ciudad_id = tmp_ciudad_id;
+				self.evento.gastostoursline_ids = tmp_gatos;
 				//console.log(self.evento.name);
 
-				self.getDatos.ejecutarSQL('SELECT * FROM gastostoursline WHERE id IN (' + domanin +')').then(
+				//console.log('self.gastostoursline_ids' + JSON.stringify(self.gastostoursline_ids));
+
+				self.getDatos.ejecutarSQL('SELECT * FROM gastostoursline WHERE eventos_id = "' + self.evento.id +'"').then(
 				function(gastos: {rows}){
+
+					
 
 					for(var i=0; i<gastos.rows.length; i++) {
 	                 	
-	                 	console.log(JSON.stringify(gastos.rows.item(i)));                    
+	                	console.log(JSON.stringify(gastos.rows.item(i)));                     	
 	                 	var tmp_concepto_gasto_id = JSON.parse(gastos.rows.item(i).concepto_gasto_id)
+	                 	var tmp_ciudad_id = JSON.parse(gastos.rows.item(i).ciudad_id)
+	                 	
 	                 	var concepto = gastos.rows.item(i);
 	                 	concepto.concepto_gasto_id = tmp_concepto_gasto_id;
+	                 	concepto.ciudad_id = tmp_ciudad_id;
 
 	                    self.gastostoursline_ids.push(concepto);               
 	                    
@@ -162,62 +173,113 @@ export class EventoPage {
         }
     }
 
-    private guardar(){
+    private guardar_btn(){
+    	this.guardar(this).then(
+		res=>{
+			console.log('save event ok');					
+		},
+		).catch(e => {
+			console.log(e);					
+		});
+    }
 
-    	this.cargar = true;
+    private guardar(dato){
+
     	var self = this;
-		var campos = {
-			 //cliente_id :[0,''],
-			 //representante_id :[0,''],	 
-			 //Fecha_Inicio : this.evento.Fecha_Inicio,
-			 //Fecha_Fin :this.evento.Fecha_Fin,
-			 hora_inicio :this.evento.hora_inicio,
-			 hora_final :this.evento.hora_final,
-			 //name :'',
-			 //is_padre :'',
-			 //fecha_padre :'',	
-			 //guia_id :[0,''],
-			 //chofer_id :[0,''],	 
-			 //gasto_rub :this.evento.gasto_rub,
-			 //gasto_eur :this.evento.gasto_eur,
-			 //gasto_usd :this.evento.gasto_usd,
-			 //gasto_paypal :this.evento.gasto_paypal,
-			 Comentarios_Chofer :this.evento.Comentarios_Chofer,
-			 Comentarios_Internos :this.evento.Comentarios_Internos,
-			 Comentarios_Cliente :this.evento.Comentarios_Cliente,
-			 Comentarios_Guia:this.evento.Comentarios_Guia,
-			 Transporte :this.evento.Transporte,
-			 //hotel_id :[0,''],
-			 //ciudad_id :[0,''],
-			 Total_Representante :this.evento.Total_Representante,
-			 message:this.evento.message,
-			 numero_pax :this.evento.numero_pax,
-			 //evento_id : [0,''],
-			 Servicio_Gastos :this.evento.Servicio_Gastos,
-			 //tarjeta_eur :this.evento.tarjeta_eur,
-			 //tarjeta_rub :this.evento.tarjeta_rub,
-			 //tarjeta_usd :this.evento.tarjeta_usd,
-			 is_traslado :this.evento.is_traslado,
-			 is_guia:this.evento.is_guia
-		};
-		//console.log('ID:' + this.evento.id)
-		//console.log('usd:' + campos.gasto_usd)
-		this.getDatos.write('rusia.eventos', this.evento.id, campos).then(
-			res=>{
-				console.log('save event ok');
-				self.cargar = false;
-			},
-			fail=>{
-				console.log('error saving event');
+    	self.cargar = true;
+	    
+
+    	var promise = new Promise(function (resolve, reject) {
+
+			console.log('------------------------------campos ----------------');
+			/*
+			var campos = {
+				 //cliente_id :[0,''],
+				 //representante_id :[0,''],	 
+				 //Fecha_Inicio : this.evento.Fecha_Inicio,
+				 //Fecha_Fin :this.evento.Fecha_Fin,
+				 //hora_inicio :self.evento.hora_inicio,
+				 //hora_final :self.evento.hora_final,
+				 //name :'',
+				 //is_padre :'',
+				 //fecha_padre :'',	
+				 //guia_id :[0,''],
+				 //chofer_id :[0,''],	 
+				 //gasto_rub :this.evento.gasto_rub,
+				 //gasto_eur :this.evento.gasto_eur,
+				 //gasto_usd :this.evento.gasto_usd,
+				 //gasto_paypal :this.evento.gasto_paypal,
+				 //Comentarios_Chofer :self.evento.Comentarios_Chofer,
+				 //Comentarios_Internos :self.evento.Comentarios_Internos,
+				 //Comentarios_Cliente :self.evento.Comentarios_Cliente,
+				 //Comentarios_Guia:self.evento.Comentarios_Guia,
+				 //Transporte :self.evento.Transporte,
+				 //hotel_id :[0,''],
+				 //ciudad_id :[0,''],
+				 //Total_Representante :self.evento.Total_Representante,
+				 //message:self.evento.message,
+				 //numero_pax :self.evento.numero_pax,
+				 //evento_id : [0,''],
+				 //Servicio_Gastos :self.evento.Servicio_Gastos,
+				 //tarjeta_eur :this.evento.tarjeta_eur, 
+				 //tarjeta_rub :this.evento.tarjeta_rub,
+				 //tarjeta_usd :this.evento.tarjeta_usd,
+				 //is_traslado :self.evento.is_traslado,
+				 //is_guia:self.evento.is_guia,
+				 gastostoursline_ids:[6, 0, self.evento.gastostoursline_ids]
+
+			};*/
+			/*
+			var existing_value_id = [69,70,71];
+'value_ids'=>array(array(6,0,array($existing_value_id)))*/
+                                                 
+			//var campos = {"gastostoursline_ids":[6,0,[69,70,71,101,105,106,107]]}
+			/*var campos = {
+				gastostoursline_ids: [[0,0,{
+					Total:10,
+					ciudad_id:3,
+					concepto_gasto_id:1,
+					evento_padre:"AR001180409-11",
+					fecha:"2018-04-14",
+					observaciones:false,
+					tipo_moneda:"pp",
+					usuario_id:false}]]
+			};*/
+
+
+
+			
+
+
+			var campos = {
+				gastostoursline_ids: [[0,0,dato]]
 			}
 
-		);
+			console.log(JSON.stringify(campos));
+			//console.log('ID:' + this.evento.id)
+			//console.log('usd:' + campos.gasto_usd)
+			self.getDatos.write('rusia.eventos', self.evento.id, campos).then(
+				res=>{
+					console.log('save event ok');
+					self.cargar = false;
+					resolve();
+				},
+				fail=>{
+					console.log('error saving event');
+					reject();
+				} 
+
+			);
+    	});
+
+    	return promise;
+    	
     }
 
   	initializeCategories() {
 
         // Select it by defaut
-        console.log(this.categories)
+        //console.log(this.categories)
         this.selectedCategory = this.categories[0];
         this.selectedCategory.visible = true;
 
@@ -260,12 +322,88 @@ export class EventoPage {
 
     public abrirGasto(item){
     	//item.concepto_gasto_id = JSON.stringify(item.concepto_gasto_id);
-    	this.navCtrl.push(GatosTourPage, {gasto:item, ver_segmento:this.editable});
+    	var self = this;
+    	var gasto = {
+			id:item.id,
+			concepto_gasto_id:item.concepto_gasto_id,
+			Total:item.Total,
+			tipo_moneda:item.tipo_moneda,
+			ciudad_id:item.ciudad_id,
+			usuario_id:item.usuario_id,
+			observaciones:item.observaciones,		
+			evento_padre:item.evento_padre,
+			eventos_id:item.eventos_id,
+			//fecha:new Date(item.fecha).toISOString()
+		}
+    	let profileModal = this.modalCtrl.create(GatosTourPage, {gasto:gasto, ver_segmento:this.editable});
+        
+        profileModal.onDidDismiss(data => {
+        	
+			console.log(data);
+            if (data > 0) {
+            	
+            	self.cargar = true;
+            	self.getDatos.cargarGastos().then(
+	        		res=>{
+	        			self.initEvento();
+	        		},
+	        		fail=>{
+
+	        			console.log('Error loading cgastos');
+	        		}
+	        	);
+            	
+            }
+        });
+
+        profileModal.present();
     }
 
     private agregarGasto(){
 
-    	this.navCtrl.push(GatosTourPage, {gasto:'nuevo', ver_segmento:this.editable});	
+    	var self = this;
+    	var gasto = {
+			id:null,
+			concepto_gasto_id:[],
+			Total:'',
+			tipo_moneda:'',
+			ciudad_id:[],
+			usuario_id:[],
+			observaciones:'',		
+			evento_padre:this.evento.name,
+			eventos_id:this.evento.id,
+			fecha:new Date().toISOString()
+		}//gasto:{, , , id:nul
+        let profileModal = this.modalCtrl.create(GatosTourPage, {gasto:gasto, ver_segmento:this.editable});
+        
+        profileModal.onDidDismiss(data => {
+        	
+			
+            if (data != 'x') {
+            	self.guardar(data).then(
+	        		res=>{
+
+	        			self.getDatos.cargarGastos().then(
+			        		res=>{
+			        			console.log('Update complete');
+			        			self.initEvento();
+			        		},
+			        		fail=>{
+
+			        			console.log('Error loading cgastos');
+			        		}
+			        	);
+	        		},
+	        		fail=>{
+
+	        			console.log('Error loading cgastos');
+	        		}
+	        	);
+            	
+            }
+        });
+
+        profileModal.present();       
     }
 
 }

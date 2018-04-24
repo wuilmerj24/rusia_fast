@@ -15,7 +15,7 @@ import { LoginPage } from '../pages/login/login';
 import { EventoPage } from '../pages/evento/evento';
 import { GatosTourPage } from '../pages/gatos-tour/gatos-tour';
 import { PanelPage } from '../pages/panel/panel';
-
+import { PerfilPage } from '../pages/perfil/perfil';
 
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -39,7 +39,8 @@ import { TablasProvider } from '../providers/tablas/tablas';
     LoginPage,
     EventoPage,
     GatosTourPage,
-    PanelPage
+    PanelPage,
+    PerfilPage
   ],
   imports: [
     BrowserModule,
@@ -60,7 +61,8 @@ import { TablasProvider } from '../providers/tablas/tablas';
     LoginPage,
     EventoPage,
     GatosTourPage,
-    PanelPage
+    PanelPage,
+    PerfilPage
   ],
   providers: [
     SQLite,

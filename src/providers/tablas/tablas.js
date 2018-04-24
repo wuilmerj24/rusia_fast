@@ -23,14 +23,21 @@ var TablasProvider = /** @class */ (function () {
             " Total VARCHAR(20)," +
             " fecha VARCHAR(20)," +
             " ciudad_id VARCHAR(50)," +
-            " observaciones TEXT);";
+            " observaciones TEXT, " +
+            " usuario_id VARCHAR(255)," +
+            " evento_padre VARCHAR(50)," +
+            " eventos_id VARCHAR(5));";
         this.tbl_gastos_odoo = [
-            "concepto_gasto_id",
+            "id",
             "tipo_moneda",
-            "Total",
             "fecha",
             "ciudad_id",
-            "observaciones"
+            "usuario_id",
+            "concepto_gasto_id",
+            "observaciones",
+            "Total",
+            "evento_padre",
+            "eventos_id"
         ];
         this.tbl_user = "CREATE TABLE IF NOT EXISTS user(" +
             " id INTEGER," +
@@ -38,6 +45,14 @@ var TablasProvider = /** @class */ (function () {
             " pwd VARCHAR(20)," +
             " bd VARCHAR(20)," +
             " tipo_usuario VARCHAR(20));";
+        this.tbl_user_odoo = ["email",
+            "is_chofer",
+            "is_guia",
+            "is_rep",
+            "is_client",
+            "is_root",
+            "is_general",
+            "is_traslados"];
         this.tbl_eventos = "CREATE TABLE IF NOT EXISTS eventos(" +
             " id INTEGER PRIMARY KEY," +
             " cliente_id VARCHAR(255)," +
@@ -150,14 +165,6 @@ var TablasProvider = /** @class */ (function () {
             "hora_inicio",
             "hora_final",
             "is_adjudicado"];
-        this.tbl_user_odoo = ["email",
-            "is_chofer",
-            "is_guia",
-            "is_rep",
-            "is_client",
-            "is_root",
-            "is_general",
-            "is_traslados"];
         console.log('Hello TablasProvider Provider');
     }
     Object.defineProperty(TablasProvider.prototype, "Tbl_user_odoo", {

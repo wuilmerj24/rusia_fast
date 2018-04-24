@@ -12,7 +12,7 @@
 
    <ion-segment *ngIf="ver_segmento">
         <ion-segment-button  value="camera" icon-start (click)="guardar()">
-                <ion-icon name="ios-create" md="md-create"></ion-icon>
+                <ion-icon ios="ios-cloud-upload" md="md-cloud-upload"></ion-icon>
             Guardar
         </ion-segment-button>
         <ion-segment-button value="bookmark" icon-start (click)="eliminar()">
@@ -87,7 +87,7 @@
 	            <b>Ciudad</b>
 	        </ion-col>
 	        <ion-col col-8>
-	            <ion-select name="gasto.ciudad_id" [disabled]="!ver_segmento" [(ngModel)]="gasto.ciudad_id[1]">	            	
+	            <ion-select name="gasto.ciudad_id" [disabled]="!ver_segmento" [(ngModel)]="gasto.ciudad_id[0]">	            	
 	            	<ion-option value="3">Moscu</ion-option>
 	            	<ion-option value="2">San petersburgo</ion-option>
 	            	<ion-option value="4">Sochi</ion-option>
@@ -101,7 +101,9 @@
 	            <b>Fecha usuario</b>
 	        </ion-col>
 	        <ion-col col-8>
-	            <ion-input name="gasto.fecha" type="text" [readonly]="!ver_segmento" [(ngModel)]="gasto.fecha"></ion-input>
+	        	<ion-datetime  name="gasto.fecha" displayFormat="YYYY-MM-DD" [(ngModel)]="gasto.fecha"></ion-datetime>
+
+	            <!--<ion-input name="gasto.fecha" type="text" [readonly]="!ver_segmento" [(ngModel)]="gasto.fecha"></ion-input-->
 	        </ion-col>    
 	    </ion-row>        	     
 

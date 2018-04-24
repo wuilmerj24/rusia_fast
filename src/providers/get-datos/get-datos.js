@@ -54,8 +54,12 @@ var GetDatosProvider = /** @class */ (function () {
                 location: 'default'
             }).then(function (db) {
                 var sql = [];
+                Object.keys(tablas).forEach(function (key) {
+                    //sql.push('DROP TABLE IF EXISTS '+tablas[key]);
+                    console.log('DROP TABLE IF EXISTS ' + tablas[key]);
+                });
                 db.sqlBatch(sql).then(function (res) {
-                    console.log('Drop tables - OK');
+                    console.log('----------Drop tables - OK---------');
                     resolve();
                 }).catch(function (e) {
                     console.log('Error Drop tables');
@@ -64,6 +68,50 @@ var GetDatosProvider = /** @class */ (function () {
                 });
             }).catch(function (e) {
                 console.log('Error en conexion bd');
+                console.log(e.message);
+                reject(e);
+            });
+        });
+        return promise;
+    };
+    GetDatosProvider.prototype.cargarEventos = function () {
+    };
+    GetDatosProvider.prototype.cargarGastos = function () {
+        var self = this;
+        var sql = [];
+        var promise = new Promise(function (resolve, reject) {
+            self.sqlite.create({
+                name: 'ionicdb.db',
+                location: 'default'
+            }).then(function (db) {
+                self.search_read('rusia.gastostoursline', [["id", "<>", 0]], self.tablas.Tbl_gastos_odoo)
+                    .then(function (gastos) {
+                    console.log('resolvio gastos');
+                    //						      			resolve(true);
+                    Object.keys(gastos).forEach(function (key) {
+                        //console.log(JSON.stringify(gastos[key].eventos_id)); 
+                        sql.push("INSERT OR IGNORE INTO gastostoursline " +
+                            "(id, concepto_gasto_id, tipo_moneda, Total, fecha, ciudad_id, observaciones, usuario_id, evento_padre, eventos_id)" +
+                            " VALUES (" + gastos[key].id + ", '" + JSON.stringify(gastos[key].concepto_gasto_id) + "', '"
+                            + gastos[key].tipo_moneda + "', '" + gastos[key].Total + "', '" + gastos[key].fecha + "', '" +
+                            JSON.stringify(gastos[key].ciudad_id) + "', '" + gastos[key].observaciones + "', '" + JSON.stringify(gastos[key].usuario_id) + "', '" + gastos[key].evento_padre + "', '" + JSON.stringify(gastos[key].eventos_id) + "');");
+                    });
+                    //console.log(JSON.stringify(sql));  										   
+                    db.sqlBatch(sql)
+                        .then(function (res) {
+                        //console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+                        resolve();
+                    }).catch(function (e) {
+                        console.log(e.message);
+                        reject(e);
+                    });
+                }, function () {
+                    console.log('Error search_read - Loading offline gastos');
+                    //console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+                    resolve();
+                });
+            }).catch(function (e) {
+                console.log('Error en CONEXION');
                 console.log(e.message);
                 reject(e);
             });
@@ -125,33 +173,10 @@ var GetDatosProvider = /** @class */ (function () {
                             });
                             db.sqlBatch(sql)
                                 .then(function (res) {
-                                sql = [];
-                                self.search_read('rusia.gastostoursline', [["id", "<>", '0']], self.tablas.Tbl_gastos_odoo)
-                                    .then(function (gastos) {
-                                    console.log('resolvio gastos');
-                                    //						      			resolve(true);
-                                    Object.keys(gastos).forEach(function (key) {
-                                        //console.log(JSON.stringify(gastos[key])); JSON.stringify(gastos[key].concepto_gasto_id) 
-                                        sql.push("INSERT OR IGNORE INTO gastostoursline " +
-                                            "(id, concepto_gasto_id, tipo_moneda, Total, fecha, ciudad_id, observaciones)" +
-                                            " VALUES (" + gastos[key].id + ", '" + JSON.stringify(gastos[key].concepto_gasto_id) + "', '"
-                                            + gastos[key].tipo_moneda + "', '" + gastos[key].Total + "', '" + gastos[key].fecha + "', '" +
-                                            JSON.stringify(gastos[key].ciudad_id) + "', '" + gastos[key].observaciones + "');");
-                                    });
-                                    //console.log(JSON.stringify(sql));  										   
-                                    db.sqlBatch(sql)
-                                        .then(function (res) {
-                                        //console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
-                                        resolve(usr.tipo_usuario);
-                                    }).catch(function (e) {
-                                        console.log(e.message);
-                                        reject(e);
-                                    });
-                                }, function () {
-                                    console.log('Error search_read');
-                                    console.log('Loading offline gastos');
-                                    //console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+                                self.cargarGastos().then(function (res) {
                                     resolve(usr.tipo_usuario);
+                                }, function (fail) {
+                                    reject();
                                 });
                             }).catch(function (e) {
                                 console.log(e.message);
@@ -160,7 +185,7 @@ var GetDatosProvider = /** @class */ (function () {
                         }, function () {
                             console.log('Error search_read');
                             console.log('Loading offline events');
-                            resolve(true);
+                            resolve(usr.tipo_usuario);
                         });
                     }, function () {
                         console.log('Error get table');
@@ -175,6 +200,64 @@ var GetDatosProvider = /** @class */ (function () {
                 console.log('Error en CONEXION');
                 console.log(e.message);
                 reject(e);
+            });
+        });
+        return promise;
+    };
+    GetDatosProvider.prototype.create = function (tabla, campos) {
+        var self = this; //http://185.129.251.102
+        var promise = new Promise(function (resolve, reject) {
+            self.ejecutarSQL('SELECT * FROM user').then(function (data) {
+                var usr = data.rows.item(0);
+                //for(var i=0; i<data.rows.length; i++) {
+                //    self.reservas.push(data.rows.item(i));                    
+                //}
+                var odoo = new OdooApi(self.url, usr.bd);
+                odoo.login(usr.usuario, usr.pwd).then(function (uid) {
+                    odoo.create(tabla, campos).then(function (ok_id) {
+                        console.log('-----------Odoo created id:' + ok_id);
+                        if (ok_id != false && ok_id > 0) {
+                            var insert = ok_id + ", ";
+                            var values = "id, ";
+                            Object.keys(campos).forEach(function (key) {
+                                values = values + key + ",";
+                                insert = insert + " '" + campos[key] + "', ";
+                            });
+                            var tabla_bd = tabla.split('.')[1];
+                            values = values.substring(0, values.length - 1);
+                            insert = insert.substring(0, insert.length - 2);
+                            insert = insert + " ";
+                            //console.log("UPDATE " + tabla_bd + " SET " + set + " WHERE id = "+ dominio);
+                            console.log("INSERT OR IGNORE INTO " + tabla_bd +
+                                "(" + values + ")" +
+                                " VALUES (" + insert + ");");
+                            self.ejecutarSQL("INSERT OR IGNORE INTO " + tabla_bd +
+                                "(" + values + ")" +
+                                " VALUES (" + insert + ");").then(function (res) {
+                                console.log('create OK: ' + ok_id);
+                                //console.log(JSON.stringify(res));
+                                resolve(ok_id);
+                            }, function (fail) {
+                                console.log('Fail update BD');
+                                reject();
+                            });
+                            //resolve(ok_code);				        		
+                        }
+                        else {
+                            console.log('Fail update Odoo');
+                            reject();
+                        }
+                    }, function () {
+                        console.log('error');
+                        reject();
+                    });
+                }, function () {
+                    console.log('error');
+                    reject();
+                });
+            }, function () {
+                console.log('Error get table user');
+                reject();
             });
         });
         return promise;
@@ -199,7 +282,7 @@ var GetDatosProvider = /** @class */ (function () {
                             var tabla_bd = tabla.split('.')[1];
                             set = set.substring(0, set.length - 2); // "12345.0"
                             set = set + " ";
-                            //console.log("UPDATE " + tabla_bd + " SET " + set + " WHERE id = "+ dominio);
+                            console.log("UPDATE " + tabla_bd + " SET " + set + " WHERE id = " + dominio);
                             self.ejecutarSQL("UPDATE " + tabla_bd + " SET " + set + " WHERE id = " + dominio).then(function (res) {
                                 console.log('write OK: ' + ok_code);
                                 console.log(res);
@@ -215,11 +298,11 @@ var GetDatosProvider = /** @class */ (function () {
                             reject();
                         }
                     }, function () {
-                        console.log('error');
+                        console.log('Fail update Odoo');
                         reject();
                     });
                 }, function () {
-                    console.log('error');
+                    console.log('Fail connect Odoo');
                     reject();
                 });
             }, function () {
@@ -346,6 +429,24 @@ var GetDatosProvider = /** @class */ (function () {
             });
         });
         return promise;
+    };
+    GetDatosProvider.prototype.addCero = function (num) {
+        if (num < 10 && num.toString().length < 2) {
+            return (num = '0' + num);
+        }
+        return num;
+    };
+    GetDatosProvider.prototype.convertirFecha = function (fecha) {
+        var dateS = new Date(fecha);
+        var date = new Date(dateS.getTime() + (dateS.getTimezoneOffset() * 60000));
+        var year = date.getFullYear();
+        var month = this.addCero(date.getMonth() + 1);
+        var dia = this.addCero(date.getDate());
+        var hora = this.addCero(date.getHours());
+        var minutos = this.addCero(date.getMinutes());
+        var segundos = this.addCero(date.getSeconds());
+        //+ ' ' + hora + ':' + minutos + ':' + segundos
+        return year + '-' + month + '-' + dia;
     };
     GetDatosProvider = __decorate([
         Injectable(),

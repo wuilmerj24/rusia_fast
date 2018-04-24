@@ -12,6 +12,7 @@ import { AcercaPage } from '../../pages/acerca/acerca';
 import { DetallesReservaPage } from '../../pages/detalles-reserva/detalles-reserva';
 import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 import { LoginPage } from '../../pages/login/login';
+import { PerfilPage } from '../../pages/perfil/perfil';
 
 @IonicPage() 
 @Component({
@@ -36,24 +37,28 @@ export class PanelPage {
     if("is_chofer" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
+        { title: 'Mi Perfil', component: PerfilPage },
         { title: 'Acerca de', component: AcercaPage },
         { title: 'Salir', component: 'salir' },
       ];
     } else if("is_guia" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
+        { title: 'Mi Perfil', component: PerfilPage },
         { title: 'Acerca de', component: AcercaPage },
         { title: 'Salir', component: 'salir' },
       ];
     }else if("is_rep" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
+        { title: 'Mi Perfil', component: PerfilPage },
         { title: 'Acerca de', component: AcercaPage },
         { title: 'Salir', component: 'salir' },
       ];
     }else if("is_client" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
+        { title: 'Mi Perfil', component: PerfilPage },
         { title: 'Acerca de', component: AcercaPage },
         { title: 'Salir', component: 'salir' },
       ];
@@ -66,24 +71,28 @@ export class PanelPage {
         { title: 'Ganancias', component: GananciasPage },
         { title: 'Configuración', component: ConfiPage },
         { title: 'Gastos Temporal',  component:GatosTourPage },
+        { title: 'Mi Perfil', component: PerfilPage },
         { title: 'Acerca de', component: AcercaPage },
         { title: 'Salir', component: 'salir' },
       ];
     }else if("is_general" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
-        { title: 'Acerca de', component: AcercaPage },
+        { title: 'Mi Perfil', component: PerfilPage },
+        { title: 'Acerca de', component: AcercaPage },       
         { title: 'Salir', component: 'salir' },
       ];
     }else if("is_traslados" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
-        { title: 'Acerca de', component: AcercaPage },
+        { title: 'Mi Perfil', component: PerfilPage },
+        { title: 'Acerca de', component: AcercaPage },        
         { title: 'Salir', component: 'salir' },
       ];
     }else {
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
+        { title: 'Mi Perfil', component: PerfilPage },
         { title: 'Acerca de', component: AcercaPage },
         { title: 'Salir', component: 'salir' },
       ];

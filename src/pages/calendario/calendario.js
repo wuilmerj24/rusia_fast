@@ -39,6 +39,7 @@ var CalendarioPage = /** @class */ (function () {
     }
     CalendarioPage.prototype.initCalendario = function () {
         var self = this;
+        self.cargar = true;
         this.getDatos.cargarCalendario().then(function (permisos) {
             self.permisos = permisos;
             //console.log('permisos ------>'+ self.permisos);
@@ -78,6 +79,12 @@ var CalendarioPage = /** @class */ (function () {
         this.navCtrl.push(EventoPage, { evento: evt, permisos: this.permisos });
     };
     CalendarioPage.prototype.refresh = function () {
+        var self = this;
+        this.getDatos.borrarTablas(["gastostoursline", "eventos"]).then(function (res) {
+            self.initCalendario();
+        }, function (fail) {
+            console.log('Error refresh tables');
+        });
     };
     CalendarioPage = __decorate([
         IonicPage(),

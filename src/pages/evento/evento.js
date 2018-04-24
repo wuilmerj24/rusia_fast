@@ -8,14 +8,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, Slides, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, Slides, NavController, NavParams, ModalController } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 var EventoPage = /** @class */ (function () {
-    function EventoPage(navCtrl, navParams, getDatos) {
+    function EventoPage(navCtrl, navParams, getDatos, modalCtrl) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.getDatos = getDatos;
+        this.modalCtrl = modalCtrl;
         this.evento = { id: -1,
             cliente_id: [0, ''],
             representante_id: [0, ''],
@@ -48,13 +49,15 @@ var EventoPage = /** @class */ (function () {
             tarjeta_rub: '',
             tarjeta_usd: '',
             is_traslado: false,
-            is_guia: false
+            is_guia: false,
+            gastostoursline_ids: []
         };
         this.gastostoursline_ids = [];
         this.editable = false;
         this.cargar = false;
         this.permisos = '';
         this.ver_segmento = true;
+        this.evento_cal = this.navParams.get('evento');
         this.permisos = this.navParams.get('permisos');
         //console.log('permisos:'+ this.permisos);
         if (this.permisos == 'is_client') {
@@ -79,10 +82,10 @@ var EventoPage = /** @class */ (function () {
         console.log('ionViewDidLoad EventoPage');
     };
     EventoPage.prototype.initEvento = function () {
-        this.evento_cal = this.navParams.get('evento');
         var self = this;
+        self.gastostoursline_ids = [];
         self.cargar = true;
-        this.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE id = ' + this.evento_cal.id).then(function (eventos) {
+        self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE id = ' + self.evento_cal.id).then(function (eventos) {
             var tmp_evento_id = JSON.parse(eventos.rows.item(0).evento_id);
             var tmp_cliente_id = JSON.parse(eventos.rows.item(0).cliente_id);
             var tmp_representante_id = JSON.parse(eventos.rows.item(0).representante_id);
@@ -108,13 +111,17 @@ var EventoPage = /** @class */ (function () {
             self.evento.chofer_id = tmp_chofer_id;
             self.evento.hotel_id = tmp_hotel_id;
             self.evento.ciudad_id = tmp_ciudad_id;
+            self.evento.gastostoursline_ids = tmp_gatos;
             //console.log(self.evento.name);
-            self.getDatos.ejecutarSQL('SELECT * FROM gastostoursline WHERE id IN (' + domanin + ')').then(function (gastos) {
+            //console.log('self.gastostoursline_ids' + JSON.stringify(self.gastostoursline_ids));
+            self.getDatos.ejecutarSQL('SELECT * FROM gastostoursline WHERE eventos_id = "' + self.evento.id + ',' + self.evento.name + '"').then(function (gastos) {
+                console.log(JSON.stringify(gastos.rows.item(i)));
                 for (var i = 0; i < gastos.rows.length; i++) {
-                    console.log(JSON.stringify(gastos.rows.item(i)));
                     var tmp_concepto_gasto_id = JSON.parse(gastos.rows.item(i).concepto_gasto_id);
+                    var tmp_ciudad_id = JSON.parse(gastos.rows.item(i).ciudad_id);
                     var concepto = gastos.rows.item(i);
                     concepto.concepto_gasto_id = tmp_concepto_gasto_id;
+                    concepto.ciudad_id = tmp_ciudad_id;
                     self.gastostoursline_ids.push(concepto);
                 }
                 self.cargar = false;
@@ -133,55 +140,80 @@ var EventoPage = /** @class */ (function () {
             this.editable = false;
         }
     };
-    EventoPage.prototype.guardar = function () {
-        this.cargar = true;
-        var self = this;
-        var campos = {
-            //cliente_id :[0,''],
-            //representante_id :[0,''],	 
-            //Fecha_Inicio : this.evento.Fecha_Inicio,
-            //Fecha_Fin :this.evento.Fecha_Fin,
-            hora_inicio: this.evento.hora_inicio,
-            hora_final: this.evento.hora_final,
-            //name :'',
-            //is_padre :'',
-            //fecha_padre :'',	
-            //guia_id :[0,''],
-            //chofer_id :[0,''],	 
-            //gasto_rub :this.evento.gasto_rub,
-            //gasto_eur :this.evento.gasto_eur,
-            //gasto_usd :this.evento.gasto_usd,
-            //gasto_paypal :this.evento.gasto_paypal,
-            Comentarios_Chofer: this.evento.Comentarios_Chofer,
-            Comentarios_Internos: this.evento.Comentarios_Internos,
-            Comentarios_Cliente: this.evento.Comentarios_Cliente,
-            Comentarios_Guia: this.evento.Comentarios_Guia,
-            Transporte: this.evento.Transporte,
-            //hotel_id :[0,''],
-            //ciudad_id :[0,''],
-            Total_Representante: this.evento.Total_Representante,
-            message: this.evento.message,
-            numero_pax: this.evento.numero_pax,
-            //evento_id : [0,''],
-            Servicio_Gastos: this.evento.Servicio_Gastos,
-            //tarjeta_eur :this.evento.tarjeta_eur,
-            //tarjeta_rub :this.evento.tarjeta_rub,
-            //tarjeta_usd :this.evento.tarjeta_usd,
-            is_traslado: this.evento.is_traslado,
-            is_guia: this.evento.is_guia
-        };
-        //console.log('ID:' + this.evento.id)
-        //console.log('usd:' + campos.gasto_usd)
-        this.getDatos.write('rusia.eventos', this.evento.id, campos).then(function (res) {
+    EventoPage.prototype.guardar_btn = function () {
+        this.guardar().then(function (res) {
             console.log('save event ok');
-            self.cargar = false;
-        }, function (fail) {
-            console.log('error saving event');
+        }).catch(function (e) {
+            console.log(e);
         });
+    };
+    EventoPage.prototype.guardar = function () {
+        var self = this;
+        self.cargar = true;
+        var promise = new Promise(function (resolve, reject) {
+            console.log('------------------------------campos ----------------');
+            /*
+            var campos = {
+                 //cliente_id :[0,''],
+                 //representante_id :[0,''],
+                 //Fecha_Inicio : this.evento.Fecha_Inicio,
+                 //Fecha_Fin :this.evento.Fecha_Fin,
+                 //hora_inicio :self.evento.hora_inicio,
+                 //hora_final :self.evento.hora_final,
+                 //name :'',
+                 //is_padre :'',
+                 //fecha_padre :'',
+                 //guia_id :[0,''],
+                 //chofer_id :[0,''],
+                 //gasto_rub :this.evento.gasto_rub,
+                 //gasto_eur :this.evento.gasto_eur,
+                 //gasto_usd :this.evento.gasto_usd,
+                 //gasto_paypal :this.evento.gasto_paypal,
+                 //Comentarios_Chofer :self.evento.Comentarios_Chofer,
+                 //Comentarios_Internos :self.evento.Comentarios_Internos,
+                 //Comentarios_Cliente :self.evento.Comentarios_Cliente,
+                 //Comentarios_Guia:self.evento.Comentarios_Guia,
+                 //Transporte :self.evento.Transporte,
+                 //hotel_id :[0,''],
+                 //ciudad_id :[0,''],
+                 //Total_Representante :self.evento.Total_Representante,
+                 //message:self.evento.message,
+                 //numero_pax :self.evento.numero_pax,
+                 //evento_id : [0,''],
+                 //Servicio_Gastos :self.evento.Servicio_Gastos,
+                 //tarjeta_eur :this.evento.tarjeta_eur,
+                 //tarjeta_rub :this.evento.tarjeta_rub,
+                 //tarjeta_usd :this.evento.tarjeta_usd,
+                 //is_traslado :self.evento.is_traslado,
+                 //is_guia:self.evento.is_guia,
+                 gastostoursline_ids:[6, 0, self.evento.gastostoursline_ids]
+
+            };*/
+            /*
+            var existing_value_id = [69,70,71];
+'value_ids'=>array(array(6,0,array($existing_value_id)))*/
+            //var campos = {"gastostoursline_ids":[6,0,[69,70,71,101,105,106,107]]}
+            var campos = {
+                gastostoursline_ids: [[0, 0, [101]]],
+                Comentarios_Chofer: self.evento.Comentarios_Chofer
+            };
+            console.log(JSON.stringify(campos));
+            //console.log('ID:' + this.evento.id)
+            //console.log('usd:' + campos.gasto_usd)
+            self.getDatos.write('rusia.eventos', self.evento.id, campos).then(function (res) {
+                console.log('save event ok');
+                self.cargar = false;
+                resolve();
+            }, function (fail) {
+                console.log('error saving event');
+                reject();
+            });
+        });
+        return promise;
     };
     EventoPage.prototype.initializeCategories = function () {
         // Select it by defaut
-        console.log(this.categories);
+        //console.log(this.categories)
         this.selectedCategory = this.categories[0];
         this.selectedCategory.visible = true;
         // Check which arrows should be shown
@@ -221,7 +253,15 @@ var EventoPage = /** @class */ (function () {
         this.navCtrl.push(GatosTourPage, { gasto: item, ver_segmento: this.editable });
     };
     EventoPage.prototype.agregarGasto = function () {
-        this.navCtrl.push(GatosTourPage, { gasto: 'nuevo', ver_segmento: this.editable });
+        var self = this;
+        var profileModal = this.modalCtrl.create(GatosTourPage, { gasto: null, ver_segmento: this.editable, eventos_id: this.evento.id });
+        profileModal.onDidDismiss(function (data) {
+            if (data > 0) {
+                self.getDatos.cargarGastos();
+                self.initEvento();
+            }
+        });
+        profileModal.present();
     };
     __decorate([
         ViewChild(Slides),
@@ -233,7 +273,7 @@ var EventoPage = /** @class */ (function () {
             selector: 'page-evento',
             templateUrl: 'evento.html',
         }),
-        __metadata("design:paramtypes", [NavController, NavParams, GetDatosProvider])
+        __metadata("design:paramtypes", [NavController, NavParams, GetDatosProvider, ModalController])
     ], EventoPage);
     return EventoPage;
 }());
