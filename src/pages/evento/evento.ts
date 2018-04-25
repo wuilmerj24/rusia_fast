@@ -1,11 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, Slides, NavController, NavParams,ViewController, ModalController } from 'ionic-angular';
+import { Slides, NavController, NavParams,ViewController, ModalController } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 import { File } from '@ionic-native/file';
 
 
-@IonicPage()
 @Component({
   selector: 'page-evento',
   templateUrl: 'evento.html',

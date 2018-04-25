@@ -1,16 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 //import { CalendarioPage } from '../../pages/calendario/calendario';
 import { PanelPage } from '../../pages/panel/panel';
-/**
- * Generated class for the LoginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
-@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -23,11 +16,12 @@ export class LoginPage {
 
 	//"proxyUrl": "http://185.129.251.102"
    	//guia
-    conexion = {usuario: 'joselugar8@hotmail.com', bd: 'rusia3', pwd: '123456'};
+    //conexion = {usuario: 'joselugar8@hotmail.com', bd: 'rusia3', pwd: '123456'};
     //admin
-    //conexion = {usuario: 'jdmas@maui.com.mx', bd: 'rusia3', pwd: 'rusia@2018'};
+    conexion = {usuario: '', bd: 'rusia3', pwd: ''};
     //cliente
     //conexion = {usuario: 'ceballosdavid@gmail.com', bd: 'rusia3', pwd: '123456'};
+    //conexion = {usuario: '', bd: 'rusia3', pwd: ''};
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getData:GetDatosProvider) {
 
 		var operacion = this.navParams.get('operacion');

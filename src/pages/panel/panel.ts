@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, Nav, Platform, NavParams } from 'ionic-angular';
+import { Nav, Platform, NavParams } from 'ionic-angular';
 
  
 import { CalendarioPage } from '../../pages/calendario/calendario';
@@ -14,7 +14,7 @@ import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 import { LoginPage } from '../../pages/login/login';
 import { PerfilPage } from '../../pages/perfil/perfil';
 
-@IonicPage() 
+
 @Component({
   selector: 'page-panel',
   templateUrl: 'panel.html',

@@ -15,7 +15,8 @@ export class GetDatosProvider {
 
 	private db: SQLiteObject = null;
 
-	private url = '/api';
+	//private url = '/api';
+	private url = 'http://odoo.devoptions.mx';
 
 	public usr = null;	
 
