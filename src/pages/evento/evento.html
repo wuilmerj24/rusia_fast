@@ -333,6 +333,10 @@
 
     <ion-grid *ngIf="ver_documentos">
 
+    	<div *ngIf="ver_download" style="text-align: center">    
+        	<ion-spinner name="circles"></ion-spinner><br>
+        	<b>Descargando archivo...</b>
+		</div>
 		
 		<ion-row align-items-center>  
             <ion-col col-8>

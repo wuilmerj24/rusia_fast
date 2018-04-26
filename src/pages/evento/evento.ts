@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Slides, NavController, NavParams,ViewController, ModalController } from 'ionic-angular';
+import { Slides, NavController, NavParams,ViewController, ModalController, ToastController } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 import { File } from '@ionic-native/file';
@@ -71,8 +71,10 @@ export class EventoPage {
 
 	private ver_download = false;
 
+	private ruta : '';
 
-	constructor(private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
+
+	constructor(private toastCtrl: ToastController, private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 		
 		this.evento_cal = this.navParams.get('evento');
 		this.permisos = this.navParams.get('permisos');
@@ -461,23 +463,51 @@ export class EventoPage {
     private descargarAtt(att){
 
     	var self  = this;
-
+    	self.ver_download = true;
+    	console.log(att.id);
     	self.getDatos.search_read('ir.attachment', [["id", "=", att.id]], ["datas", "mimetype"]).then(
 
     		(res : [{datas:'', mimetype:''}])=>{
     			//var tabla = 
-    			console.log(JSON.stringify(res[0].datas));
-
+    			console.log(JSON.stringify(res[0].mimetype));
+    			var ext = '';
+    			if(res[0].mimetype.toString() == "application/pdf"){
+    				ext = '.pdf';
+    			}else if(res[0].mimetype.toString() == "image/png"){
+    				ext = '.png';
+    			}
 
     			var blob = new Blob([res[0].datas], {type: res[0].mimetype});
-    			self.file.writeFile(self.file.externalDataDirectory, att.name, blob, {replace:true})
-
+    			self.file.writeFile(self.file.externalDataDirectory, att.name + ext, blob, {replace:true}).then(
+    				res=>{
+    					console.log('file saved');
+    					self.presentToast();
+    				},
+    				fail=>{
+    					console.log(JSON.stringify(fail));
+    				}
+    			);
+    			self.ver_download = false;
     		},
     		fail=>{
     			console.log('Fail downloading att');
     		}
 		);
 
-    }    
+    }   
+
+    private presentToast() {
+	  let toast = this.toastCtrl.create({
+	    message: 'Archivo descargado',
+	    duration: 2000,
+	    position: 'top'
+	  });
+
+	  /*toast.onDidDismiss(() => {
+	    console.log('Dismissed toast');
+	  });*/
+
+	  toast.present();
+	} 
 
 }

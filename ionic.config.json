@@ -1,5 +1,5 @@
 {
-  "name": "rusia_fast",
+  "name": "GuiaRus",
   "app_id": "",
   "type": "ionic-angular",
   "integrations": {
@@ -8,7 +8,7 @@
 	"proxies": [
 	    {
 	        "path": "/api",
-	        "proxyUrl":"http://odoo.devoptions.mx"
+	        "proxyUrl":"http://rusiatoursmoscu.com"
 	    }
 	]
 }

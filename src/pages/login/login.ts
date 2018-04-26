@@ -14,29 +14,28 @@ export class LoginPage {
     cargar = false;    
    
 
-	//"proxyUrl": "http://185.129.251.102"
    	//guia
-    //conexion = {usuario: 'joselugar8@hotmail.com', bd: 'rusia3', pwd: '123456'};
+    //conexion = {usuario: 'joselugar8@hotmail.com', bd: 'rusia3', pwd: '123456'}; //pruebas
+    
     //admin
-    conexion = {usuario: '', bd: 'rusia3', pwd: ''};
-    //cliente
-    //conexion = {usuario: 'ceballosdavid@gmail.com', bd: 'rusia3', pwd: '123456'};
     //conexion = {usuario: '', bd: 'rusia3', pwd: ''};
+    //conexion = {usuario: 'reservas@guiarus.com', bd: 'rusia3', pwd: '123456'};//produccion 
+    //cliente
+    //conexion = {usuario: 'ceballosdavid@gmail.com', bd: 'rusia3', pwd: '123456'};    pruebas
+    //conexion = {usuario: 'cupabanoscar@gmail.com', bd: 'rusia3', pwd: '123456'};  //  prd
+    conexion = {usuario: '', bd: 'rusia3', pwd: ''};
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getData:GetDatosProvider) {
 
 		var operacion = this.navParams.get('operacion');
 		if(operacion != null && operacion == 'salir'){
 			this.getData.deleteBD();
 			this.getData.usr = null;
-		}else{
-			if(this.conexion.usuario != ""){
-				this.conectarApp();	
-			}			
 		}
+
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad LoginPage');
+		this.conectarApp();
 	}
 
 	private conectarApp(){
@@ -49,8 +48,9 @@ export class LoginPage {
 				console.log(JSON.stringify(res));
 				self.navCtrl.setRoot(PanelPage, {usr:res});							
 			}).catch(e => {
-				console.log(e.message);
+				//console.log(e.message);
 				console.log('error');
+				self.cargar = false;
 			}
 		);
 	}

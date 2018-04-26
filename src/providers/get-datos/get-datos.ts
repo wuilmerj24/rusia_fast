@@ -16,7 +16,8 @@ export class GetDatosProvider {
 	private db: SQLiteObject = null;
 
 	//private url = '/api';
-	private url = 'http://odoo.devoptions.mx';
+	//private url = 'http://odoo.devoptions.mx';
+	private url = 'http://rusiatoursmoscu.com';
 
 	public usr = null;	
 
@@ -114,13 +115,13 @@ export class GetDatosProvider {
 		var sql = [];
 		var promise = new Promise(function (resolve, reject) {
             
-            
+            console.log('-----------------entro3 ---------------');
             self.search_read('ir.attachment', [["id", "<>", 0], ["cliente_id", "<>", false]], self.tablas.Tbl_attachment_odoo)
 	  		.then(function(attachment) {
 	  		
 
 	  			//console.log('resolvio gastos');
-	  			//console.log('-----------------entro3 ---------------');
+	  			console.log('-----------------entro4 ---------------');
 	  			//console.log(JSON.stringify(attachment));
 	  			if(borrar == true){
 		  			sql.push('DELETE FROM attachment;');
@@ -128,10 +129,10 @@ export class GetDatosProvider {
 	            
 		  		Object.keys(attachment).forEach(key=> {
 
-				    console.log("INSERT OR IGNORE INTO attachment "+
+				    /*console.log("INSERT OR IGNORE INTO attachment "+
 				    	"(id, cliente_id, file_size, name)"+
 				    	" VALUES (" + attachment[key].id + ", '"+attachment[key].cliente_id[0]+"', '" +attachment[key].file_size+"', '" 
-				    	+attachment[key].name +"');"); 
+				    	+attachment[key].name +"');"); */
 
 
 				    sql.push("INSERT OR IGNORE INTO attachment "+
@@ -155,7 +156,7 @@ export class GetDatosProvider {
 		    	}).catch(e => {
 			  		console.log('Error en conexion DB');
 			  		console.log(e.message);
-			  		reject(e)
+			  		reject(e) 
 			  	});
 
 				//console.log('-----------------Fin ---------------');
@@ -263,20 +264,25 @@ export class GetDatosProvider {
             
 			self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
 		      		       
-				//console.log(self.usr.id);
+				//console.log('tipo suario :' + self.usr.tipo_usuario); 
+				//console.log((self.usr.tipo_usuario + '')); 
 				var dominio;
-				if(self.usr.tipo_usuario == 'is_root'){
+				if(self.usr.tipo_usuario + '' == 'is_root'){
 					dominio = [['is_padre', '=' , false]];
-				}if(self.usr.tipo_usuario == 'is_client'){
+				}else if(self.usr.tipo_usuario + '' == 'is_client'){
 					dominio = [['is_padre', '=' , false],["Datos_Cliente_id", "=", self.usr.id]];
 				}else {
 					dominio = [['is_padre', '=' , false], ["guia_id", "=", self.usr.id]];
 				} 
+
 	      		var sql = [];
+	      		//console.log(JSON.stringify(dominio));
 	      		self.search_read('rusia.eventos', dominio, self.tablas.Tbl_eventos_odoo)
 	      		.then(function(eventos) {
+
+	      			//console.log(JSON.stringify(eventos));
 	      		
-	      			console.log('resolvio eventos');
+	      			//console.log('resolvio eventos');
 			  		Object.keys(eventos).forEach(key=> {
 
 			  			if(borrar == true){
@@ -609,20 +615,14 @@ export class GetDatosProvider {
 	    )
 	}	
 
-	public login(conexion){
+	private crearEsquema(conexion){
 
-		var self = this;//http://185.129.251.102
-		//console.log('-----------------------------0');
+		var self = this;
+
 		var promise = new Promise(function (resolve, reject) {
-            
-            //console.log('------------------------------1');
-            if(self.usr != null){
+			if(conexion.usuario != '' && conexion.pwd != ''){
 
-            	resolve(self.usr.tipo_usuario);
-            }else{
-            	//console.log('-----------------------------1');
-
-            	var odoo = new OdooApi(self.url, conexion.bd);
+        		var odoo = new OdooApi(self.url, conexion.bd);
 				odoo.login(conexion.usuario, conexion.pwd).then(
 				function (uid) {
 					
@@ -724,8 +724,57 @@ export class GetDatosProvider {
 				function (){
 					console.log('Error conexion login');
 					reject()
-				});		    	
-            }
+				});	
+        	}else{
+        		reject();
+        	}
+		});
+
+		return promise;
+	}
+
+	public login(conexion){
+
+		var self = this;//http://185.129.251.102
+		//console.log('-----------------------------0');
+		var promise = new Promise(function (resolve, reject) {
+            
+            self.ejecutarSQL("SELECT * FROM user").then(
+
+				function(data:{rows}){
+					console.log(JSON.stringify(data));
+					if(data.rows.length > 0){
+
+						self.usr = data.rows.item(0);
+					}else{
+						self.usr = null;
+					}
+					
+					console.log(JSON.stringify(data.rows.item(0)));
+					//console.log('------------------------------1');
+		            if(self.usr != null){
+
+		            	resolve(self.usr.tipo_usuario);
+		            }else{
+		            	//console.log('-----------------------------1');
+		            	
+		            }
+				},
+				function(){
+					console.log('Error get table user');				
+					self.crearEsquema(conexion).then(
+						res=>{
+							resolve(res);
+						},
+						fail=>{
+							reject();
+						}
+					);
+				}
+			);
+            
+            		    	
+            
 			
         });
 
