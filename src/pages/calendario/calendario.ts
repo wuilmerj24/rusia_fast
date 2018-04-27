@@ -29,7 +29,7 @@ export class CalendarioPage {
         formatWeekTitle: 'MMMM yyyy, Se $n'
     };
 
-    permisos = '';
+    usuario;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 
@@ -40,12 +40,24 @@ export class CalendarioPage {
         var self = this;
         self.cargar = true;
         this.getDatos.cargarCalendario(false).then(          
-          function(permisos:'') {
+          function(usr:{tipo_usuario:'', id:0, name:''}) {
             
-            self.permisos = permisos;
-            //console.log('permisos ------>'+ self.permisos);
+            self.usuario = usr;
+            var where;
+            if(usr.tipo_usuario + '' == 'is_root'){
+                
+            }else if(usr.tipo_usuario + '' == 'is_client'){
+                
+                //dominio = [["Datos_Cliente_id", "=", self.usr.id]];
+            }else {//+ JSON.stringify([usr.id, usr.name]  and guia_id = "[71,"Natalia Kazan"]"
+                where = 'is_padre = "false" and guia_id_tmp = "' + usr.id + '"';
+                console.log(where);
+                //dominio = [["guia_id", "=", self.usr.id]];
+            } 
 
-            self.getDatos.ejecutarSQL('SELECT * FROM eventos ORDER BY id DESC').then(
+            console.log()
+
+            self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE '+ where +'  ORDER BY id DESC').then(
 
               function(eventos: {rows}){
                 console.log('eventos loaded - OK');
@@ -56,6 +68,8 @@ export class CalendarioPage {
                     var dateStart = new Date(String(eventos.rows.item(i).Fecha_Inicio).replace(' ', 'T'));
                     var hora_ini = eventos.rows.item(i).hora_inicio.split(":") //<--MAC
                     var hora_fin = eventos.rows.item(i).hora_final.split(":") //<--MAC
+
+                    console.log(eventos.rows.item(i).guia_id);
                     
                     //var dateEnd = new Date(String(eventos.rows.item(i).Fecha_Inicio).replace(' ', 'T'));
                     event_format.push({
@@ -90,7 +104,7 @@ export class CalendarioPage {
 
     onEventSelected(evt) {
         
-        this.navCtrl.push(EventoPage, {evento: evt, permisos:this.permisos});
+        this.navCtrl.push(EventoPage, {evento: evt, permisos:this.usuario.tipo_usuario});
     }
 
     refresh(){

@@ -1,5 +1,5 @@
 <!--
-  Generated template for the DetallesReservaPage page.
+  Generated template for the EventoPage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
@@ -8,14 +8,16 @@
 
   <ion-navbar color="primary">
     <ion-title>Detalles Reserva</ion-title>
-    <ion-buttons end>
+    <!--ion-buttons end>
         <button ion-button icon-only (click)="closeModal('x')">
                 <ion-icon item-right name="ios-close-outline"></ion-icon>
         </button>
-    </ion-buttons>
+    </ion-buttons-->
   </ion-navbar>
 
-	<ion-toolbar>
+    
+<!--
+    <ion-toolbar>
         <ion-row class="filters">
             <ion-col class="col-with-arrow" (click)="slidePrev()" no-padding col-1>
                 <ion-icon *ngIf="showLeftButton" name="ios-arrow-back"></ion-icon>
@@ -33,48 +35,393 @@
         </ion-row>
 
     </ion-toolbar>
-
+    <ion-segment *ngIf="ver_segmento">
+        <ion-segment-button  value="camera" icon-start (click)="editar()">
+                            <ion-icon ios="ios-create" md="md-create"></ion-icon>
+            Editar
+        </ion-segment-button>
+        <ion-segment-button value="bookmark" icon-start (click)="guardar(null)">
+                            <ion-icon ios="ios-cloud-upload" md="md-cloud-upload"></ion-icon>
+            Guardar
+        </ion-segment-button>
+    </ion-segment>
+-->
 </ion-header>
 
 
-<ion-content padding>
-	<ion-segment [(ngModel)]="relationship" color="primary" (ionChange)="segmentChanged($event)">
-	    <ion-segment-button value="friends">
-	      Editar
-	    </ion-segment-button>
-	    <ion-segment-button value="enemies">
-	      Eliminar
-	    </ion-segment-button>
-	</ion-segment>
+<ion-content >
 
-	<ion-grid *ngIf="categories[0].visible">                 
+    <div *ngIf="cargar" style="text-align: center">    
+        <ion-spinner name="circles"></ion-spinner><br>
+        <b>Cargando...</b>
+    </div>
+
+<div *ngIf="!cargar">
+    
+    <ion-grid *ngIf="ver_resumen">                 
         
+
         <ion-row align-items-center>  
             <ion-col col-6>
-                <b>Num. reserva</b>
+                <b>Número de reserva</b>
             </ion-col>
             <ion-col col-6>
-               <ion-input name="reserva.name" placeholder='0' [readonly]="!editable" type="text" [(ngModel)]="reserva.name"></ion-input>
+                <ion-input name="reserva.evento_id"  readonly type="text" [(ngModel)]="reserva.evento_id[1]"></ion-input>
             </ion-col>       
-        </ion-row>      
-        <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Represetante</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.representante_nombree" placeholder='0' [readonly]="!editable" type="text" [(ngModel)]="reserva.representante_nombre"></ion-input>
-            </ion-col>       
-        </ion-row>    
+        </ion-row> 
 
         <ion-row align-items-center>  
             <ion-col col-6>
                 <b>Cliente</b>
             </ion-col>
             <ion-col col-6>
-                <ion-input name="reserva.cliente_nombre" placeholder='0' [readonly]="!editable" type="text" [(ngModel)]="reserva.cliente_nombre"></ion-input>
+               <ion-input name="reserva.cliente_id"  readonly type="text" [(ngModel)]="reserva.cliente_id[1]"></ion-input>
+            </ion-col>       
+        </ion-row>  
+
+        <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Representante</b>
+            </ion-col>
+            <ion-col col-6>
+               <ion-input name="reserva.representante_id"  readonly type="text" [(ngModel)]="reserva.representante_id[1]"></ion-input>
+            </ion-col>       
+        </ion-row> 
+
+           
+<!--
+        <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Tipo de servicio</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva."  [readonly]="!editable" type="text" [(ngModel)]="reserva."></ion-input>
             </ion-col>       
         </ion-row>    
+
+
+        <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Transporte</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.Transporte"  [readonly]="!editable" type="text" [(ngModel)]="reserva.Transporte"></ion-input>
+            </ion-col>       
+        </ion-row>    
+
+        <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Fecha</b>
+            </ion-col>
+            <ion-col col-6>
+
+                <ion-input name="reserva.Fecha_Inicio"  [readonly]="!editable" type="text" [(ngModel)]="reserva.Fecha_Inicio"></ion-input>
+            </ion-col>       
+        </ion-row>    
+
+        <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Hora inicio</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.hora_inicio"  [readonly]="!editable" type="text" [(ngModel)]="reserva.hora_inicio"></ion-input>
+            </ion-col>       
+        </ion-row>    
+
+        <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Hora fin</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.hora_final"  [readonly]="!editable" type="text" [(ngModel)]="reserva.hora_final"></ion-input>
+            </ion-col>       
+        </ion-row>    
+
+        <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Guía</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.guia_id"  readonly type="text" [(ngModel)]="reserva.guia_id[1]"></ion-input>
+            </ion-col>       
+        </ion-row>    
+
+        <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Chofer</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.chofer_id"  readonly type="text" [(ngModel)]="reserva.chofer_id[1]"></ion-input>
+            </ion-col>       
+        </ion-row>    
+
+         <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Hotel</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.hotel_id"  readonly type="text" [(ngModel)]="reserva.hotel_id[1]"></ion-input>
+            </ion-col>       
+        </ion-row>
+
+         <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Numero de personas</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.numero_pax"  [readonly]="!editable" type="number" [(ngModel)]="reserva.numero_pax"></ion-input>
+            </ion-col>       
+        </ion-row>
+
+         <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Ciudad</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.ciudad_id"  readonly type="text" [(ngModel)]="reserva.ciudad_id[1]"></ion-input>
+            </ion-col>       
+        </ion-row>
+
+         <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Servicios (gastos)</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.Servicio_Gastos"  [readonly]="!editable" type="number" [(ngModel)]="reserva.Servicio_Gastos"></ion-input>
+            </ion-col>       
+        </ion-row>
+        
+         <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Gastos RUB</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.gasto_rub"  readonly type="number" [(ngModel)]="reserva.gasto_rub"></ion-input>
+            </ion-col>       
+        </ion-row>
+
+         <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Gastos USD</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.gasto_usd"  readonly type="number" [(ngModel)]="reserva.gasto_usd"></ion-input>
+            </ion-col>       
+        </ion-row>
+
+         <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Gastos EUR</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.gasto_eur"  readonly type="number" [(ngModel)]="reserva.gasto_eur"></ion-input>
+            </ion-col>       
+        </ion-row>
+
+         <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Gastos TC RUB</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.tarjeta_rub"  readonly type="number" [(ngModel)]="reserva.tarjeta_rub"></ion-input>
+            </ion-col>       
+        </ion-row>
+
+         <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Gastos TC USD</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.tarjeta_usd"  readonly type="number" [(ngModel)]="reserva.tarjeta_usd"></ion-input>
+            </ion-col>       
+        </ion-row>
+
+         <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Gastos TC EUR</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.tarjeta_eur"  readonly type="number" [(ngModel)]="reserva.tarjeta_eur"></ion-input>
+            </ion-col>       
+        </ion-row>
+
+        <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Gastos PayPal</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.gasto_paypal"  readonly type="number" [(ngModel)]="reserva.gasto_paypal"></ion-input>
+            </ion-col>       
+        </ion-row>
+
+         <ion-row align-items-center>  
+            <ion-col col-6>
+                <b>Total Representante</b>
+            </ion-col>
+            <ion-col col-6>
+                <ion-input name="reserva.Total_Representante"  [readonly]="!editable" type="number" [(ngModel)]="reserva.Total_Representante"></ion-input>
+            </ion-col>       
+        </ion-row>      
+-->
+    </ion-grid>
+
+
+    <ion-grid *ngIf="ver_descripcion">
+            
+        <ion-row align-items-center>  
+            <ion-col col-4>
+                <b>Nombre del evento</b>
+            </ion-col>
+            <ion-col col-4>
+                <b>Fecha de inicio</b>
+            </ion-col>       
+            <ion-col col-4>
+                <b>Ciudad</b>
+            </ion-col>
+        </ion-row>        
+        <ion-row class="borde" *ngFor="let ite of itinerario; let i = index" align-items-center (click)="abrirGasto(gasto)">  
+            <ion-col col-4>
+                {{ite.name}}
+            </ion-col>                    
+            <ion-col col-3>
+                {{ite.Fecha_Inicio}}
+            </ion-col>
+            <ion-col col-4>
+                {{ite.ciudad_id[1]}}
+            </ion-col>       
+        </ion-row>          
+        <!--ion-row *ngIf="editable" align-items-center>  
+            <ion-col col-4>
+                <button ion-button color="danger" type="button" (click)="agregarGasto()" >Agregar</button>
+            </ion-col>
+        </ion-row-->  
+
+    </ion-grid>
+
+ <ion-grid *ngIf="ver_documentos">
+
+        <div *ngIf="ver_download" style="text-align: center">    
+            <ion-spinner name="circles"></ion-spinner><br>
+            <b>Descargando archivo...</b>
+        </div>
+        
+        <ion-row align-items-center>  
+            <ion-col col-8>
+                <b>Nombre</b>
+            </ion-col>
+            <ion-col col-4>
+                <b>Decargar</b>
+            </ion-col>                  
+        </ion-row>        
+        <ion-row class="borde" *ngFor="let att of attachment; let i = index" align-items-center >  
+            <ion-col col-8>
+                {{att.name}}
+            </ion-col>
+            <ion-col col-4>
+                <a (click)="descargarAtt(att)">Descargar: {{att.file_size}}</a>
+            </ion-col>                    
+        </ion-row>          
+        <!--ion-row *ngIf="editable" align-items-center>  
+            <ion-col col-4>
+                <button ion-button color="danger" type="button" (click)="agregarAttachment()" >Agregar</button>
+            </ion-col>
+        </ion-row-->    
+        
+
+    </ion-grid>
+
+ <!--   <ion-grid >
+        <ion-row align-items-center>  
+            <ion-col col-4>
+                <b>Concepto</b>
+            </ion-col>
+            <ion-col col-2>
+                <b>Moneda</b>
+            </ion-col>       
+            <ion-col col-3>
+                <b>Total</b>
+            </ion-col>
+            <ion-col col-3>
+                <b>Fecha</b>
+            </ion-col>
+        </ion-row>        
+        <ion-row class="borde" *ngFor="let gasto of gastostoursline_ids; let i = index" align-items-center (click)="abrirGasto(gasto)">  
+            <ion-col col-4>
+                {{gasto.concepto_gasto_id[1]}}
+            </ion-col>
+            <ion-col col-2>
+                {{gasto.tipo_moneda}}
+            </ion-col>       
+            <ion-col col-3>
+                {{gasto.Total}}
+            </ion-col>
+            <ion-col col-3>
+                {{gasto.fecha}}
+            </ion-col>       
+        </ion-row>          
+        <ion-row *ngIf="editable" align-items-center>  
+            <ion-col col-4>
+                <button ion-button color="danger" type="button" (click)="agregarGasto()" >Agregar</button>
+            </ion-col>
+        </ion-row>  
+    </ion-grid>-->
+      
+
+    <ion-grid *ngIf="ver_comentarios">
+
+        <ion-row align-items-center>  
+            <ion-col col-12>
+                <b>Comentarios cliente</b>
+            </ion-col>
+        </ion-row>
+
+        <ion-row align-items-center>  
+            <ion-col col-12>
+                <ion-textarea name="reserva.Comentarios_Cliente" [readonly]="!editable" [(ngModel)]="reserva.Comentarios_Cliente"> </ion-textarea>
+            </ion-col>       
+        </ion-row>
+        <div *ngIf="ver_segmento">
+            <ion-row align-items-center>  
+                <ion-col col-12>
+                    <b>Comentarios internos</b>
+                </ion-col>
+            </ion-row>
+
+            <ion-row align-items-center>  
+                <ion-col col-12>
+                    <ion-textarea name="reserva.Comentarios_Internos" [readonly]="!editable" [(ngModel)]="reserva.Comentarios_Internos"> </ion-textarea>
+                </ion-col>       
+            </ion-row>
+
+            <ion-row align-items-center>  
+                <ion-col col-12>
+                    <b>Comentarios guía</b>
+                </ion-col>
+            </ion-row>
+
+            <ion-row align-items-center>  
+                <ion-col col-12>
+                    <ion-textarea name="reserva.Comentarios_Guia" [readonly]="!editable" [(ngModel)]="reserva.Comentarios_Guia"> </ion-textarea>
+                </ion-col>       
+            </ion-row>      
+
+            <ion-row align-items-center>  
+                <ion-col col-12>
+                    <b>Comentarios chofer</b>
+                </ion-col>
+            </ion-row>
+
+            <ion-row align-items-center>  
+                <ion-col col-12>
+                    <ion-textarea name="reserva.Comentarios_Chofer" [readonly]="!editable" [(ngModel)]="reserva.Comentarios_Chofer"> </ion-textarea>
+                </ion-col>       
+            </ion-row>
+    
+        </div>
+        
         
     </ion-grid>
+
+</div>
 
 </ion-content>

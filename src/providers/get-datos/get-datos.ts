@@ -15,11 +15,12 @@ export class GetDatosProvider {
 
 	private db: SQLiteObject = null;
 
-	//private url = '/api';
-	//private url = 'http://odoo.devoptions.mx';
-	private url = 'http://rusiatoursmoscu.com';
+	private url = '/api';
+	//private url = 'http://odoo.devoptions.mx';     //"http://odoo.devoptions.mx"
+	//private url = 'http://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
 
 	public usr = null;	
+	private eventoHijo = [];
 
 	private bd_conf = {
       name: 'ionicdb.db',
@@ -75,39 +76,12 @@ export class GetDatosProvider {
 
 	}
 
-	/*public borrarTablas(tablas){
-		var self = this;
-		var promise = new Promise(function (resolve, reject) {
-            
-            
-			self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
-		      
-
-		      	var sql = [];
-		      	Object.keys(tablas).forEach(key=> {
-
-		      		//sql.push('DROP TABLE IF EXISTS '+tablas[key]);
-		      		console.log('DROP TABLE IF EXISTS '+tablas[key]);
-		      	});
-
-		      	db.sqlBatch(sql).then(
-	      		res => {
-		      		console.log('----------Drop tables - OK---------');
-		      		resolve();
-		      	}).catch(e => {
-	  				console.log('Error Drop tables');
-	  				console.log(e.message);
-	  				reject(e)
-	  			});
-  			}).catch(e => {
-		  		console.log('Error en conexion bd');
-		  		console.log(e.message);
-		  		reject(e)
-		  	});
-	  	});
-
-	  	return promise;
-	}*/
+	public bytesToSize(bytes:number) {
+	   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+	   if (bytes == 0) return '0 Byte';
+	   var i = Math.floor(Math.log(bytes) / Math.log(1024));
+	   return Math.round((bytes / Math.pow(1024, i))) + ' ' + sizes[i];
+	};
 
 	public cargarAttachment(borrar){
 
@@ -159,14 +133,7 @@ export class GetDatosProvider {
 			  		reject(e) 
 			  	});
 
-				//console.log('-----------------Fin ---------------');
-				//resolve();
-			    //console.log(JSON.stringify(sql));  										   
-
-
-
-	   			
-
+			
 		  	}, 
 			function() {
 		  		
@@ -202,18 +169,14 @@ export class GetDatosProvider {
 			            
 				  		Object.keys(gastos).forEach(key=> {
 
-						    /*console.log("INSERT OR IGNORE INTO gastostoursline "+
+						    var registro = "INSERT OR IGNORE INTO gastostoursline "+
 						    	"(id, concepto_gasto_id, tipo_moneda, Total, fecha, ciudad_id, observaciones, usuario_id, evento_padre, eventos_id)"+
 						    	" VALUES (" + gastos[key].id + ", '"+JSON.stringify(gastos[key].concepto_gasto_id)+"', '" 
 						    	+gastos[key].tipo_moneda +"', '"+ gastos[key].Total+ "', '" + gastos[key].fecha +"', '"+
-						    	JSON.stringify(gastos[key].ciudad_id)+"', '"+gastos[key].observaciones+"', '"+JSON.stringify(gastos[key].usuario_id)+"', '"+gastos[key].evento_padre+"', '"+ JSON.stringify(gastos[key].eventos_id) +"');"); */
+						    	JSON.stringify(gastos[key].ciudad_id)+"', '"+gastos[key].observaciones+"', '"+JSON.stringify(gastos[key].usuario_id)+"', '"+gastos[key].evento_padre+"', '"+ gastos[key].eventos_id[0] +"');";
 
-
-						    sql.push("INSERT OR IGNORE INTO gastostoursline "+
-						    	"(id, concepto_gasto_id, tipo_moneda, Total, fecha, ciudad_id, observaciones, usuario_id, evento_padre, eventos_id)"+
-						    	" VALUES (" + gastos[key].id + ", '"+JSON.stringify(gastos[key].concepto_gasto_id)+"', '" 
-						    	+gastos[key].tipo_moneda +"', '"+ gastos[key].Total+ "', '" + gastos[key].fecha +"', '"+
-						    	JSON.stringify(gastos[key].ciudad_id)+"', '"+gastos[key].observaciones+"', '"+JSON.stringify(gastos[key].usuario_id)+"', '"+gastos[key].evento_padre+"', '"+ gastos[key].eventos_id[0] +"');");
+						    console.log(registro);
+						    sql.push(registro);
 						}); 
 					    //console.log(JSON.stringify(sql));  										   
 
@@ -252,50 +215,54 @@ export class GetDatosProvider {
 	private parseDato(dato){
 		//console.log(typeof dato)
 		//console.log((dato == 'false'));
-		return ((dato == 'false')?"":dato);
+		return ((dato == 'false' || dato == false)?"":dato);
 	}
+	
 
-
-	public cargarCalendario(borrar){
+	private cargarEventos(_dominio, borrar){
 
 		var self = this;
 		var promise = new Promise(function (resolve, reject) {
-            
-            
-			self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
-		      		       
-				//console.log('tipo suario :' + self.usr.tipo_usuario); 
-				//console.log((self.usr.tipo_usuario + '')); 
-				var dominio;
-				if(self.usr.tipo_usuario + '' == 'is_root'){
-					dominio = [['is_padre', '=' , false]];
-				}else if(self.usr.tipo_usuario + '' == 'is_client'){
-					dominio = [['is_padre', '=' , false],["Datos_Cliente_id", "=", self.usr.id]];
-				}else {
-					dominio = [['is_padre', '=' , false], ["guia_id", "=", self.usr.id]];
-				} 
 
-	      		var sql = [];
-	      		//console.log(JSON.stringify(dominio));
-	      		self.search_read('rusia.eventos', dominio, self.tablas.Tbl_eventos_odoo)
+			var dominio = [];
+
+			if(dominio == null){
+
+				Object.keys(self.eventoHijo).forEach(key=> {
+
+					dominio.push(["name", "=", self.eventoHijo[key]]);
+				});
+				
+
+			}else{
+
+				dominio = _dominio;
+			}
+			self.search_read('rusia.eventos', dominio, self.tablas.Tbl_eventos_odoo)
 	      		.then(function(eventos) {
 
-	      			//console.log(JSON.stringify(eventos));
+	      			
 	      		
 	      			//console.log('resolvio eventos');
+	      			var sql = [];
+	      			if(borrar == true){
+		  				sql.push('DELETE FROM eventos;');	
+		  			}
 			  		Object.keys(eventos).forEach(key=> {
-
-			  			if(borrar == true){
-			  				sql.push('DELETE FROM eventos;');	
-			  			}
-					    				  							  			
-					    sql.push("INSERT OR IGNORE INTO eventos "+
+			  			
+			  			if(_dominio != null){
+			  				if(self.eventoHijo.indexOf(eventos[key].name) > -1) {
+					    		self.eventoHijo.push(eventos[key].name);
+					      		console.log(eventos[key].name);
+					    	}	
+			  			}			  			
+			  			var registro = "INSERT OR IGNORE INTO eventos "+
 					    	"(id, cliente_id, representante_id,"+
 					    	" Fecha_Inicio, hora_inicio , hora_final , name, is_padre, fecha_padre, guia_id,"+
 					    	" chofer_id, gasto_rub, gasto_eur, gasto_usd, gasto_paypal, Comentarios_Chofer,"+
 					    	" Comentarios_Internos, Comentarios_Cliente, Comentarios_Guia, Fecha_Fin, Transporte, hotel_id,"+
 					    	" ciudad_id, Total_Representante, message, numero_pax, evento_id, Servicio_Gastos, tarjeta_eur,"+
-					    	" tarjeta_rub, tarjeta_usd, is_guia, is_traslado, gastostoursline_ids)"+
+					    	" tarjeta_rub, tarjeta_usd, is_guia, is_traslado, gastostoursline_ids, guia_id_tmp)"+
 					    	" VALUES (" + eventos[key].id + ", '"+ JSON.stringify(eventos[key].Datos_Cliente_id)+"', '" +
 					    	JSON.stringify(eventos[key].representante_id)+ "', '" + eventos[key].Fecha_Inicio +"','" + 
 					    	eventos[key].hora_inicio + "', '" + eventos[key].hora_final + "', '" + 
@@ -309,44 +276,92 @@ export class GetDatosProvider {
 					    	eventos[key].Transporte+"', '"+JSON.stringify(eventos[key].hotel_id)+"', '"+JSON.stringify(eventos[key].ciudad_id)+"', '"+
 					    	eventos[key].Total_Representante+"', '"+eventos[key].message+"', '"+eventos[key].numero_pax+"', '"+
 					    	JSON.stringify(eventos[key].evento_id)+"', '"+eventos[key].Servicio_Gastos+"', '"+eventos[key].tarjeta_eur+"', '"+
-					    	eventos[key].tarjeta_rub+"', '"+eventos[key].tarjeta_usd+"' , '"+eventos[key].is_guia+"', '"+eventos[key].is_traslado+"', '"+ JSON.stringify(eventos[key].gastostoursline_ids)+"');");
+					    	eventos[key].tarjeta_rub+"', '"+eventos[key].tarjeta_usd+"' , '"+eventos[key].is_guia+"', '"+eventos[key].is_traslado+"', '"+ 
+					    	JSON.stringify(eventos[key].gastostoursline_ids)+"', '"+eventos[key].guia_id[0]+"');";
+					    //console.log(registro);							  			
+					    sql.push(registro);
 					});
 
-		   			db.sqlBatch(sql)
-			        .then(res => {
-			        	
-			        	console.log('-----------------entro1 ---------------');
-			        	self.cargarGastos(false).then(
-			        		res=>{
+					self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
+						db.sqlBatch(sql)
+				        .then(res => {
+				        	
+				        	resolve();
+								
+						}).catch(e => {
+							console.log(e.message);
+							reject(e);
+						});
+					});		
+			  	}, 
+				function() {
+			  		reject();						  		
+				});	
+		});
 
-			        			console.log('-----------------entro2 ---------------');
-			        			self.cargarAttachment(false).then(
+		return promise;
+
+	}
+
+
+	public cargarCalendario(borrar){
+
+		var self = this;
+		var promise = new Promise(function (resolve, reject) {
+            
+            
+			self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
+		      		       
+				//console.log('tipo suario :' + self.usr.tipo_usuario); 
+				//console.log((self.usr.tipo_usuario + '')); 
+				var dominio; 
+				if(self.usr.tipo_usuario + '' == 'is_root'){
+					dominio = [['is_padre', '=' , false]];
+				}else if(self.usr.tipo_usuario + '' == 'is_client'){
+					dominio = [['is_padre', '=' , false],["Datos_Cliente_id", "=", self.usr.id]];
+					//dominio = [["Datos_Cliente_id", "=", self.usr.id]];
+				}else {
+					dominio = [['is_padre', '=' , false], ["guia_id", "=", self.usr.id]];
+					//dominio = [["guia_id", "=", self.usr.id]];
+				} 
+
+				self.cargarEventos(dominio,borrar).then(
+					res=>{
+
+						self.cargarEventos(null,borrar).then(
+							res=>{
+
+								console.log('-----------------entro1 ---------------');
+					        	self.cargarGastos(false).then(
 					        		res=>{
-					        			resolve(self.usr.tipo_usuario);
+
+					        			console.log('-----------------entro2 ---------------');
+					        			self.cargarAttachment(false).then(
+							        		res=>{
+							        			resolve(self.usr);
+							        		},
+							        		fail=>{
+
+							        			reject();
+							        		}
+							        	);
 					        		},
 					        		fail=>{
 
 					        			reject();
 					        		}
 					        	);
-			        		},
-			        		fail=>{
-
-			        			reject();
-			        		}
-			        	);
-							
-					}).catch(e => {
-						console.log(e.message);
-						reject(e);
-					});
-
-			  	}, 
-				function() {
-			  		console.log('Error search_read');
-			  		console.log('Loading offline events');
-			  		resolve(self.usr.tipo_usuario);							  		
-				});						
+							},
+							fail=>{
+								resolve(self.usr);	
+							}
+						);
+					},
+					fail=>{
+						resolve(self.usr);	
+					}
+				);
+	      		
 
 		  	}).catch(e => {
 		  		console.log('Error en CONEXION');
@@ -445,48 +460,7 @@ export class GetDatosProvider {
 
 		        	resolve(ok_id);
 
-		        	/*console.log('-----------Odoo created id:' + ok_id);
-		        	if(ok_id != false && ok_id > 0){
-
-		        		var insert = ok_id + ", ";
-		        		var values = "id, ";
-		        		Object.keys(campos).forEach(key=> {
-
-		        			values = values + key+",";
-		        			insert = insert + " '"+campos[key]+"', ";				        			
-		        		});
-
-		        		var tabla_bd = tabla.split('.')[1];
-
-		        		values = values.substring(0, values.length - 1); 
-
-		        		insert = insert.substring(0, insert.length - 2);
-
-		        		insert = insert + " ";
-		        		//console.log("UPDATE " + tabla_bd + " SET " + set + " WHERE id = "+ dominio);
-		        		console.log("INSERT OR IGNORE INTO " + tabla_bd + 
-								    	"("+values+")"+
-								    	" VALUES (" + insert +");");
-
-		        		
-		        		self.ejecutarSQL("INSERT OR IGNORE INTO " + tabla_bd + 
-								    	"("+values+")"+
-								    	" VALUES (" + insert +");").then(
-		        			res =>{
-		        				console.log('create OK: ' + ok_id);
-		        				//console.log(JSON.stringify(res));
-		        				resolve(ok_id);
-		        			},
-		        			fail =>{				        				
-		        				console.log('Fail update BD');
-		        				reject();			
-		        			}
-		        		);				        		
-		        		//resolve(ok_code);				        		
-		        	}else{
-		        		console.log('Fail update Odoo');
-		        		reject();	
-		        	}		*/					
+		        
 		        },
 		    	function (){
 		    		console.log('Error creating Odoo');
@@ -519,37 +493,7 @@ export class GetDatosProvider {
 
 		        function (ok_code) {
 
-		        	/*
-		        	if(ok_code){
-
-		        		var set = ''
-		        		Object.keys(campos).forEach(key=> {
-
-		        			set = set + key +" = '"+campos[key]+"', ";
-		        			console.log();
-		        		});
-
-		        		var tabla_bd = tabla.split('.')[1];
-
-		        		set = set.substring(0, set.length - 2); // "12345.0"
-		        		set = set + " ";
-		        		console.log("UPDATE " + tabla_bd + " SET " + set + " WHERE id = "+ dominio);
-		        		self.ejecutarSQL("UPDATE " + tabla_bd + " SET " + set + " WHERE id = "+ dominio).then(
-		        			res =>{
-		        				console.log('write OK: ' + ok_code);
-		        				console.log(res);
-		        				resolve(res);
-		        			},
-		        			fail =>{				        				
-		        				console.log('Fail update BD');
-		        				reject();			
-		        			}
-		        		);				        		
-		        						        		
-		        	}else{
-		        		console.log('Fail update Odoo');
-		        		reject();	
-		        	}							*/
+		     
 		        	resolve(ok_code);
 		        },
 		    	function (){

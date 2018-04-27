@@ -1,7 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild ,Directive, ElementRef, ContentChild} from '@angular/core';
 import { Slides, NavController, NavParams,ViewController, ModalController, ToastController } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
+import { DetallesReservaPage } from '../../pages/detalles-reserva//detalles-reserva';
 import { File } from '@ionic-native/file';
 
 
@@ -9,6 +10,11 @@ import { File } from '@ionic-native/file';
   selector: 'page-evento',
   templateUrl: 'evento.html',
 })
+
+@Directive({
+  selector: 'ion-textarea[autosize]'
+})
+
 export class EventoPage {
 
 	@ViewChild(Slides) slides: Slides;
@@ -74,7 +80,7 @@ export class EventoPage {
 	private ruta : '';
 
 
-	constructor(private toastCtrl: ToastController, private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
+	constructor(public element:ElementRef, private toastCtrl: ToastController, private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 		
 		this.evento_cal = this.navParams.get('evento');
 		this.permisos = this.navParams.get('permisos');
@@ -101,14 +107,16 @@ export class EventoPage {
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad EventoPage');
+
 	}
 
-	private bytesToSize(bytes:number) {
-	   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-	   if (bytes == 0) return '0 Byte';
-	   var i = Math.floor(Math.log(bytes) / Math.log(1024));
-	   return Math.round((bytes / Math.pow(1024, i))) + ' ' + sizes[i];
-	};
+	protected adjustTextarea(event: any): void {
+		let textarea: any		= event.target;
+		textarea.style.overflow = 'hidden';
+		textarea.style.height 	= 'auto';
+		textarea.style.height 	= textarea.scrollHeight + 'px';
+		return;
+	}	
 
 	private initEvento(){
 		
@@ -168,10 +176,10 @@ export class EventoPage {
 					function(gastos: {rows}){
 
 						
-
+						
 						for(var i=0; i<gastos.rows.length; i++) {
 		                 	
-		                	//console.log(JSON.stringify(gastos.rows.item(i)));                     	
+		                	//                    	
 		                 	var tmp_concepto_gasto_id = JSON.parse(gastos.rows.item(i).concepto_gasto_id)
 		                 	var tmp_ciudad_id = JSON.parse(gastos.rows.item(i).ciudad_id)
 		                 	
@@ -191,7 +199,7 @@ export class EventoPage {
 								for(var i=0; i<attachment.rows.length; i++) {
 
 									var att = attachment.rows.item(i)
-									att.file_size = self.bytesToSize(parseInt(att.file_size))
+									att.file_size = self.getDatos.bytesToSize(parseInt(att.file_size))
 									//var tmp_file_size = attachment.rows.item(i).file_size;
 									//console.log('file size:' + );
 				                	//console.log(JSON.stringify(attachment.rows.item(i)));  	
@@ -495,6 +503,12 @@ export class EventoPage {
 		);
 
     }   
+
+    private abrirReserva(){
+    	//console.log('entro');
+    	// 
+    	this.navCtrl.push(DetallesReservaPage, {evento:this.evento});
+    }
 
     private presentToast() {
 	  let toast = this.toastCtrl.create({

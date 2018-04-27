@@ -127,6 +127,7 @@ export class TablasProvider {
 	" tarjeta_eur VARCHAR(10),"+
 	" tarjeta_rub VARCHAR(10),"+
 	" tarjeta_usd VARCHAR(10),"+
+	" guia_id_tmp VARCHAR(5),"+
 	" gastostoursline_ids VARCHAR(255));";
 /*
 	"tarjeta_usd_pos",

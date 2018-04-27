@@ -57,7 +57,17 @@
 	</div>
 
 <div *ngIf="!cargar">
-	
+	<!--<ion-slides>
+	<ion-slide>
+	<h1>Slide 1</h1>
+	</ion-slide>
+	<ion-slide>
+	<h1>Slide 2</h1>
+	</ion-slide>
+	<ion-slide>
+	<h1>Slide 3</h1>
+	</ion-slide>
+	</ion-slides>-->
 	<ion-grid *ngIf="ver_resumen">                 
 	    
 	    <ion-row align-items-center>  
@@ -69,12 +79,12 @@
 	        </ion-col>       
 	    </ion-row>  
 
-	    <ion-row align-items-center>  
+	    <ion-row align-items-center (click)="abrirReserva()">  
 	        <ion-col col-6>
 	            <b>Evento Padre</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name="evento.evento_id"  readonly type="text" [(ngModel)]="evento.evento_id[1]"></ion-input>
+	            <ion-input name="evento.evento_id" style="color: #85C1E9"  readonly type="text" [(ngModel)]="evento.evento_id[1]"></ion-input>
 	        </ion-col>       
 	    </ion-row>    
 <!--
@@ -265,7 +275,8 @@
 
 	    <ion-row align-items-center>  
 	        <ion-col col-12>
-	            <ion-textarea rows="15" name="evento.message" [readonly]="!editable" [(ngModel)]="evento.message"> </ion-textarea>
+
+	            <textarea class="desText" id="message" rows="15" (click)="adjustTextarea($event);" name="evento.message" [readonly]="!editable" [(ngModel)]="evento.message"  #message> </textarea>
 	        </ion-col>       
 	    </ion-row>
 
