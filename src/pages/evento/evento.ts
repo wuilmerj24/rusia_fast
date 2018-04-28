@@ -62,8 +62,9 @@ export class EventoPage {
 	 //gastostoursline_ids:[]
 	 }
 
-	gastostoursline_ids = [];
-	attachment = [];
+	private gastostoursline_ids = [];
+	private attachment = [];
+	private gastostours = [];
 
 	private editable = false;
 	private cargar = false;
@@ -122,6 +123,10 @@ export class EventoPage {
 		
 		var self = this;
 		self.gastostoursline_ids = [];
+
+		self.attachment = [];
+		self.gastostours = [];
+
 		self.cargar = true;
 		self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE id = ' + self.evento_cal.id).then(
 			function(eventos: {rows}){
@@ -134,17 +139,6 @@ export class EventoPage {
 				var tmp_hotel_id = JSON.parse(eventos.rows.item(0).hotel_id);
 				var tmp_ciudad_id = JSON.parse(eventos.rows.item(0).ciudad_id);
 
-				//var tmp_gatos = JSON.parse(eventos.rows.item(0).gastostoursline_ids);
-
-				/*var domanin = '';
-				for (var i = tmp_gatos.length - 1; i >= 0; i--) {
-
-					if(i == 0){
-						domanin = domanin + tmp_gatos[i];  
-					}else{
-						domanin = domanin + tmp_gatos[i] + ","  	
-					}
-				}*/
 
 				self.evento = eventos.rows.item(0);
 				self.evento.evento_id = tmp_evento_id;
@@ -155,22 +149,6 @@ export class EventoPage {
 				self.evento.hotel_id = tmp_hotel_id;
 				self.evento.ciudad_id = tmp_ciudad_id;
 
-				//self.evento.gastostoursline_ids = tmp_gatos;
-
-				//self.evento.Fecha_Inicio = new Date(self.evento.Fecha_Inicio).toISOString();
-				/*var tmp_hora_inicio = new Date();
-				tmp_hora_inicio.setHours(parseInt(self.evento.hora_inicio.split(':')[0]));
-				tmp_hora_inicio.setMinutes(parseInt(self.evento.hora_inicio.split(':')[1]));
-				
-				console.log(parseInt(self.evento.hora_inicio.split(':')[0]));
-
-				tmp_hora_inicio.setHours(15, 35, 1);
-				console.log(tmp_hora_inicio);
-
-				self.evento.hora_inicio = new Date(tmp_hora_inicio).toISOString();*/
-				//console.log(self.evento.name);
-
-				//console.log('self.gastostoursline_ids' + JSON.stringify(self.gastostoursline_ids));
 
 				self.getDatos.ejecutarSQL('SELECT * FROM gastostoursline WHERE eventos_id = "' + self.evento.id +'"').then(
 					function(gastos: {rows}){
@@ -191,7 +169,7 @@ export class EventoPage {
 		                    
 		                }
 		                //self.cargar = false;
-		                console.log('SELECT * FROM attachment WHERE cliente_id = "' + self.evento.cliente_id[0] +'"');
+		                //console.log('SELECT * FROM attachment WHERE cliente_id = "' + self.evento.cliente_id[0] +'"');
 		                self.getDatos.ejecutarSQL('SELECT * FROM attachment WHERE cliente_id = "' + self.evento.cliente_id[0] +'"').then(
 							function(attachment: {rows}){
 
@@ -200,12 +178,34 @@ export class EventoPage {
 
 									var att = attachment.rows.item(i)
 									att.file_size = self.getDatos.bytesToSize(parseInt(att.file_size))
-									//var tmp_file_size = attachment.rows.item(i).file_size;
-									//console.log('file size:' + );
-				                	//console.log(JSON.stringify(attachment.rows.item(i)));  	
+
 				                   	self.attachment.push(att);               				                    
 				                }
-				                self.cargar = false;
+				                //self.cargar = false;
+
+//				                console.log('SELECT * FROM attachment WHERE gastostours');
+				                self.getDatos.ejecutarSQL('SELECT * FROM gastostours').then(
+									function(gastostours: {rows}){
+
+																	 
+										for(var i=0; i<gastostours.rows.length; i++) {
+
+											var gastos = gastostours.rows.item(i)
+											var tmp_ciudades = JSON.parse(gastos.ciudades);
+
+											if(tmp_ciudades.indexOf(self.evento.ciudad_id[0]) > -1) {
+									    		self.gastostours.push(gastos);
+									      		//console.log(eventos[key].name);
+									    	}										    	
+						                   	
+						                }
+						                self.cargar = false;
+
+									},
+									fail=>{
+										console.log('Fail load gastos')
+									}
+								);
 
 							},
 							fail=>{
@@ -436,7 +436,7 @@ export class EventoPage {
 			eventos_id:this.evento.id,
 			fecha:new Date().toISOString()
 		}//gasto:{, , , id:nul
-        let profileModal = this.modalCtrl.create(GatosTourPage, {gasto:gasto, ver_segmento:self.editable});
+        let profileModal = this.modalCtrl.create(GatosTourPage, {gasto:gasto, ver_segmento:self.editable, lista_gastos:self.gastostours});
         
         profileModal.onDidDismiss(data => {
         				

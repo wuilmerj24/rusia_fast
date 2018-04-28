@@ -17,6 +17,8 @@ import { GatosTourPage } from '../pages/gatos-tour/gatos-tour';
 import { PanelPage } from '../pages/panel/panel';
 import { PerfilPage } from '../pages/perfil/perfil';
 
+import { GastosRelPage } from '../pages/gastos-rel/gastos-rel';
+
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -42,7 +44,8 @@ import { TablasProvider } from '../providers/tablas/tablas';
     EventoPage,
     GatosTourPage,
     PanelPage,
-    PerfilPage
+    PerfilPage,
+    GastosRelPage
   ],
   imports: [
     BrowserModule,
@@ -64,7 +67,8 @@ import { TablasProvider } from '../providers/tablas/tablas';
     EventoPage,
     GatosTourPage,
     PanelPage,
-    PerfilPage
+    PerfilPage,
+    GastosRelPage
   ],
   providers: [ 
     File,   

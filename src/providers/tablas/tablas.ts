@@ -209,9 +209,29 @@ export class TablasProvider {
 	"hora_final", 
 	"is_adjudicado"];
 
-	constructor() {
+	/*constructor() {
     	console.log('Hello TablasProvider Provider');
-  	}
+  	}*/
+
+  	private tbl_gastostours = "CREATE TABLE IF NOT EXISTS gastostours("+
+	" id INTEGER PRIMARY KEY,"+
+	" name VARCHAR(255),"+	
+	" ciudades VARCHAR(255));";
+
+  	/*private tbl_gastostours = "CREATE TABLE IF NOT EXISTS gastostours("+
+	" id INTEGER PRIMARY KEY,"+
+	" name VARCHAR(255),"
+	" ciudades VARCHAR(255));";*/
+
+  	private tbl_gastostours_odoo = ["id", "name", "ciudades"];
+
+	public get Tbl_gastostours_odoo() : string[] {
+		return  this.tbl_gastostours_odoo;
+	}
+
+	public get Tbl_gastostours() : string {
+		return  this.tbl_gastostours;
+	}
 
   	public get Tbl_user_odoo() : string[] {
   		return this.tbl_user_odoo;

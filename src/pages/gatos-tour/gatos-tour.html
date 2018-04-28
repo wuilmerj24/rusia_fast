@@ -42,7 +42,9 @@
 	            <b>Concepto gasto</b>
 	        </ion-col>
 	        <ion-col col-8>	        	
-	            <ion-select name="gasto.concepto_gasto_id" [disabled]="!ver_segmento" [(ngModel)]="gasto.concepto_gasto_id[0]">	            
+	            <ion-select name="gasto.concepto_gasto_id" [disabled]="!ver_segmento" [(ngModel)]="gasto.concepto_gasto_id[0]">
+	            	<ion-option *ngFor="let gasto_t of gastostours" [value]="gasto_t.id">{{gasto_t.name}}</ion-option>
+<!--
 					<ion-option value="1">Comision Getyourgide</ion-option>
 					<ion-option value="2">Entradas Kremlin</ion-option>
 					<ion-option value="3">Salario Guía</ion-option>
@@ -59,7 +61,7 @@
 					<ion-option value="14">Coste billetes de tren</ion-option>
 					<ion-option value="15">Monasterio Novodevichy</ion-option>
 					<ion-option value="16">Entradas Monasterio LAVRA</ion-option>
-					<ion-option value="17">Entradas Barco rio</ion-option>
+					<ion-option value="17">Entradas Barco rio</ion-option>-->
 	            </ion-select>    
 	        </ion-col>    
 	    </ion-row>            	

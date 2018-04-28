@@ -14,13 +14,15 @@ export class GatosTourPage {
 	private ver_segmento = true;
 	private cargar = false;
 	private eventos_id;
+	private gastostours = [];
 	constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 		
 
 		this.gasto = this.navParams.get('gasto');			
 		
 		this.ver_segmento = this.navParams.get('ver_segmento');
-		console.log(JSON.stringify(this.gasto));
+		this.gastostours = this.navParams.get('lista_gastos');
+		console.log(JSON.stringify(this.gastostours));
 	}
 
 	closeModal(dato) {

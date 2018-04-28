@@ -83,6 +83,72 @@ export class GetDatosProvider {
 	   return Math.round((bytes / Math.pow(1024, i))) + ' ' + sizes[i];
 	};
 
+	public cargarGastosConceptos(){
+
+		var self = this;
+		var sql = [];
+		var promise = new Promise(function (resolve, reject) {
+            
+            console.log('-----------------entro3 ---------------');
+            self.search_read('rusia.gastostours', [["ciudades", "in", [2,3,4,5,6,7]]], ["gasto_id","name", "ciudades"])
+	  		.then(function(gastostours) {
+	  		
+
+	  			//console.log(JSON.stringify(gastostours));
+	  			//console.log('resolvio gastos');
+	  			console.log('-----------------entro4 ---------------');
+	  			//console.log(JSON.stringify(attachment));
+	  			//if(borrar == true){
+		  		//	sql.push('DELETE FROM attachment;');
+	  			//}	
+
+
+	  			console.log(JSON.stringify(gastostours))
+	            
+		  		Object.keys(gastostours).forEach(key=> {
+
+				    var registro = "INSERT OR IGNORE INTO gastostours "+
+				    	"(id, name, ciudades)"+
+				    	" VALUES (" + gastostours[key].id + ", '"+gastostours[key].name+"', '"+JSON.stringify(gastostours[key].ciudades) +"');";
+
+				    console.log(registro);
+				    sql.push(registro);
+				}); 
+
+				self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
+
+			    	db.sqlBatch(sql)
+			        .then(res => {
+			        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+			        	resolve();
+							
+					}).catch(e => {
+						console.log(e.message);
+						reject(e);
+					});
+
+		    	}).catch(e => {
+			  		console.log('Error en conexion DB');
+			  		console.log(e.message);
+			  		reject(e) 
+			  	});
+			
+		  	}, 
+			function() {
+		  		
+		  		console.log('Error search_read - Loading offline attachment');
+		  		//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+		  		reject();							  		
+			});
+
+			
+
+        });
+
+        return promise;	
+
+	}
+
 	public cargarAttachment(borrar){
 
 		var self = this;
@@ -175,7 +241,7 @@ export class GetDatosProvider {
 						    	+gastos[key].tipo_moneda +"', '"+ gastos[key].Total+ "', '" + gastos[key].fecha +"', '"+
 						    	JSON.stringify(gastos[key].ciudad_id)+"', '"+gastos[key].observaciones+"', '"+JSON.stringify(gastos[key].usuario_id)+"', '"+gastos[key].evento_padre+"', '"+ gastos[key].eventos_id[0] +"');";
 
-						    console.log(registro);
+						    //console.log(registro);
 						    sql.push(registro);
 						}); 
 					    //console.log(JSON.stringify(sql));  										   
@@ -217,7 +283,9 @@ export class GetDatosProvider {
 		//console.log((dato == 'false'));
 		return ((dato == 'false' || dato == false)?"":dato);
 	}
-	
+
+	//private cargarGastosEvento
+	 
 
 	private cargarEventos(_dominio, borrar){
 
@@ -331,14 +399,25 @@ export class GetDatosProvider {
 						self.cargarEventos(null,borrar).then(
 							res=>{
 
-								console.log('-----------------entro1 ---------------');
+								//console.log('-----------------entro1 ---------------');
 					        	self.cargarGastos(false).then(
 					        		res=>{
 
-					        			console.log('-----------------entro2 ---------------');
+					        			//console.log('-----------------entro2 ---------------');
 					        			self.cargarAttachment(false).then(
 							        		res=>{
-							        			resolve(self.usr);
+
+							        			console.log('-----------------cargarGastosConceptos ---------------');
+							        			self.cargarGastosConceptos().then(
+									        		res=>{
+									        			
+									        			resolve(self.usr);
+									        		},
+									        		fail=>{
+
+									        			reject();
+									        		}
+									        	);
 							        		},
 							        		fail=>{
 
@@ -603,8 +682,8 @@ export class GetDatosProvider {
 				    		//creo todas las tablas
 
 					        self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
-					      
-					      		var sql = [self.tablas.Tbl_eventos, self.tablas.Tbl_gastos, self.tablas.Tbl_user, self.tablas.Tbl_attachment];
+					      		//
+					      		var sql = [ self.tablas.Tbl_gastostours, self.tablas.Tbl_eventos, self.tablas.Tbl_gastos, self.tablas.Tbl_user, self.tablas.Tbl_attachment];
 
 						      	db.sqlBatch(sql)
 						      	.then(
