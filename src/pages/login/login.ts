@@ -20,6 +20,8 @@ export class LoginPage {
 
     //admin
     //conexion = {usuario: '', bd: 'rusia3', pwd: ''};
+    
+
     //conexion = {usuario: 'reservas@guiarus.com', bd: 'rusia3', pwd: '123456'};//produccion 
     //cliente
     //conexion = {usuario: 'ceballosdavid@gmail.com', bd: 'rusia3', pwd: '123456'};    pruebas
@@ -46,7 +48,7 @@ export class LoginPage {
 		this.getData.login(this.conexion).then(
 			function(res){
 				self.cargar = false;
-				console.log(JSON.stringify(res));
+				//console.log(JSON.stringify(res));
 				self.navCtrl.setRoot(PanelPage, {usr:res});							
 			}).catch(e => {
 				//console.log(e.message);

@@ -51,11 +51,11 @@ export class CalendarioPage {
                 //dominio = [["Datos_Cliente_id", "=", self.usr.id]];
             }else {//+ JSON.stringify([usr.id, usr.name]  and guia_id = "[71,"Natalia Kazan"]"
                 where = 'is_padre = "false" and guia_id_tmp = "' + usr.id + '"';
-                console.log(where);
+              //  console.log(where);
                 //dominio = [["guia_id", "=", self.usr.id]];
             } 
 
-            console.log()
+            //console.log()
 
             self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE '+ where +'  ORDER BY id DESC').then(
 
@@ -69,7 +69,7 @@ export class CalendarioPage {
                     var hora_ini = eventos.rows.item(i).hora_inicio.split(":") //<--MAC
                     var hora_fin = eventos.rows.item(i).hora_final.split(":") //<--MAC
 
-                    console.log(eventos.rows.item(i).guia_id);
+                    //console.log(eventos.rows.item(i).guia_id);
                     
                     //var dateEnd = new Date(String(eventos.rows.item(i).Fecha_Inicio).replace(' ', 'T'));
                     event_format.push({
