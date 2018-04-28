@@ -1,20 +1,15 @@
-import { Component, ViewChild ,Directive, ElementRef, ContentChild} from '@angular/core';
+import { Component, ViewChild} from '@angular/core';
 import { Slides, NavController, NavParams,ViewController, ModalController, ToastController } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 import { DetallesReservaPage } from '../../pages/detalles-reserva//detalles-reserva';
-import { File } from '@ionic-native/file';
+import { File, IWriteOptions } from '@ionic-native/file';
 
 
 @Component({
   selector: 'page-evento',
   templateUrl: 'evento.html',
 })
-
-@Directive({
-  selector: 'ion-textarea[autosize]'
-})
-
 export class EventoPage {
 
 	@ViewChild(Slides) slides: Slides;
@@ -81,13 +76,22 @@ export class EventoPage {
 	private ruta : '';
 
 
-	constructor(public element:ElementRef, private toastCtrl: ToastController, private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
+	constructor(private toastCtrl: ToastController, private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 		
 		this.evento_cal = this.navParams.get('evento');
 		this.permisos = this.navParams.get('permisos');
 		//console.log('permisos:'+ this.permisos);
 		if(this.permisos == 'is_client'){
 			this.ver_segmento = false;
+
+			this.categories = [{id:1, name:'Resumen', visible:false},//0
+			{id:2, name:'Descripción', visible:false},//1
+			//{id:3, name:'Gastos', visible:false},
+			{id:4, name:'Documentos', visible:false},	//2
+			{id:5, name:'Comentarios', visible:false}];//3
+
+		}else if(this.permisos == 'is_chofer'){
+			this.ver_segmento = true;
 
 			this.categories = [{id:1, name:'Resumen', visible:false},//0
 			{id:2, name:'Descripción', visible:false},//1
@@ -440,12 +444,13 @@ export class EventoPage {
         
         profileModal.onDidDismiss(data => {
         				
+
             if (data != 'x') {
-            	self.cargar = true;
+            	
             	self.guardar(data).then(
 	        		res=>{
-
-	        			self.getDatos.cargarCalendario(false).then(
+	        			self.cargar = true;
+	        			self.getDatos.cargarCalendario(true).then(
 			        		res=>{
 			        			console.log('Update complete');
 			        			self.initEvento();
@@ -485,8 +490,11 @@ export class EventoPage {
     				ext = '.png';
     			}
 
+    			const opt: IWriteOptions = { replace: true }
+
     			var blob = new Blob([res[0].datas], {type: res[0].mimetype});
-    			self.file.writeFile(self.file.externalDataDirectory, att.name + ext, blob, {replace:true}).then(
+
+    			self.file.writeFile(self.file.dataDirectory, att.name + ext, blob, opt).then(
     				res=>{
     					console.log('file saved');
     					self.presentToast();
@@ -507,7 +515,7 @@ export class EventoPage {
     private abrirReserva(){
     	//console.log('entro');
     	// 
-    	this.navCtrl.push(DetallesReservaPage, {evento:this.evento});
+    	this.navCtrl.push(DetallesReservaPage, {evento:this.evento, permisos:this.permisos});
     }
 
     private presentToast() {

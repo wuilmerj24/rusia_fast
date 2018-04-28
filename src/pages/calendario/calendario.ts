@@ -49,8 +49,14 @@ export class CalendarioPage {
             }else if(usr.tipo_usuario + '' == 'is_client'){
                 
                 //dominio = [["Datos_Cliente_id", "=", self.usr.id]];
-            }else {//+ JSON.stringify([usr.id, usr.name]  and guia_id = "[71,"Natalia Kazan"]"
+                where = 'is_padre = "false" and cliente_id_tmp = "' + usr.id + '"';
+
+            }else if(usr.tipo_usuario + '' == 'is_guia'){//+ JSON.stringify([usr.id, usr.name]  and guia_id = "[71,"Natalia Kazan"]"
                 where = 'is_padre = "false" and guia_id_tmp = "' + usr.id + '"';
+              //  console.log(where);
+                //dominio = [["guia_id", "=", self.usr.id]];
+            } else if(usr.tipo_usuario + '' == 'is_chofer'){//+ JSON.stringify([usr.id, usr.name]  and guia_id = "[71,"Natalia Kazan"]"
+                where = 'is_padre = "false" and chofer_id_tmp = "' + usr.id + '"';
               //  console.log(where);
                 //dominio = [["guia_id", "=", self.usr.id]];
             } 

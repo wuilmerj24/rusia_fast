@@ -92,10 +92,38 @@ export class TablasProvider {
 	"mobile"];
 
 
+	private tbl_gastos_ciudad_odoo = ["dia", "evento_id", "fecha_pago_reserva", "Total_Beneficios", "tarjeta_usd_pos", "tarjeta_usd", "tarjeta_rub", "Total_Pagado_Web", "tarjeta_eur_pos", "Total_Tarjeta", "Total_Paypal", "Total_Rub", "Total_Representante", "Total_Pago_Clientes", "gasto_usd", "concepto_id", "gasto_paypal", "Total_Usd", "tarjeta_eur", "gasto_rub", "gasto_eur", "Total_Euros", "display_name", "__last_update"]
+
+	private tbl_gastos_ciudad = "CREATE TABLE IF NOT EXISTS gastosciudad("+
+	" id INTEGER PRIMARY KEY,"+
+	" fecha_pago_reserva VARCHAR(20),"+ 
+	" Total_Beneficios VARCHAR(20),"+ 
+	" tarjeta_usd_pos VARCHAR(20),"+ 
+	" tarjeta_usd VARCHAR(20),"+ 
+	" tarjeta_rub VARCHAR(20),"+ 
+	" Total_Pagado_Web VARCHAR(20),"+ 
+	" tarjeta_eur_pos VARCHAR(20),"+ 
+	" Total_Tarjeta VARCHAR(20),"+ 
+	" Total_Paypal VARCHAR(20),"+ 
+	" Total_Rub VARCHAR(20),"+ 
+	" Total_Representante VARCHAR(20),"+ 
+	" Total_Pago_Clientes VARCHAR(20),"+ 
+	" gasto_usd VARCHAR(20),"+ 
+	" concepto_id VARCHAR(255),"+ 
+	" gasto_paypal VARCHAR(20),"+ 
+	" Total_Usd VARCHAR(20),"+ 
+	" tarjeta_eur VARCHAR(20),"+ 
+	" gasto_rub VARCHAR(20),"+ 
+	" gasto_eur VARCHAR(20),"+ 
+	" Total_Euros VARCHAR(20),"+ 
+	" dia VARCHAR(20),"+ 
+	" evento_id VARCHAR(255),"+ 
+	" display_name VARCHAR(255));";	
 
 	private tbl_eventos = "CREATE TABLE IF NOT EXISTS eventos("+
 	" id INTEGER PRIMARY KEY,"+
-	" cliente_id VARCHAR(255),"+	
+	" cliente_id_tmp VARCHAR(255),"+	
+	" cliente_id VARCHAR(20),"+	
 	" representante_id VARCHAR(255),"+	
 	" Fecha_Inicio VARCHAR(20),"+
 	" Fecha_Fin VARCHAR(20),"+
@@ -108,6 +136,7 @@ export class TablasProvider {
 	" fecha_padre VARCHAR(20),"+	
 	" guia_id VARCHAR(255),"+
 	" chofer_id VARCHAR(255),"	+	
+	" chofer_id_tmp VARCHAR(20),"	+
 	" gasto_rub VARCHAR(10),"+
 	" gasto_eur VARCHAR(10),"+
 	" gasto_usd VARCHAR(10),"+
@@ -247,6 +276,14 @@ export class TablasProvider {
   	public get Tbl_gastos() : string {
   		return this.tbl_gastos;
   	}
+
+	public get Tbl_gastos_ciudad_odoo() : string[] {
+		return this.tbl_gastos_ciudad_odoo;
+	}
+
+	public get Tbl_gastos_ciudad() : string {
+		return this.tbl_gastos_ciudad;
+	}
 
   	public get Tbl_user() : string {
   		return this.tbl_user;

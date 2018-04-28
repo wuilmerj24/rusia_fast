@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Slides, NavController, NavParams,ViewController } from 'ionic-angular';
 import { AcercaPage } from '../../pages/acerca/acerca';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
+import { GastosRelPage } from '../../pages/gastos-rel/gastos-rel';
 
 
 @Component({
@@ -57,6 +58,7 @@ export class DetallesReservaPage {
          tarjeta_usd :'',
          is_traslado :false,
          is_guia:false,
+         gastos_ids:[]
      //
     }
 
@@ -68,121 +70,187 @@ export class DetallesReservaPage {
     private ver_descripcion = true;
     private ver_comentarios = true;
     private ver_documentos = true;
-    private cargar  = false;
-    private gastostoursline_ids = [];
+    private cargar  = true;
     private ver_segmento = true;
 
+    private ver_gastos= false;
+
+    //private gastostoursline_ids = [];
+    private gastos_ciudad = [];
+    
+
     private attachment = [];
+    private evento_hijo;
+    private permisos = '';
 
 	constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 
-		this.reserva = this.navParams.get('evento');
+		this.evento_hijo = this.navParams.get('evento');
+
+    this.permisos = this.navParams.get('permisos');
+    //console.log('permisos:'+ this.permisos);
+    if(this.permisos == 'is_client' || this.permisos == 'is_chofer'){
+      //this.ver_segmento = false;
+      this.ver_segmento = false;
+    }else{
+
+      this.ver_gastos = true;
+    }
+
+        //var tmp_gastos = JSON.parse(eventos.rows.item(i).gastos_ids);
 
         this.initReserva();
 		//this.initializeCategories();
-        console.log(JSON.stringify(this.navParams.get('evento')));
+        //console.log(JSON.stringify(this.navParams.get('evento')));
+            
 	}
 
     private initReserva(){
         
         var self = this;
         self.itinerario = [];
-        self.gastostoursline_ids = [];
+        self.gastos_ciudad = [];
 
         self.cargar = true;
-        self.getDatos.ejecutarSQL('SELECT name, ciudad_id, Fecha_Inicio FROM eventos WHERE is_padre = "false" and  name = "' + self.reserva.name +'"').then(
+
+        self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE id = ' + self.evento_hijo.evento_id[0]).then(
             function(eventos: {rows}){
 
-                console.log(JSON.stringify(eventos));
-
-                for(var i=0; i<eventos.rows.length; i++) {
-                             
-                    //console.log(JSON.stringify(gastos.rows.item(i)));                         
-                     //var tmp_concepto_gasto_id = JSON.parse(gastos.rows.item(i).concepto_gasto_id)
-                     var tmp_ciudad_id = JSON.parse(eventos.rows.item(i).ciudad_id);
-                     
-                     var concepto = eventos.rows.item(i);
-                     //concepto.concepto_gasto_id = tmp_concepto_gasto_id;
-                    concepto.ciudad_id = tmp_ciudad_id;                     
-
-                    self.itinerario.push(concepto);               
-                    
-                }
-
-                //self.cargar = false;
                 /*var tmp_evento_id = JSON.parse(eventos.rows.item(0).evento_id);
-                var tmp_cliente_id = JSON.parse(eventos.rows.item(0).cliente_id);
-                var tmp_representante_id = JSON.parse(eventos.rows.item(0).representante_id);
+                
+                
                 var tmp_guia_id = JSON.parse(eventos.rows.item(0).guia_id);
                 var tmp_chofer_id = JSON.parse(eventos.rows.item(0).chofer_id);
-                var tmp_hotel_id = JSON.parse(eventos.rows.item(0).hotel_id);
-                var tmp_ciudad_id = JSON.parse(eventos.rows.item(0).ciudad_id);
+                var tmp_hotel_id = JSON.parse(eventos.rows.item(0).hotel_id);*/
+                var tmp_gastos_ids = JSON.parse(eventos.rows.item(0).gastos_ids);
+                var tmp_representante_id = JSON.parse(eventos.rows.item(0).representante_id);
+                var tmp_cliente_id = JSON.parse(eventos.rows.item(0).cliente_id);
 
-
-                self.evento = eventos.rows.item(0);
-                self.evento.evento_id = tmp_evento_id;
-                self.evento.cliente_id = tmp_cliente_id;
-                self.evento.representante_id = tmp_representante_id;
+                self.reserva = eventos.rows.item(0);
+                self.reserva.gastos_ids = tmp_gastos_ids;
+                self.reserva.representante_id = tmp_representante_id;
+                self.reserva.cliente_id = tmp_cliente_id;
+                /*
                 self.evento.guia_id = tmp_guia_id;
                 self.evento.chofer_id = tmp_chofer_id;
                 self.evento.hotel_id = tmp_hotel_id;
                 self.evento.ciudad_id = tmp_ciudad_id;*/
 
-                console.log('SELECT * FROM attachment WHERE cliente_id = "' + self.reserva.cliente_id[0] +'"');
-                self.getDatos.ejecutarSQL('SELECT * FROM attachment WHERE cliente_id = "' + self.reserva.cliente_id[0] +'"').then(
-                    function(attachment: {rows}){
+                self.getDatos.ejecutarSQL('SELECT name, ciudad_id, Fecha_Inicio FROM eventos WHERE is_padre = "false" and  name = "' + self.reserva.name +'"').then(
+                function(eventos: {rows}){
 
-                                                     
-                        for(var i=0; i<attachment.rows.length; i++) {
+                    console.log(JSON.stringify(eventos));
 
-                            var att = attachment.rows.item(i)
-                            att.file_size = self.getDatos.bytesToSize(parseInt(att.file_size))
-                            //var tmp_file_size = attachment.rows.item(i).file_size;
-                            //console.log('file size:' + );
-                            //console.log(JSON.stringify(attachment.rows.item(i)));      
-                            self.attachment.push(att);                                                   
-                        }
-                        self.cargar = false;
+                    for(var i=0; i<eventos.rows.length; i++) {
+                                 
+                        //console.log(JSON.stringify(gastos.rows.item(i)));                         
+                         //var tmp_concepto_gasto_id = JSON.parse(gastos.rows.item(i).concepto_gasto_id)
+                         var tmp_ciudad_id = JSON.parse(eventos.rows.item(i).ciudad_id);
+                         
+                         var concepto = eventos.rows.item(i);
+                         //concepto.concepto_gasto_id = tmp_concepto_gasto_id;
+                        concepto.ciudad_id = tmp_ciudad_id;                     
 
-                    },
-                    fail=>{
-                        console.log('Fail load gastos')
-                    }
-                );
-                /*self.getDatos.ejecutarSQL('SELECT * FROM gastostoursline WHERE evento_padre = "' + self.reserva.name +'"').then(
-                    function(gastos: {rows}){
-
+                        self.itinerario.push(concepto);               
                         
-                        console.log(JSON.stringify(gastos));
-                        for(var i=0; i<gastos.rows.length; i++) {
-                             
-                            console.log(JSON.stringify(gastos.rows.item(i)));                         
-                            var tmp_concepto_gasto_id = JSON.parse(gastos.rows.item(i).concepto_gasto_id)
-                            var tmp_ciudad_id = JSON.parse(gastos.rows.item(i).ciudad_id)
-                             
-                            var concepto = gastos.rows.item(i);
-                            concepto.concepto_gasto_id = tmp_concepto_gasto_id;
-                            concepto.ciudad_id = tmp_ciudad_id;
-
-                            self.gastostoursline_ids.push(gastos.rows.item(i));               
-                            
-                        }
-                        self.cargar = false;
-                       
-
-                    },
-                    fail=>{
-                        console.log('Fail load gastos')
                     }
-                );*/
 
 
+                    //self.cargar = false;
+                    /*var tmp_evento_id = JSON.parse(eventos.rows.item(0).evento_id);
+                    var tmp_cliente_id = JSON.parse(eventos.rows.item(0).cliente_id);
+                    var tmp_representante_id = JSON.parse(eventos.rows.item(0).representante_id);
+                    var tmp_guia_id = JSON.parse(eventos.rows.item(0).guia_id);
+                    var tmp_chofer_id = JSON.parse(eventos.rows.item(0).chofer_id);
+                    var tmp_hotel_id = JSON.parse(eventos.rows.item(0).hotel_id);
+                    var tmp_ciudad_id = JSON.parse(eventos.rows.item(0).ciudad_id);
+
+
+                    self.evento = eventos.rows.item(0);
+                    self.evento.evento_id = tmp_evento_id;
+                    self.evento.cliente_id = tmp_cliente_id;
+                    self.evento.representante_id = tmp_representante_id;
+                    self.evento.guia_id = tmp_guia_id;
+                    self.evento.chofer_id = tmp_chofer_id;
+                    self.evento.hotel_id = tmp_hotel_id;
+                    self.evento.ciudad_id = tmp_ciudad_id;*/
+
+                    console.log('SELECT * FROM attachment WHERE cliente_id = "' + self.evento_hijo.cliente_id[0] +'"');
+                    self.getDatos.ejecutarSQL('SELECT * FROM attachment WHERE cliente_id = "' + self.evento_hijo.cliente_id[0] +'"').then(
+                        function(attachment: {rows}){
+
+                                                         
+                            for(var i=0; i<attachment.rows.length; i++) {
+
+                                var att = attachment.rows.item(i)
+                                att.file_size = self.getDatos.bytesToSize(parseInt(att.file_size))
+                                //var tmp_file_size = attachment.rows.item(i).file_size;
+                                //console.log('file size:' + );
+                                //console.log(JSON.stringify(attachment.rows.item(i)));      
+                                self.attachment.push(att);                                                   
+                            }
+                            
+                            var tmp_gastos = self.reserva.gastos_ids;
+                            var where = '(';
+                            for (var i = tmp_gastos.length - 1; i >= 0; i--) {
+                               
+                               where = where + tmp_gastos[i] + ",";
+                            }
+                            where = where.substring(0, where.length - 1); // "12345.0"
+                            where = where + ')'
+                            var sql = 'SELECT * FROM gastosciudad WHERE id in ' + where;
+                            console.log(sql);
+                            self.getDatos.ejecutarSQL(sql).then(
+                                function(gastos: {rows}){
+
+                                    
+                                    console.log(JSON.stringify(gastos));
+                                    for(var i=0; i<gastos.rows.length; i++) {
+                                         
+                                        console.log(JSON.stringify(gastos.rows.item(i)));                         
+                                        var tmp_evento_id = JSON.parse(gastos.rows.item(i).evento_id)
+                                        //var tmp_ciudad_id = JSON.parse(gastos.rows.item(i).ciudad_id)
+                                         
+                                        var concepto = gastos.rows.item(i);
+
+                                        concepto.evento_id = tmp_evento_id;
+
+                                        self.gastos_ciudad.push(concepto);               
+                                        
+                                    }
+                                    self.cargar = false;                               
+
+                                },
+                                fail=>{
+                                    console.log('Fail load gastos')
+                                }
+                            );
+
+                            //self.cargar = false;
+
+                        },
+                        fail=>{
+                            console.log('Fail load gastos')
+                        }
+                    );
+                    /**/
+
+
+
+                },
+                fail=>{
+                    console.log('Fail load evento')
+                }
+            );    
+                
 
             },
             fail=>{
                 console.log('Fail load evento')
             }
-        );    
+        );
+
+       
     }
 
   	ionViewDidLoad() {
@@ -239,6 +307,11 @@ export class DetallesReservaPage {
     // Method that shows the previous slide
     public slidePrev(): void {
         this.slides.slidePrev();
+    }
+
+    private abrirGasto(gasto){
+
+        this.navCtrl.push(GastosRelPage, {gastos_rel:gasto});
     }
 
 }

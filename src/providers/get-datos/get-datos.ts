@@ -15,9 +15,9 @@ export class GetDatosProvider {
 
 	private db: SQLiteObject = null;
 
-	private url = '/api';
+	//private url = '/api';
 	//private url = 'http://odoo.devoptions.mx';     //"http://odoo.devoptions.mx"
-	//private url = 'http://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
+	private url = 'http://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
 
 	public usr = null;	
 	private eventoHijo = [];
@@ -36,9 +36,9 @@ export class GetDatosProvider {
     	self.ejecutarSQL("SELECT * FROM user").then(
 
 			function(data:{rows}){
-				console.log(JSON.stringify(data));
+				//console.log(JSON.stringify(data));
 				self.usr = data.rows.item(0);
-				console.log(JSON.stringify(data.rows.item(0)));
+				//console.log(JSON.stringify(data.rows.item(0)));
 			},
 			function(){
 				console.log('Error get table user');				
@@ -217,6 +217,85 @@ export class GetDatosProvider {
     
 	}
 
+	private cargarGastosCiudad(borrar){
+
+		var self = this;
+		var sql = [];
+		var promise = new Promise(function (resolve, reject) {
+            
+            //console.log('-----------------entro3 ---------------');
+            console.log('-----------------cargarGastosCiudad ---------------');
+            console.log(self.gastos_ciudad);
+            self.read('rusia.gastos.ciudad', self.gastos_ciudad, self.tablas.Tbl_gastos_ciudad_odoo)
+	  		.then(function(gastos) {
+	  		
+
+	  			//console.log('resolvio gastos');
+	  			
+	  			//console.log(JSON.stringify(attachment));
+	  			if(borrar == true){
+		  			sql.push('DELETE FROM gastosciudad;');
+	  			}	
+	            
+		  		Object.keys(gastos).forEach(key=> {
+
+
+		  			var registro = "INSERT OR IGNORE INTO gastosciudad "+
+				    	"(id, fecha_pago_reserva, Total_Beneficios, tarjeta_usd_pos, tarjeta_usd, tarjeta_rub, "+
+				    	"Total_Pagado_Web, tarjeta_eur_pos, Total_Tarjeta, Total_Paypal, Total_Rub, Total_Representante, "+
+				    	"Total_Pago_Clientes, gasto_usd, concepto_id, gasto_paypal, Total_Usd, tarjeta_eur, gasto_rub, "+
+				    	"gasto_eur, Total_Euros, display_name, dia, evento_id)"+
+				    	" VALUES (" + gastos[key].id+ ", '"+gastos[key].fecha_pago_reserva+ "', '"+
+				    	gastos[key].Total_Beneficios+ "', '"+gastos[key].tarjeta_usd_pos+ "', '"+
+				    	gastos[key].tarjeta_usd+ "', '"+gastos[key].tarjeta_rub+ "', '"+
+				    	gastos[key].Total_Pagado_Web+ "', '"+gastos[key].tarjeta_eur_pos+ "', '"+
+				    	gastos[key].Total_Tarjeta+ "', '"+gastos[key].Total_Paypal+ "', '"+
+				    	gastos[key].Total_Rub+ "', '"+gastos[key].Total_Representante+ "', '"+
+				    	gastos[key].Total_Pago_Clientes+ "', '"+gastos[key].gasto_usd+ "', '"+
+				    	JSON.stringify(gastos[key].concepto_id)+ "', '"+gastos[key].gasto_paypal+ "', '"+gastos[key].Total_Usd+ "', '"+
+				    	gastos[key].tarjeta_eur+ "', '"+gastos[key].gasto_rub+ "', '"+gastos[key].gasto_eur+ "', '"+
+				    	gastos[key].Total_Euros+ "', '"+gastos[key].display_name +"',  '"+gastos[key].dia+"', '"+JSON.stringify(gastos[key].evento_id)+ "');";
+
+
+				    console.log(registro);
+				    sql.push(registro);
+				});
+
+				self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
+
+			    	db.sqlBatch(sql)
+			        .then(res => {
+			        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+			        	resolve();
+							
+					}).catch(e => {
+						console.log(e.message);
+						reject(e);
+					});
+
+		    	}).catch(e => {
+			  		console.log('Error en conexion DB');
+			  		console.log(e.message);
+			  		reject(e) 
+			  	});
+
+			
+		  	}, 
+			function() {
+		  		
+		  		console.log('Error search_read - Loading offline attachment');
+		  		//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+		  		reject();							  		
+			});
+
+			
+
+        });
+
+        return promise;	
+
+	};
+
 	public cargarGastos(borrar){
 		var self = this;
 		var sql = [];
@@ -286,7 +365,102 @@ export class GetDatosProvider {
 	}
 
 	//private cargarGastosEvento
-	 
+	
+	private guardarEventos(eventos, is_padre, borrar){
+
+		var self = this;
+		//self.eventoHijo = [];
+		var promise = new Promise(function (resolve, reject) {
+			console.log('resolvio eventos');
+  			console.log(JSON.stringify(eventos));
+  			var sql = [];
+  			if(borrar == true){
+  				sql.push('DELETE FROM eventos;');	
+  			}
+	  		Object.keys(eventos).forEach(key=> {
+	  			
+
+	  			//console.log('Inner B'+ tmp_dominio)
+	  			//console.log(JSON.stringify(eventos[key].gastos_ids));
+	  			if(is_padre == false){
+
+	  				//console.log('cargar evento padre---------------------->' + self.eventoHijo.indexOf(eventos[key].name));
+
+	  				if(self.eventoHijo.indexOf(eventos[key].evento_id[0]) == -1) {
+
+	  					var evento_id = eventos[key].evento_id[0];
+	  					if (evento_id != null) {
+	  						self.eventoHijo.push(eventos[key].evento_id[0]);
+	  					}
+			    		
+			    		//console.log('Es evento padre---------------------->')
+			      		//console.log(self.eventoHijo);
+			    	}	
+	  			}else{
+	  				//gastos_ciudad
+	  				//agrego los
+
+					var gastos_ids = eventos[key].gastos_ids;
+					console.log(JSON.stringify(gastos_ids));
+					for (var i = gastos_ids.length - 1; i >= 0; i--) {
+						
+						if(self.gastos_ciudad.indexOf(gastos_ids[i]) == -1) {
+
+	  						//var gasto_id = eventos[key].gastos_ids[key2];
+	  						self.gastos_ciudad.push(gastos_ids[i]);			      			
+			    		}
+					}
+
+	  				/*
+	  				Object.keys(gastos_ids).forEach(key2=> {
+
+	  					
+	  				});*/
+
+	  				console.log(JSON.stringify(self.gastos_ciudad));
+	  			}			  			
+	  			var registro = "INSERT OR IGNORE INTO eventos "+
+			    	"(id, cliente_id_tmp, cliente_id, representante_id,"+
+			    	" Fecha_Inicio, hora_inicio , hora_final , name, is_padre, fecha_padre, guia_id,"+
+			    	" chofer_id_tmp, chofer_id, gasto_rub, gasto_eur, gasto_usd, gasto_paypal, Comentarios_Chofer,"+
+			    	" Comentarios_Internos, Comentarios_Cliente, Comentarios_Guia, Fecha_Fin, Transporte, hotel_id,"+
+			    	" ciudad_id, Total_Representante, message, numero_pax, evento_id, Servicio_Gastos, tarjeta_eur,"+
+			    	" tarjeta_rub, tarjeta_usd, is_guia, is_traslado, gastostoursline_ids, guia_id_tmp, gastos_ids)"+
+			    	" VALUES (" + eventos[key].id + ", '"+eventos[key].Datos_Cliente_id[0]+"', '" + JSON.stringify(eventos[key].Datos_Cliente_id)+"', '" +
+			    	JSON.stringify(eventos[key].representante_id)+ "', '" + eventos[key].Fecha_Inicio +"','" + 
+			    	eventos[key].hora_inicio + "', '" + eventos[key].hora_final + "', '" + 
+			    	eventos[key].name + "', '" + eventos[key].is_padre +"', '" + 
+			    	eventos[key].fecha_padre +"', '" + JSON.stringify(eventos[key].guia_id)+ "' , '" + 
+			    	eventos[key].chofer_id[0] + "' , '" +JSON.stringify(eventos[key].chofer_id) + "' , '" + eventos[key].gasto_rub + "' , '" + 
+			    	eventos[key].gasto_eur + "' , '" + eventos[key].gasto_usd + "' , '" + 
+			    	eventos[key].gasto_paypal + "', '" + self.parseDato(eventos[key].Comentarios_Chofer) + "', '" + 
+			    	self.parseDato(eventos[key].Comentarios_Internos) + "', '" + self.parseDato(eventos[key].Comentarios_Cliente) + "', '" + 
+			    	self.parseDato(eventos[key].Comentarios_Guia) + "', '" + eventos[key].Fecha_Fin + "', '"+
+			    	eventos[key].Transporte+"', '"+JSON.stringify(eventos[key].hotel_id)+"', '"+JSON.stringify(eventos[key].ciudad_id)+"', '"+
+			    	eventos[key].Total_Representante+"', '"+eventos[key].message+"', '"+eventos[key].numero_pax+"', '"+
+			    	JSON.stringify(eventos[key].evento_id)+"', '"+eventos[key].Servicio_Gastos+"', '"+eventos[key].tarjeta_eur+"', '"+
+			    	eventos[key].tarjeta_rub+"', '"+eventos[key].tarjeta_usd+"' , '"+eventos[key].is_guia+"', '"+eventos[key].is_traslado+"', '"+ 
+			    	JSON.stringify(eventos[key].gastostoursline_ids)+"', '"+eventos[key].guia_id[0]+"', '"+ JSON.stringify(eventos[key].gastos_ids) +"');";
+			    //console.log(registro);							  			
+			    sql.push(registro);
+			});
+
+			self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
+				db.sqlBatch(sql)
+		        .then(res => {
+		        	
+		        	resolve();
+						
+				}).catch(e => {
+					console.log(e.message);
+					reject(e);
+				});
+			});
+
+		});
+
+		return promise;
+	}
 
 	private cargarEventos(tmp_dominio, borrar){
 
@@ -299,115 +473,56 @@ export class GetDatosProvider {
 			//console.log('Inner A'+ tmp_dominio)
 			if(tmp_dominio == null){
 
-				/*var tmp_name = [];
-				Object.keys(self.eventoHijo).forEach(key=> {
-
-					if(tmp_name.indexOf(eventos[key].name) == -1) {
-			    		self.eventoHijo.push(eventos[key].name);
-			    		console.log('Es evento padre---------------------->')
-			      		console.log(eventos[key].name);
-			    	}
-				});*/
-				//dominio.push(['is_padre', '=' , true]);
-				dominio.push(["name", "in", self.eventoHijo]);
-				console.log(' SE PUEDE LEER -------------------------------------------------------1');
-				self.read('rusia.eventos', [332], self.tablas.Tbl_eventos_odoo).then(
-					res=>{
-						console.log(' SE PUEDE LEER -------------------------------------------------------2');
-						console.log(JSON.stringify(res));
+				//console.log('tmp_dominio is null -------------------------------------------------------1');
+				//console.log(JSON.stringify(self.eventoHijo));
+				self.read('rusia.eventos', self.eventoHijo, self.tablas.Tbl_eventos_odoo).then(
+					eventos=>{
+						console.log(' va por los padres -------------------------------------------------------2');
+						//console.log(JSON.stringify(eventos));
+						self.guardarEventos(eventos, true, false).then(
+		      				res=>{
+		      					//console.log(' entro a  cargarGastosCiudad-------------------------------------------------------2');
+		      					self.cargarGastosCiudad(borrar).then(
+		      						res=>{
+				      					resolve();
+				      				},
+				      				fail=>{
+				      					reject();
+				      				}
+		      					);		      					
+		      				},
+		      				fail=>{
+		      					reject();
+		      				}
+		      			);
 					},
 					fail=>{
 
 					}
 					
 				)
-				//dominio.push(["evento_id", "=", null]);
 
 			}else{
 
-				dominio = tmp_dominio;
-			}
-			console.log(JSON.stringify(dominio));
-			self.search_read('rusia.eventos', dominio, self.tablas.Tbl_eventos_odoo)
+				
+			self.search_read('rusia.eventos', tmp_dominio, self.tablas.Tbl_eventos_odoo)
 	      		.then(function(eventos) {
 
 	      			
-	      			
-	      			console.log('resolvio eventos');
-	      			console.log(JSON.stringify(eventos));
-	      			var sql = [];
-	      			if(borrar == true){
-		  				sql.push('DELETE FROM eventos;');	
-		  			}
-			  		Object.keys(eventos).forEach(key=> {
-			  			
-
-			  			//console.log('Inner B'+ tmp_dominio)
-			  			console.log(JSON.stringify(eventos[key].gastos_ids));
-			  			if(tmp_dominio != null){
-
-			  				console.log('cargar evento padre---------------------->' + self.eventoHijo.indexOf(eventos[key].name));
-
-			  				if(self.eventoHijo.indexOf(eventos[key].name) == -1) {
-					    		self.eventoHijo.push(eventos[key].name);
-					    		console.log('Es evento padre---------------------->')
-					      		console.log(eventos[key].name);
-					    	}	
-			  			}else{
-			  				//gastos_ciudad
-			  				//agrego los
-
-			  				
-			  				console.log(JSON.stringify(eventos[key].gastos_ids));
-			  				Object.keys(eventos[key].gastos_ids).forEach(key2=> {
-
-			  					if(self.gastos_ciudad.indexOf(eventos[key].gastos_ids[key2]) > -1) {
-					    			self.gastos_ciudad.push(eventos[key].gastos_ids[key2]);
-					      			console.log(JSON.stringify(self.gastos_ciudad));
-					    		}
-			  				});
-			  			}			  			
-			  			var registro = "INSERT OR IGNORE INTO eventos "+
-					    	"(id, cliente_id, representante_id,"+
-					    	" Fecha_Inicio, hora_inicio , hora_final , name, is_padre, fecha_padre, guia_id,"+
-					    	" chofer_id, gasto_rub, gasto_eur, gasto_usd, gasto_paypal, Comentarios_Chofer,"+
-					    	" Comentarios_Internos, Comentarios_Cliente, Comentarios_Guia, Fecha_Fin, Transporte, hotel_id,"+
-					    	" ciudad_id, Total_Representante, message, numero_pax, evento_id, Servicio_Gastos, tarjeta_eur,"+
-					    	" tarjeta_rub, tarjeta_usd, is_guia, is_traslado, gastostoursline_ids, guia_id_tmp, gastos_ids)"+
-					    	" VALUES (" + eventos[key].id + ", '"+ JSON.stringify(eventos[key].Datos_Cliente_id)+"', '" +
-					    	JSON.stringify(eventos[key].representante_id)+ "', '" + eventos[key].Fecha_Inicio +"','" + 
-					    	eventos[key].hora_inicio + "', '" + eventos[key].hora_final + "', '" + 
-					    	eventos[key].name + "', '" + eventos[key].is_padre +"', '" + 
-					    	eventos[key].fecha_padre +"', '" + JSON.stringify(eventos[key].guia_id)+ "' , '" + 
-					    	JSON.stringify(eventos[key].chofer_id) + "' , '" + eventos[key].gasto_rub + "' , '" + 
-					    	eventos[key].gasto_eur + "' , '" + eventos[key].gasto_usd + "' , '" + 
-					    	eventos[key].gasto_paypal + "', '" + self.parseDato(eventos[key].Comentarios_Chofer) + "', '" + 
-					    	self.parseDato(eventos[key].Comentarios_Internos) + "', '" + self.parseDato(eventos[key].Comentarios_Cliente) + "', '" + 
-					    	self.parseDato(eventos[key].Comentarios_Guia) + "', '" + eventos[key].Fecha_Fin + "', '"+
-					    	eventos[key].Transporte+"', '"+JSON.stringify(eventos[key].hotel_id)+"', '"+JSON.stringify(eventos[key].ciudad_id)+"', '"+
-					    	eventos[key].Total_Representante+"', '"+eventos[key].message+"', '"+eventos[key].numero_pax+"', '"+
-					    	JSON.stringify(eventos[key].evento_id)+"', '"+eventos[key].Servicio_Gastos+"', '"+eventos[key].tarjeta_eur+"', '"+
-					    	eventos[key].tarjeta_rub+"', '"+eventos[key].tarjeta_usd+"' , '"+eventos[key].is_guia+"', '"+eventos[key].is_traslado+"', '"+ 
-					    	JSON.stringify(eventos[key].gastostoursline_ids)+"', '"+eventos[key].guia_id[0]+"', '"+ JSON.stringify(eventos[key].gastos_ids) +"');";
-					    //console.log(registro);							  			
-					    sql.push(registro);
-					});
-
-					self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
-						db.sqlBatch(sql)
-				        .then(res => {
-				        	
-				        	resolve();
-								
-						}).catch(e => {
-							console.log(e.message);
-							reject(e);
-						});
-					});		
+	      			self.guardarEventos(eventos, false, borrar).then(
+	      				res=>{
+	      					resolve();
+	      				},
+	      				fail=>{
+	      					reject();
+	      				}
+	      			)
+	      					
 			  	}, 
 				function() {
 			  		reject();						  		
 				});	
+	      	}
 		});
 
 		return promise;
@@ -431,14 +546,19 @@ export class GetDatosProvider {
 				}else if(self.usr.tipo_usuario + '' == 'is_client'){
 					dominio = [['is_padre', '=' , false],["Datos_Cliente_id", "=", self.usr.id]];
 					//dominio = [["Datos_Cliente_id", "=", self.usr.id]];
-				}else {
+				}else if(self.usr.tipo_usuario + '' == 'is_guia'){
 					dominio = [['is_padre', '=' , false], ["guia_id", "=", self.usr.id]];
 					//dominio = [["is_padre", "=", 'true']];
-				} 
+				}else if(self.usr.tipo_usuario + '' == 'is_chofer'){
+					dominio = [['is_padre', '=' , false], ["chofer_id", "=", self.usr.id]];
+					//dominio = [["is_padre", "=", 'true']];
+				}
 
+				console.log('-----------------eventos hijos ---------------');
 				self.cargarEventos(dominio,borrar).then(
 					res=>{
 
+						console.log('-----------------eventos padre ---------------');
 						self.cargarEventos(null,borrar).then(
 							res=>{
 
@@ -449,8 +569,7 @@ export class GetDatosProvider {
 					        			//console.log('-----------------entro2 ---------------');
 					        			self.cargarAttachment(false).then(
 							        		res=>{
-
-							        			console.log('-----------------cargarGastosConceptos ---------------');
+							        			
 							        			self.cargarGastosConceptos().then(
 									        		res=>{
 									        			
@@ -734,7 +853,7 @@ export class GetDatosProvider {
 		 
 				    	function (user) {
 
-				    		console.log(user[0]);
+				    		//console.log(user[0]);
 				    		console.log('get login user OK');
 
 
@@ -762,7 +881,7 @@ export class GetDatosProvider {
 
 					        self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
 					      		//
-					      		var sql = [ self.tablas.Tbl_gastostours, self.tablas.Tbl_eventos, self.tablas.Tbl_gastos, self.tablas.Tbl_user, self.tablas.Tbl_attachment];
+					      		var sql = [self.tablas.Tbl_gastos_ciudad, self.tablas.Tbl_gastostours, self.tablas.Tbl_eventos, self.tablas.Tbl_gastos, self.tablas.Tbl_user, self.tablas.Tbl_attachment];
 
 						      	db.sqlBatch(sql)
 						      	.then(
@@ -844,7 +963,7 @@ export class GetDatosProvider {
             self.ejecutarSQL("SELECT * FROM user").then(
 
 				function(data:{rows}){
-					console.log(JSON.stringify(data));
+					//console.log(JSON.stringify(data));
 					if(data.rows.length > 0){
 
 						self.usr = data.rows.item(0);
@@ -852,7 +971,7 @@ export class GetDatosProvider {
 						self.usr = null;
 					}
 					
-					console.log(JSON.stringify(data.rows.item(0)));
+					//console.log(JSON.stringify(data.rows.item(0)));
 					//console.log('------------------------------1');
 		            if(self.usr != null){
 
@@ -863,7 +982,7 @@ export class GetDatosProvider {
 		            }
 				},
 				function(){
-					console.log('Error get table user');				
+					//console.log('Error get table user');				
 					self.crearEsquema(conexion).then(
 						res=>{
 							resolve(res);
