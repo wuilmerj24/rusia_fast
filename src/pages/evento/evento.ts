@@ -4,6 +4,7 @@ import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 import { DetallesReservaPage } from '../../pages/detalles-reserva//detalles-reserva';
 import { File, IWriteOptions } from '@ionic-native/file';
+import { FileOpener } from '@ionic-native/file-opener';
 
 
 @Component({
@@ -76,7 +77,8 @@ export class EventoPage {
 	private ruta : '';
 
 
-	constructor(private toastCtrl: ToastController, private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
+	//private fileOpener: FileOpener,
+	constructor(private fileOpener: FileOpener, private toastCtrl: ToastController, private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 		
 		this.evento_cal = this.navParams.get('evento');
 		this.permisos = this.navParams.get('permisos');
@@ -490,14 +492,44 @@ export class EventoPage {
     				ext = '.png';
     			}
 
+    			let downloadPDF: any = res[0].datas;
+		        let base64pdf = downloadPDF;
+		        var binary = atob(base64pdf.replace(/\s/g, ''));
+		        var len = binary.length;
+		        var buffer = new ArrayBuffer(len);
+		        var view = new Uint8Array(buffer);
+		        for (var i = 0; i < len; i++) {
+		            view[i] = binary.charCodeAt(i);
+		        }
+		           
+		        var blobPdf = new Blob( [view], { type: res[0].mimetype.toString() });
+
     			const opt: IWriteOptions = { replace: true }
 
-    			var blob = new Blob([res[0].datas], {type: res[0].mimetype});
+    			//var blob = new Blob([res[0].datas], {type: res[0].mimetype});
 
-    			self.file.writeFile(self.file.dataDirectory, att.name + ext, blob, opt).then(
+    			//var blob = 'data:application/pdf;base64,' +res[0].datas;
+
+    			/*if (ionic.Platform.isIOS()) {
+            pathFile = cordova.file.documentsDirectory
+        } else {
+            pathFile = cordova.file.externalDataDirectory
+        }
+    			);*/
+
+    			self.file.writeFile(self.file.externalDataDirectory, att.name + ext, blobPdf, opt).then(
     				res=>{
-    					console.log('file saved');
+    					console.log('file saved'+ res.nativeURL);
     					self.presentToast();
+    					self.fileOpener.open(
+					      res.toInternalURL(),
+					      'application/pdf'//file mimeType
+					    ).then((success) => {
+					      console.log('success open file: ', success);
+					    }, (err) => {
+					      console.log('error open file', err.message);
+					    });
+
     				},
     				fail=>{
     					console.log(JSON.stringify(fail));

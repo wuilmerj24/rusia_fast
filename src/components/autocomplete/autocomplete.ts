@@ -16,6 +16,10 @@ export class AutocompleteComponent {
 
   	@Input('lista') lista2: any[];
   	@Input('placeholder') placeholder;
+    //@Input('default') default;
+    @Output() onselect = new EventEmitter;
+
+
   	lista = [];
   	lista_visible = false;
     //lista2 = [];
@@ -35,15 +39,15 @@ export class AutocompleteComponent {
 
   	onKey(e) {
         
-        console.log(e);
+        //console.log(e);
 	    if (this.buscar.length > 0) {
 	        console.log('entro en el key ');
 	        this.lista_visible = true;
 	        this.lista = [];
 	        for (var key in this.lista2) {
 	            
-	            console.log(JSON.stringify(this.lista2[key]));
-	            console.log(String(this.lista2[key].name).toLowerCase());
+	            //console.log(JSON.stringify(this.lista2[key]));
+	            //console.log(String(this.lista2[key].name).toLowerCase());
 	            if (String(this.lista2[key].name).toLowerCase().includes(this.buscar.toLowerCase())) {
 	                
 	                this.lista.push(this.lista2[key]);
@@ -54,16 +58,19 @@ export class AutocompleteComponent {
 	    }	    
 	}
 
-	onCancel(e) {
+	/*onCancel(e) {
         console.log(e);
+        console.log('Si esta cancelando');
         this.lista_visible = false;
         this.lista = [];
-    }
+    }*/
 
     selectItem(valor) {
         this.lista_visible = false;
         this.buscar = valor.name;
-        this.id = valor.id;               
+        this.id = valor.id;     
+        console.log(this.id);
+        this.onselect.emit(this.id);
     }
 
 

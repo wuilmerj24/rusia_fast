@@ -2,13 +2,14 @@
     <ion-searchbar     
     	[(ngModel)]="buscar" 
     	(ionCancel)="onCancel($event)" 
-        showCancelButton="false" 
+        showCancelButton="false"
         (keyup)="onKey($event)"       
         placeholder="{{placeholder}}">
     </ion-searchbar>
 
-    <ion-list *ngIf="lista_visible">
+    <ion-list *ngIf="lista_visible">    
         <ion-item *ngFor="let item of lista" (click)="selectItem(item)">
             {{ item.name }}
-    </ion-item>
-</ion-list>
+        </ion-item>
+    </ion-list>
+</div>

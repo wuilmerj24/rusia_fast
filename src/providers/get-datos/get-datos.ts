@@ -15,9 +15,9 @@ export class GetDatosProvider {
 
 	private db: SQLiteObject = null;
 
-	private url = '/api';
+	//private url = '/api';
 	//private url = 'http://odoo.devoptions.mx';     //"http://odoo.devoptions.mx"
-	//private url = 'http://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
+	private url = 'http://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
 
 	public usr = null;	
 	private eventoHijo = [];
@@ -33,12 +33,12 @@ export class GetDatosProvider {
 		var self = this;
 
 		//console.log('constructor creado primero');
-    	self.ejecutarSQL("SELECT * FROM user").then(
+    	self.ejecutarSQL("SELECT * FROM user WHERE usuario IS NOT NULL").then(
 
 			function(data:{rows}){
 				//console.log(JSON.stringify(data));
 				self.usr = data.rows.item(0);
-				//console.log(JSON.stringify(data.rows.item(0)));
+				console.log(JSON.stringify(data.rows.item(0)));
 			},
 			function(){
 				console.log('Error get table user');				
@@ -116,7 +116,38 @@ export class GetDatosProvider {
 				    sql.push(registro);
 				}); 
 
-				self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
+				self.insertBatch(sql)
+			        .then(res => {
+			        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+			        	resolve();
+							
+					}).catch(e => {
+			  		console.log('Error en insertBatch DB');
+			  		console.log(e.message);
+			  		reject(e) 
+			  	});
+
+			
+		  	}, 
+			function() {
+		  		
+		  		console.log('Error search_read - Loading offline attachment');
+		  		//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+		  		reject();							  		
+			});
+
+			
+
+        });
+
+        return promise;	
+
+	}
+
+	private insertBatch(sql){
+		var self = this;
+		var promise = new Promise(function (resolve, reject) {
+			self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
 
 			    	db.sqlBatch(sql)
 			        .then(res => {
@@ -133,21 +164,9 @@ export class GetDatosProvider {
 			  		console.log(e.message);
 			  		reject(e) 
 			  	});
-			
-		  	}, 
-			function() {
-		  		
-		  		console.log('Error search_read - Loading offline attachment');
-		  		//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
-		  		reject();							  		
-			});
-
-			
-
-        });
-
-        return promise;	
-
+		    }
+	    );
+		return promise;
 	}
 
 	public cargarAttachment(borrar){
@@ -182,20 +201,13 @@ export class GetDatosProvider {
 				    	+attachment[key].name +"');");
 				}); 
 
-				self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
-
-			    	db.sqlBatch(sql)
+				self.insertBatch(sql)
 			        .then(res => {
 			        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
 			        	resolve();
 							
 					}).catch(e => {
-						console.log(e.message);
-						reject(e);
-					});
-
-		    	}).catch(e => {
-			  		console.log('Error en conexion DB');
+			  		console.log('Error en insertBatch DB');
 			  		console.log(e.message);
 			  		reject(e) 
 			  	});
@@ -261,20 +273,13 @@ export class GetDatosProvider {
 				    sql.push(registro);
 				});
 
-				self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
-
-			    	db.sqlBatch(sql)
+				self.insertBatch(sql)
 			        .then(res => {
 			        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
 			        	resolve();
 							
 					}).catch(e => {
-						console.log(e.message);
-						reject(e);
-					});
-
-		    	}).catch(e => {
-			  		console.log('Error en conexion DB');
+			  		console.log('Error en insertBatch DB');
 			  		console.log(e.message);
 			  		reject(e) 
 			  	});
@@ -301,56 +306,47 @@ export class GetDatosProvider {
 		var sql = [];
 		var promise = new Promise(function (resolve, reject) {
             
-            
-			self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
+            self.search_read('rusia.gastostoursline', [["id", "<>", 0]], self.tablas.Tbl_gastos_odoo)
+	  		.then(function(gastos) {
+	  		
 
-		    	self.search_read('rusia.gastostoursline', [["id", "<>", 0]], self.tablas.Tbl_gastos_odoo)
-			  		.then(function(gastos) {
-			  		
+	  			//console.log('resolvio gastos');
+	  			if(borrar == true){
+		  			sql.push('DELETE FROM gastostoursline;');
+	  			}	
+	            
+		  		Object.keys(gastos).forEach(key=> {
 
-			  			//console.log('resolvio gastos');
-			  			if(borrar == true){
-				  			sql.push('DELETE FROM gastostoursline;');
-			  			}	
-			            
-				  		Object.keys(gastos).forEach(key=> {
+				    var registro = "INSERT OR IGNORE INTO gastostoursline "+
+				    	"(id, concepto_gasto_id, tipo_moneda, Total, fecha, ciudad_id, observaciones, usuario_id, evento_padre, eventos_id)"+
+				    	" VALUES (" + gastos[key].id + ", '"+JSON.stringify(gastos[key].concepto_gasto_id)+"', '" 
+				    	+gastos[key].tipo_moneda +"', '"+ gastos[key].Total+ "', '" + gastos[key].fecha +"', '"+
+				    	JSON.stringify(gastos[key].ciudad_id)+"', '"+gastos[key].observaciones+"', '"+JSON.stringify(gastos[key].usuario_id)+"', '"+gastos[key].evento_padre+"', '"+ gastos[key].eventos_id[0] +"');";
 
-						    var registro = "INSERT OR IGNORE INTO gastostoursline "+
-						    	"(id, concepto_gasto_id, tipo_moneda, Total, fecha, ciudad_id, observaciones, usuario_id, evento_padre, eventos_id)"+
-						    	" VALUES (" + gastos[key].id + ", '"+JSON.stringify(gastos[key].concepto_gasto_id)+"', '" 
-						    	+gastos[key].tipo_moneda +"', '"+ gastos[key].Total+ "', '" + gastos[key].fecha +"', '"+
-						    	JSON.stringify(gastos[key].ciudad_id)+"', '"+gastos[key].observaciones+"', '"+JSON.stringify(gastos[key].usuario_id)+"', '"+gastos[key].evento_padre+"', '"+ gastos[key].eventos_id[0] +"');";
-
-						    //console.log(registro);
-						    sql.push(registro);
-						}); 
-					    //console.log(JSON.stringify(sql));  										   
+				    //console.log(registro);
+				    sql.push(registro);
+				}); 
+			    //console.log(JSON.stringify(sql));  										   
 
 
+			    self.insertBatch(sql)
+			        .then(res => {
+			        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+			        	resolve();
+							
+					}).catch(e => {
+			  		console.log('Error en insertBatch DB');
+			  		console.log(e.message);
+			  		reject(e) 
+			  	});	   			
 
-			   			db.sqlBatch(sql)
-				        .then(res => {
-				        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
-				        	resolve();
-								
-						}).catch(e => {
-							console.log(e.message);
-							reject(e);
-						});
-
-				  	}, 
-					function() {
-				  		
-				  		console.log('Error search_read - Loading offline gastos');
-				  		//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
-				  		resolve();							  		
-					});
-
-		    	}).catch(e => {
-		  		console.log('Error en CONEXION');
-		  		console.log(e.message);
-		  		reject(e)
-		  	});
+		  	}, 
+			function() {
+		  		
+		  		console.log('Error search_read - Loading offline gastos');
+		  		//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+		  		resolve();							  		
+			});					
 
         });
 
@@ -445,17 +441,17 @@ export class GetDatosProvider {
 			    sql.push(registro);
 			});
 
-			self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
-				db.sqlBatch(sql)
-		        .then(res => {
-		        	
-		        	resolve();
-						
-				}).catch(e => {
-					console.log(e.message);
-					reject(e);
-				});
-			});
+			self.insertBatch(sql)
+			        .then(res => {
+			        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+			        	resolve();
+							
+					}).catch(e => {
+			  		console.log('Error en insertBatch DB');
+			  		console.log(e.message);
+			  		reject(e) 
+			  	});
+
 
 		});
 
@@ -477,7 +473,7 @@ export class GetDatosProvider {
 				//console.log(JSON.stringify(self.eventoHijo));
 				self.read('rusia.eventos', self.eventoHijo, self.tablas.Tbl_eventos_odoo).then(
 					eventos=>{
-						console.log(' va por los padres -------------------------------------------------------2');
+						//console.log(' va por los padres -------------------------------------------------------2');
 						//console.log(JSON.stringify(eventos));
 						self.guardarEventos(eventos, true, false).then(
 		      				res=>{
@@ -533,82 +529,91 @@ export class GetDatosProvider {
 	public cargarCalendario(borrar){
 
 		var self = this;
-		var promise = new Promise(function (resolve, reject) {
-            
-            
-			self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
+		var promise = new Promise(function (resolve, reject) {                      
 		      		       
-				//console.log('tipo suario :' + self.usr.tipo_usuario); 
-				//console.log((self.usr.tipo_usuario + '')); 
-				var dominio; 
-				if(self.usr.tipo_usuario + '' == 'is_root'){
-					dominio = [['is_padre', '=' , false]];
-				}else if(self.usr.tipo_usuario + '' == 'is_client'){
-					dominio = [['is_padre', '=' , false],["Datos_Cliente_id", "=", self.usr.id]];
-					//dominio = [["Datos_Cliente_id", "=", self.usr.id]];
-				}else if(self.usr.tipo_usuario + '' == 'is_guia'){
-					dominio = [['is_padre', '=' , false], ["guia_id", "=", self.usr.id]];
-					//dominio = [["is_padre", "=", 'true']];
-				}else if(self.usr.tipo_usuario + '' == 'is_chofer'){
-					dominio = [['is_padre', '=' , false], ["chofer_id", "=", self.usr.id]];
-					//dominio = [["is_padre", "=", 'true']];
+			//console.log('tipo suario :' + self.usr.tipo_usuario); 
+			//console.log((self.usr.tipo_usuario + '')); 
+			var dominioUsers = null;
+			var dominio; 
+			if(self.usr.tipo_usuario + '' == 'is_root'){
+				dominio = [['is_padre', '=' , false]];
+			}else if(self.usr.tipo_usuario + '' == 'is_client'){
+				dominio = [['is_padre', '=' , false],["Datos_Cliente_id", "=", self.usr.id]];
+				//dominio = [["Datos_Cliente_id", "=", self.usr.id]];
+			}else if(self.usr.tipo_usuario + '' == 'is_guia'){
+				
+				dominio = [['is_padre', '=' , false], ["guia_id", "=", self.usr.id]];
+				dominioUsers = [["is_client", "=", false], ["is_rep", "=", false]];
+
+			}else if(self.usr.tipo_usuario + '' == 'is_chofer'){
+				dominio = [['is_padre', '=' , false], ["chofer_id", "=", self.usr.id]];
+				//dominio = [["is_padre", "=", 'true']];
+			}
+
+			console.log('-----------------eventos hijos ---------------');
+			self.cargarEventos(dominio,borrar).then(
+				res=>{
+
+					console.log('-----------------eventos padre ---------------');
+					self.cargarEventos(null,borrar).then(
+						res=>{
+
+							//console.log('-----------------entro1 ---------------');
+				        	self.cargarGastos(false).then(
+				        		res=>{
+
+				        			//console.log('-----------------entro2 ---------------');
+				        			self.cargarAttachment(false).then(
+						        		res=>{
+						        			
+						        			self.cargarGastosConceptos().then(
+								        		res=>{
+								        			
+								        			if(dominioUsers != null){
+
+								        				self.cargarUsuario(dominioUsers).then(
+											        		res=>{
+											        			
+										        				resolve(self.usr);													        															        			
+											        		},
+											        		fail=>{
+
+											        			reject();
+											        		}
+											        	);
+								        			}else{
+
+								        				resolve(self.usr);	
+								        			}
+								        			
+								        		},
+								        		fail=>{
+
+								        			reject();
+								        		}
+								        	);
+						        		},
+						        		fail=>{
+
+						        			reject();
+						        		}
+						        	);
+				        		},
+				        		fail=>{
+
+				        			reject();
+				        		}
+				        	);
+						},
+						fail=>{
+							resolve(self.usr);	
+						}
+					);
+				},
+				fail=>{
+					resolve(self.usr);	
 				}
-
-				console.log('-----------------eventos hijos ---------------');
-				self.cargarEventos(dominio,borrar).then(
-					res=>{
-
-						console.log('-----------------eventos padre ---------------');
-						self.cargarEventos(null,borrar).then(
-							res=>{
-
-								//console.log('-----------------entro1 ---------------');
-					        	self.cargarGastos(false).then(
-					        		res=>{
-
-					        			//console.log('-----------------entro2 ---------------');
-					        			self.cargarAttachment(false).then(
-							        		res=>{
-							        			
-							        			self.cargarGastosConceptos().then(
-									        		res=>{
-									        			
-									        			resolve(self.usr);
-									        		},
-									        		fail=>{
-
-									        			reject();
-									        		}
-									        	);
-							        		},
-							        		fail=>{
-
-							        			reject();
-							        		}
-							        	);
-					        		},
-					        		fail=>{
-
-					        			reject();
-					        		}
-					        	);
-							},
-							fail=>{
-								resolve(self.usr);	
-							}
-						);
-					},
-					fail=>{
-						resolve(self.usr);	
-					}
-				);
-	      		
-
-		  	}).catch(e => {
-		  		console.log('Error en CONEXION');
-		  		console.log(e.message);
-		  		reject(e)
-		  	});
+			);	      		
 
         });
 
@@ -794,7 +799,7 @@ export class GetDatosProvider {
 		var self = this;//http://185.129.251.102
 		var promise = new Promise(function (resolve, reject) {
                     
-          
+          	console.log(JSON.stringify(campos))
             var odoo = new OdooApi(self.url, self.usr.bd);
 			odoo.login(self.usr.usuario, self.usr.pwd).then(
 			function (uid) {
@@ -836,6 +841,62 @@ export class GetDatosProvider {
 	    )
 	}	
 
+	private cargarUsuario(dominio){
+
+		var self = this;
+
+
+		var promise = new Promise(function (resolve, reject) {
+
+			self.search_read('res.users', dominio, self.tablas.Tbl_user_odoo).then(
+		 
+		    	function (users) {
+
+		    		//console.log(user[0]);
+		    		var sql = [];
+		    		Object.keys(users).forEach(key=> {
+
+
+			  			var registro = "INSERT OR IGNORE INTO user "+
+					    	"(id, gastos_users_ids,"+
+					    	" company_id, ciudades, fax, is_correo, name, eventos_ids, state,"+
+					    	"email, active, reps_gastos_ids, login, phone, mobile) VALUES (" + users[key].id +	", '"+JSON.stringify(users[key].gastos_users_ids)+"', '"+
+					    	JSON.stringify(users[key].company_id)+"', '"+users[key].ciudades+"', '"+users[key].fax+"', '"+users[key].is_correo+"', '"+
+					    	users[key].name+"', '"+JSON.stringify(users[key].eventos_ids)+"', '"+users[key].state+"', '"+users[key].email+"', '"+
+					    	users[key].active+"', '"+JSON.stringify(users[key].reps_gastos_ids)+"', '"+users[key].login+"' ,'"+users[key].phone+"', '"+users[key].mobile+"' );"
+
+
+					    //console.log(registro);
+					    sql.push(registro);
+					});
+
+			        self.insertBatch(sql)
+				        .then(res => {
+				        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+				        	resolve();
+								
+						}).catch(e => {
+				  		console.log('Error en insertBatch DB');
+				  		console.log(e.message);
+				  		reject(e) 
+				  	});
+
+
+		    	//resolve();
+		    	
+		        },
+		    	function (){
+		    		console.log('Error get usuarios');
+		    		reject();
+		    	}
+			)
+		});
+
+		return promise;
+		
+
+	}
+
 	private crearEsquema(conexion){
 
 		var self = this;
@@ -843,11 +904,12 @@ export class GetDatosProvider {
 		var promise = new Promise(function (resolve, reject) {
 			if(conexion.usuario != '' && conexion.pwd != ''){
 
+				//console.log()
         		var odoo = new OdooApi(self.url, conexion.bd);
 				odoo.login(conexion.usuario, conexion.pwd).then(
 				function (uid) {
 					
-
+					//vamos a cargar el usuario 
 					odoo.search_read('res.users', [['login', '=', conexion.usuario]], //, '', 'date_begin',
 			                         self.tablas.Tbl_user_odoo).then(
 		 
@@ -902,7 +964,7 @@ export class GetDatosProvider {
 							   			db.sqlBatch(sql)
 								        .then(res => {
 								        	
-								        	self.ejecutarSQL('SELECT * FROM user').then(
+								        	self.ejecutarSQL('SELECT * FROM user where login = "'+user[0].login+'"' ).then(
 
 												function(data:{rows}){
 
@@ -960,10 +1022,12 @@ export class GetDatosProvider {
 		//console.log('-----------------------------0');
 		var promise = new Promise(function (resolve, reject) {
             
-            self.ejecutarSQL("SELECT * FROM user").then(
+            self.ejecutarSQL('SELECT * FROM user WHERE usuario IS NOT NULL' ).then(
 
 				function(data:{rows}){
-					//console.log(JSON.stringify(data));
+
+					console.log('---------------login by bd ---------------1');
+					console.log(JSON.stringify(data));
 					if(data.rows.length > 0){
 
 						self.usr = data.rows.item(0);
@@ -972,7 +1036,7 @@ export class GetDatosProvider {
 					}
 					
 					//console.log(JSON.stringify(data.rows.item(0)));
-					//console.log('------------------------------1');
+					//
 		            if(self.usr != null){
 
 		            	resolve(self.usr.tipo_usuario);
@@ -983,6 +1047,7 @@ export class GetDatosProvider {
 				},
 				function(){
 					//console.log('Error get table user');				
+					console.log('---------------login by connet ---------------1');
 					self.crearEsquema(conexion).then(
 						res=>{
 							resolve(res);

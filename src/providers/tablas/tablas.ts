@@ -66,7 +66,7 @@ export class TablasProvider {
 	" reps_gastos_ids VARCHAR(255),"+
 	" login VARCHAR(255),"+
 	" phone VARCHAR(20),"+
-	" mobile VARCHAR(20));";
+	" mobile VARCHAR(20));";	
 
 	private tbl_user_odoo = ["email",
 	"is_chofer",

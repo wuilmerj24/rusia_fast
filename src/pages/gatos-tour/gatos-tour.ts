@@ -17,20 +17,52 @@ export class GatosTourPage {
 	private eventos_id;
 	private gastostours = [];
 
-	private clientes = [
+	private clientes = [];
+
+	private usuario_id: any = false;
+	/*[
 		{name:'jose', id:1},
 		{name:'alvaro', id:2},
 		{name:'camilo', id:3},
 		{name:'jorge', id:4},
-	];
+	];*/
 	constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 		
 
 		this.gasto = this.navParams.get('gasto');			
 		
 		this.ver_segmento = this.navParams.get('ver_segmento');
-		this.gastostours = this.navParams.get('lista_gastos');
-		console.log(JSON.stringify(this.gastostours));
+		this.gastostours = this.navParams.get('lista_gastos');		
+		this.initGatos();
+	}
+
+	private initGatos(){
+
+		var self = this;
+		self.cargar = true;
+		self.getDatos.ejecutarSQL('SELECT id, name FROM user').then(
+
+			(user: {rows})=>{
+
+				//self.clientes = user.rows;
+				for(var i=0; i<user.rows.length; i++) {
+
+			    	self.clientes.push(user.rows.item(i));                   	
+                }
+				//console.log(JSON.stringify(self.clientes));
+				self.cargar = false;
+			},
+			fail=>{
+
+			}
+		);
+
+	}
+
+	private seleccionCliente(usuario_id){
+
+		this.usuario_id = usuario_id;
+		console.log('selecccione el id' + this.usuario_id);
 	}
 
 	closeModal(dato) {
@@ -65,7 +97,7 @@ export class GatosTourPage {
 				eventos_id: self.gasto.eventos_id, 
 				fecha: self.getDatos.convertirFecha(new Date(self.gasto.fecha)),
 				evento_padre:self.gasto.evento_padre,
-				usuario_id:false
+				usuario_id: self.usuario_id
 			};
 
 			/*console.log(JSON.stringify(self.gasto.concepto_gasto_id));

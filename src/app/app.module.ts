@@ -23,6 +23,7 @@ import { GastosRelPage } from '../pages/gastos-rel/gastos-rel';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { File } from '@ionic-native/file';
+import { FileOpener } from '@ionic-native/file-opener';
 
 import { NgCalendarModule } from 'ionic2-calendar';
 import { GetDatosProvider } from '../providers/get-datos/get-datos';
@@ -75,6 +76,7 @@ import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
   ],
   providers: [ 
     File,   
+    FileOpener,
     SQLite,
     StatusBar,
     SplashScreen,

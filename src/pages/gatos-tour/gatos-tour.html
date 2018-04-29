@@ -92,7 +92,7 @@
 	        <ion-col col-8>
 	        	<!--<ion-datetime  name="gasto.fecha" displayFormat="YYYY-MM-DD" [(ngModel)]="gasto.fecha"></ion-datetime>-->
 
-	        	<autocomplete [lista]="clientes" placeholder="Usuario"></autocomplete>
+	        	<autocomplete [lista]="clientes" placeholder="Usuario" (onselect) = "seleccionCliente($event)"></autocomplete>
 
 	            <!--<ion-input name="gasto.fecha" type="text" [readonly]="!ver_segmento" [(ngModel)]="gasto.fecha"></ion-input-->
 	        </ion-col>    
