@@ -44,24 +44,6 @@
 	        <ion-col col-8>	        	
 	            <ion-select name="gasto.concepto_gasto_id" [disabled]="!ver_segmento" [(ngModel)]="gasto.concepto_gasto_id[0]">
 	            	<ion-option *ngFor="let gasto_t of gastostours" [value]="gasto_t.id">{{gasto_t.name}}</ion-option>
-<!--
-					<ion-option value="1">Comision Getyourgide</ion-option>
-					<ion-option value="2">Entradas Kremlin</ion-option>
-					<ion-option value="3">Salario Guía</ion-option>
-					<ion-option value="4">Comision Paykepeer</ion-option>
-					<ion-option value="5">Entradas San Basilio</ion-option>
-					<ion-option value="6">Servicio chofer</ion-option>
-					<ion-option value="7">Billetes Metro</ion-option>
-					<ion-option value="8">Salario Chofer</ion-option>
-					<ion-option value="9">Entradas Museo Segunda Guerra Mundial</ion-option>
-					<ion-option value="10">Entradas Museo Cosmonautica</ion-option>
-					<ion-option value="11">Permiso Foto Museo Cosmonautica</ion-option>
-					<ion-option value="12">Hermitage</ion-option>
-					<ion-option value="13">Compra de Entradas a Shows</ion-option>
-					<ion-option value="14">Coste billetes de tren</ion-option>
-					<ion-option value="15">Monasterio Novodevichy</ion-option>
-					<ion-option value="16">Entradas Monasterio LAVRA</ion-option>
-					<ion-option value="17">Entradas Barco rio</ion-option>-->
 	            </ion-select>    
 	        </ion-col>    
 	    </ion-row>            	
@@ -103,6 +85,18 @@
 	            </ion-select>
 	        </ion-col>    
 	    </ion-row>            	
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Usuario</b>
+	        </ion-col>
+	        <ion-col col-8>
+	        	<!--<ion-datetime  name="gasto.fecha" displayFormat="YYYY-MM-DD" [(ngModel)]="gasto.fecha"></ion-datetime>-->
+
+	        	<autocomplete [lista]="clientes" placeholder="Usuario"></autocomplete>
+
+	            <!--<ion-input name="gasto.fecha" type="text" [readonly]="!ver_segmento" [(ngModel)]="gasto.fecha"></ion-input-->
+	        </ion-col>    
+	    </ion-row>
 	    <ion-row align-items-center>  
 	        <ion-col col-4>
 	            <b>Fecha usuario</b>

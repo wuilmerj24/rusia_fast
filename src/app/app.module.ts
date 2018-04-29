@@ -29,6 +29,8 @@ import { GetDatosProvider } from '../providers/get-datos/get-datos';
 import { SQLite } from '@ionic-native/sqlite';
 import { TablasProvider } from '../providers/tablas/tablas';
 
+import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
+
 @NgModule({
   declarations: [
     MyApp,
@@ -45,7 +47,8 @@ import { TablasProvider } from '../providers/tablas/tablas';
     GatosTourPage,
     PanelPage,
     PerfilPage,
-    GastosRelPage
+    GastosRelPage,
+    AutocompleteComponent
   ],
   imports: [
     BrowserModule,

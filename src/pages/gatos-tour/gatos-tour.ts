@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
+import { AutocompleteComponent } from '../../components/autocomplete/autocomplete'
 
 
 @Component({
@@ -15,6 +16,13 @@ export class GatosTourPage {
 	private cargar = false;
 	private eventos_id;
 	private gastostours = [];
+
+	private clientes = [
+		{name:'jose', id:1},
+		{name:'alvaro', id:2},
+		{name:'camilo', id:3},
+		{name:'jorge', id:4},
+	];
 	constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 		
 
