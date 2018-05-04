@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
+import { SolicitarDetallePage } from '../../pages/solicitar-detalle/solicitar-detalle';
 
 @Component({
   selector: 'page-solicitar',
@@ -82,7 +83,7 @@ export class SolicitarPage {
 
     onEventSelected(evt) {
         
-        //this.navCtrl.push(EventoPage, {evento: evt, permisos:this.usuario.tipo_usuario});
+        this.navCtrl.push(SolicitarDetallePage, {evento: evt});
     }
 
     refresh(){

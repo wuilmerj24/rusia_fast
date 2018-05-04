@@ -158,39 +158,18 @@ export class TablasProvider {
 	" tarjeta_usd VARCHAR(10),"+
 	" guia_id_tmp VARCHAR(5),"+
 	" gastos_ids VARCHAR(255),"+
+	" servicio_id VARCHAR(255),"+
+	" observaciones_solicitud TEXT,"+
+	" salario VARCHAR(10),"+
 	" gastostoursline_ids VARCHAR(255));";
-/*
-	"tarjeta_usd_pos",
-	"Total_Rub",
-	"tarjeta_usd",
-	"tarjeta_rub",
-	"tarjeta_eur_pos",
-	"Total_Beneficios",
-	"Total_Pagado_Web",
-	"Total_Tarjeta",
-	"Total_Pago_Clientes",
-	"Total_Paypal",
-	"",
-	"gastostoursline_ids",
-	"evento_ids",		
-	"is_padre",	
-	"representante_id",	
-	"gastos_ids",	
-	"documentos_ids",
-	"gastos_reps_ids",
-	"Total_Euros",
-	"name",
-	"Total_Usd",
-	"tarjeta_eur",	
-	"display_name",
-	"__last_update",
-	"fecha_padre",,, 
-	"is_adjudicado"*/
 
 	
 	private tbl_eventos_odoo = ["Comentarios_Chofer",
 	"Total_Beneficios",
 	"tarjeta_usd_pos",
+	"servicio_id",
+	"salario",
+	"observaciones_solicitud",
 	"Transporte",
 	"is_traslado",
 	"is_guia",

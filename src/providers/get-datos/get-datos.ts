@@ -38,7 +38,7 @@ export class GetDatosProvider {
 			function(data:{rows}){
 				//console.log(JSON.stringify(data));
 				self.usr = data.rows.item(0);
-				console.log(JSON.stringify(data.rows.item(0)));
+				//console.log(JSON.stringify(data.rows.item(0)));
 			},
 			function(){
 				console.log('Error get table user');				
@@ -368,7 +368,7 @@ export class GetDatosProvider {
 		//self.eventoHijo = [];
 		var promise = new Promise(function (resolve, reject) {
 			console.log('resolvio eventos');
-  			console.log(JSON.stringify(eventos));
+  			//console.log(JSON.stringify(eventos));
   			var sql = [];
   			if(borrar == true){
   				sql.push('DELETE FROM eventos;');	
@@ -397,7 +397,7 @@ export class GetDatosProvider {
 	  				//agrego los
 
 					var gastos_ids = eventos[key].gastos_ids;
-					console.log(JSON.stringify(gastos_ids));
+					//console.log(JSON.stringify(gastos_ids));
 					for (var i = gastos_ids.length - 1; i >= 0; i--) {
 						
 						if(self.gastos_ciudad.indexOf(gastos_ids[i]) == -1) {
@@ -413,7 +413,7 @@ export class GetDatosProvider {
 	  					
 	  				});*/
 
-	  				console.log(JSON.stringify(self.gastos_ciudad));
+	  				//console.log(JSON.stringify(self.gastos_ciudad));
 	  			}			  			
 	  			var registro = "INSERT OR IGNORE INTO eventos "+
 			    	"(id, cliente_id_tmp, cliente_id, representante_id,"+
@@ -421,7 +421,7 @@ export class GetDatosProvider {
 			    	" chofer_id_tmp, chofer_id, gasto_rub, gasto_eur, gasto_usd, gasto_paypal, Comentarios_Chofer,"+
 			    	" Comentarios_Internos, Comentarios_Cliente, Comentarios_Guia, Fecha_Fin, Transporte, hotel_id,"+
 			    	" ciudad_id, Total_Representante, message, numero_pax, evento_id, Servicio_Gastos, tarjeta_eur,"+
-			    	" tarjeta_rub, tarjeta_usd, is_guia, is_traslado, gastostoursline_ids, guia_id_tmp, gastos_ids)"+
+			    	" tarjeta_rub, tarjeta_usd, is_guia, is_traslado, gastostoursline_ids, guia_id_tmp, gastos_ids, servicio_id, salario, observaciones_solicitud)"+
 			    	" VALUES (" + eventos[key].id + ", '"+eventos[key].Datos_Cliente_id[0]+"', '" + JSON.stringify(eventos[key].Datos_Cliente_id)+"', '" +
 			    	JSON.stringify(eventos[key].representante_id)+ "', '" + eventos[key].Fecha_Inicio +"','" + 
 			    	eventos[key].hora_inicio + "', '" + eventos[key].hora_final + "', '" + 
@@ -436,7 +436,8 @@ export class GetDatosProvider {
 			    	eventos[key].Total_Representante+"', '"+eventos[key].message+"', '"+eventos[key].numero_pax+"', '"+
 			    	JSON.stringify(eventos[key].evento_id)+"', '"+eventos[key].Servicio_Gastos+"', '"+eventos[key].tarjeta_eur+"', '"+
 			    	eventos[key].tarjeta_rub+"', '"+eventos[key].tarjeta_usd+"' , '"+eventos[key].is_guia+"', '"+eventos[key].is_traslado+"', '"+ 
-			    	JSON.stringify(eventos[key].gastostoursline_ids)+"', '"+eventos[key].guia_id[0]+"', '"+ JSON.stringify(eventos[key].gastos_ids) +"');";
+			    	JSON.stringify(eventos[key].gastostoursline_ids)+"', '"+eventos[key].guia_id[0]+"', '"+ JSON.stringify(eventos[key].gastos_ids) +"', '"+
+			    	JSON.stringify(eventos[key].servicio_id)+"', '"+eventos[key].salario+"', '"+eventos[key].observaciones_solicitud+"');";
 			    //console.log(registro);							  			
 			    sql.push(registro);
 			});
@@ -555,11 +556,11 @@ export class GetDatosProvider {
 		try{
 
 			await self.cargarEventos(dominio,borrar);
-			await self.cargarEventos(dominioSol,borrar);
+			await self.cargarEventos(dominioSol,borrar);//-> no lo carga el usuario
 			await self.cargarEventos(null,borrar);
 			await self.cargarGastos(false);
 			await self.cargarAttachment(false);
-			await self.cargarGastosConceptos();
+			await self.cargarGastosConceptos();//-> no lo carga el usuario
 
 			if(dominioUsers != null){
 
@@ -711,6 +712,43 @@ export class GetDatosProvider {
         return promise;	        
 	}
 	
+
+	public call(tabla, metodo, id){
+
+		var self = this;//http://185.129.251.102
+		var promise = new Promise(function (resolve, reject) {
+                    
+          
+            var odoo = new OdooApi(self.url, self.usr.bd);
+			odoo.login(self.usr.usuario, self.usr.pwd).then(
+			function (uid) {
+
+				console.log('search_read OK');
+
+				odoo.call(tabla, metodo, id).then(
+
+		        function (tabla) {
+
+		        	resolve(tabla);
+		        	
+		        },
+		    	function (){
+		    		console.log('error');
+		    		reject();
+		    	})
+
+			},
+			function (){
+				console.log('error');
+				reject()
+			});
+							
+
+        });
+
+        return promise;	        
+	}
+
 	public read(tabla, ids, campos){
 
 		var self = this;//http://185.129.251.102
@@ -753,7 +791,7 @@ export class GetDatosProvider {
 		var self = this;//http://185.129.251.102
 		var promise = new Promise(function (resolve, reject) {
                     
-          	console.log(JSON.stringify(campos))
+          	//console.log(JSON.stringify(campos))
             var odoo = new OdooApi(self.url, self.usr.bd);
 			odoo.login(self.usr.usuario, self.usr.pwd).then(
 			function (uid) {
@@ -980,8 +1018,8 @@ export class GetDatosProvider {
 
 				function(data:{rows}){
 
-					console.log('---------------login by bd ---------------1');
-					console.log(JSON.stringify(data));
+					//console.log('---------------login by bd ---------------1');
+					//console.log(JSON.stringify(data));
 					if(data.rows.length > 0){
 
 						self.usr = data.rows.item(0);
@@ -1001,7 +1039,7 @@ export class GetDatosProvider {
 				},
 				function(){
 					//console.log('Error get table user');				
-					console.log('---------------login by connet ---------------1');
+					//console.log('---------------login by connet ---------------1');
 					self.crearEsquema(conexion).then(
 						res=>{
 							resolve(res);

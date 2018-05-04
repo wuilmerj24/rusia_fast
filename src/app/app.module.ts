@@ -19,6 +19,7 @@ import { PerfilPage } from '../pages/perfil/perfil';
 import { GastosRelPage } from '../pages/gastos-rel/gastos-rel';
 
 import { SolicitarPage } from '../pages/solicitar/solicitar';
+import { SolicitarDetallePage } from '../pages/solicitar-detalle/solicitar-detalle';
 
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -51,7 +52,8 @@ import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
     PerfilPage,
     GastosRelPage,
     AutocompleteComponent,
-    SolicitarPage
+    SolicitarPage,
+    SolicitarDetallePage
   ],
   imports: [
     BrowserModule,
@@ -75,7 +77,8 @@ import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
     PanelPage,
     PerfilPage,
     GastosRelPage,
-    SolicitarPage
+    SolicitarPage,
+    SolicitarDetallePage
   ],
   providers: [ 
     File,   

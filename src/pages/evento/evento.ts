@@ -113,7 +113,7 @@ export class EventoPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad EventoPage');
+		console.log('ionViewDidLoad EventoPage'); 
 
 	}
 
