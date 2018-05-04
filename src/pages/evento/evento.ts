@@ -137,16 +137,17 @@ export class EventoPage {
 		self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE id = ' + self.evento_cal.id).then(
 			function(eventos: {rows}){
 
-				var tmp_evento_id = JSON.parse(eventos.rows.item(0).evento_id);
-				var tmp_cliente_id = JSON.parse(eventos.rows.item(0).cliente_id);
-				var tmp_representante_id = JSON.parse(eventos.rows.item(0).representante_id);
-				var tmp_guia_id = JSON.parse(eventos.rows.item(0).guia_id);
-				var tmp_chofer_id = JSON.parse(eventos.rows.item(0).chofer_id);
-				var tmp_hotel_id = JSON.parse(eventos.rows.item(0).hotel_id);
-				var tmp_ciudad_id = JSON.parse(eventos.rows.item(0).ciudad_id);
+				var evento = eventos.rows.item(0);
+				var tmp_evento_id = JSON.parse(evento.evento_id);
+				var tmp_cliente_id = JSON.parse(evento.cliente_id);
+				var tmp_representante_id = JSON.parse(evento.representante_id);
+				var tmp_guia_id = JSON.parse(evento.guia_id);
+				var tmp_chofer_id = JSON.parse(evento.chofer_id);
+				var tmp_hotel_id = JSON.parse(evento.hotel_id);
+				var tmp_ciudad_id = JSON.parse(evento.ciudad_id);
 
 
-				self.evento = eventos.rows.item(0);
+				self.evento = evento;
 				self.evento.evento_id = tmp_evento_id;
 				self.evento.cliente_id = tmp_cliente_id;
 				self.evento.representante_id = tmp_representante_id;

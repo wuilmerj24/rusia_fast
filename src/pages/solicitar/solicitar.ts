@@ -1,22 +1,14 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
-import { EventoPage } from '../../pages/evento/evento';
-/**
- * Generated class for the CalendarioPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
-//@IonicPage()
 @Component({
-  selector: 'page-calendario',
-  templateUrl: 'calendario.html',
+  selector: 'page-solicitar',
+  templateUrl: 'solicitar.html',
 })
-export class CalendarioPage {
+export class SolicitarPage {
 
-    cargar = true;
+	cargar = true;
     viewTitle = '';
     calendar = {
         eventSource: [],
@@ -31,39 +23,22 @@ export class CalendarioPage {
 
     usuario;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
+		this.initSolicitar();
+	}
 
-        this.initCalendario();
-    }
+	ionViewDidLoad() {
+		console.log('ionViewDidLoad SolicitarPage');
+	}
 
-    private initCalendario(){
-        var self = this;
-        self.cargar = true;
-        this.getDatos.cargarCalendario(false).then(          
-          function(usr:{tipo_usuario:'', id:0, name:''}) {
-            
-            self.usuario = usr;
-            var where;
-            if(usr.tipo_usuario + '' == 'is_root'){
-                
-            }else if(usr.tipo_usuario + '' == 'is_client'){
-                
-                //dominio = [["Datos_Cliente_id", "=", self.usr.id]];
-                where = 'is_padre = "false" and cliente_id_tmp = "' + usr.id + '"';
+	private initSolicitar(){
 
-            }else if(usr.tipo_usuario + '' == 'is_guia'){//+ JSON.stringify([usr.id, usr.name]  and guia_id = "[71,"Natalia Kazan"]"
-                where = 'is_padre = "false" and guia_id_tmp = "' + usr.id + '"';
-              //  console.log(where);
-                //dominio = [["guia_id", "=", self.usr.id]];
-            } else if(usr.tipo_usuario + '' == 'is_chofer'){//+ JSON.stringify([usr.id, usr.name]  and guia_id = "[71,"Natalia Kazan"]"
-                where = 'is_padre = "false" and chofer_id_tmp = "' + usr.id + '"';
-              //  console.log(where);
-                //dominio = [["guia_id", "=", self.usr.id]];
-            } 
-
-            //console.log()
-
-            self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE '+ where +'  ORDER BY id DESC').then(
+			//["is_padre", "=", false],
+			//["is_guia", "=", true],
+			//["guia_id", "=", false]]
+		var self = this;	
+		self.cargar = true;		
+		self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE is_guia = "true" and is_padre = "false" and guia_id = "false"  ORDER BY id DESC').then(
 
               function(eventos: {rows}){
                 console.log('eventos loaded - OK');
@@ -98,30 +73,21 @@ export class CalendarioPage {
               err =>{
                 console.log('error after create BD');
               }
-            );                                            
-          },
-           function(e){
-               console.log('Error en calendario');
-               console.log(e);
-           }
-        );
-    }
+            ); 
+	}
 
-    ionViewDidLoad() {
-        console.log('ionViewDidLoad CalendarioPage');
-    }
     onViewTitleChanged(title) {
         this.viewTitle = title;
     }
 
     onEventSelected(evt) {
         
-        this.navCtrl.push(EventoPage, {evento: evt, permisos:this.usuario.tipo_usuario});
+        //this.navCtrl.push(EventoPage, {evento: evt, permisos:this.usuario.tipo_usuario});
     }
 
     refresh(){
-        var self = this;
-        self.initCalendario();
+        //var self = this;
+        //self.initCalendario();
         /*var self = this;
         this.getDatos.borrarTablas(["gastostoursline", "eventos"]).then(
             res=>{
@@ -132,6 +98,5 @@ export class CalendarioPage {
             }
         );*/
     }
-
 
 }

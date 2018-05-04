@@ -13,6 +13,7 @@ import { DetallesReservaPage } from '../../pages/detalles-reserva/detalles-reser
 import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 import { LoginPage } from '../../pages/login/login';
 import { PerfilPage } from '../../pages/perfil/perfil';
+import { SolicitarPage } from '../../pages/solicitar/solicitar';
 
 
 @Component({
@@ -44,6 +45,7 @@ export class PanelPage {
     } else if("is_guia" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
+        { title: 'Solicitar Servicio', component: SolicitarPage },
         { title: 'Mi Perfil', component: PerfilPage },
         //{ title: 'Acerca de', component: AcercaPage },
         { title: 'Salir', component: 'salir' },
@@ -98,7 +100,7 @@ export class PanelPage {
       ];
     }
     
-
+ 
   }
 
   openPage(page) {

@@ -16,8 +16,9 @@ import { EventoPage } from '../pages/evento/evento';
 import { GatosTourPage } from '../pages/gatos-tour/gatos-tour';
 import { PanelPage } from '../pages/panel/panel';
 import { PerfilPage } from '../pages/perfil/perfil';
-
 import { GastosRelPage } from '../pages/gastos-rel/gastos-rel';
+
+import { SolicitarPage } from '../pages/solicitar/solicitar';
 
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -49,7 +50,8 @@ import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
     PanelPage,
     PerfilPage,
     GastosRelPage,
-    AutocompleteComponent
+    AutocompleteComponent,
+    SolicitarPage
   ],
   imports: [
     BrowserModule,
@@ -72,7 +74,8 @@ import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
     GatosTourPage,
     PanelPage,
     PerfilPage,
-    GastosRelPage
+    GastosRelPage,
+    SolicitarPage
   ],
   providers: [ 
     File,   

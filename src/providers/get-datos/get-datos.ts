@@ -15,9 +15,9 @@ export class GetDatosProvider {
 
 	private db: SQLiteObject = null;
 
-	//private url = '/api';
+	private url = '/api';
 	//private url = 'http://odoo.devoptions.mx';     //"http://odoo.devoptions.mx"
-	private url = 'http://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
+	//private url = 'http://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
 
 	public usr = null;	
 	private eventoHijo = [];
@@ -236,8 +236,8 @@ export class GetDatosProvider {
 		var promise = new Promise(function (resolve, reject) {
             
             //console.log('-----------------entro3 ---------------');
-            console.log('-----------------cargarGastosCiudad ---------------');
-            console.log(self.gastos_ciudad);
+            //console.log('-----------------cargarGastosCiudad ---------------');
+            //console.log(self.gastos_ciudad);
             self.read('rusia.gastos.ciudad', self.gastos_ciudad, self.tablas.Tbl_gastos_ciudad_odoo)
 	  		.then(function(gastos) {
 	  		
@@ -269,7 +269,7 @@ export class GetDatosProvider {
 				    	gastos[key].Total_Euros+ "', '"+gastos[key].display_name +"',  '"+gastos[key].dia+"', '"+JSON.stringify(gastos[key].evento_id)+ "');";
 
 
-				    console.log(registro);
+				    //console.log(registro);
 				    sql.push(registro);
 				});
 
@@ -526,98 +526,52 @@ export class GetDatosProvider {
 	}
 
 
-	public cargarCalendario(borrar){
+	public async cargarCalendario(borrar){
 
 		var self = this;
-		var promise = new Promise(function (resolve, reject) {                      
-		      		       
-			//console.log('tipo suario :' + self.usr.tipo_usuario); 
-			//console.log((self.usr.tipo_usuario + '')); 
-			var dominioUsers = null;
-			var dominio; 
-			if(self.usr.tipo_usuario + '' == 'is_root'){
-				dominio = [['is_padre', '=' , false]];
-			}else if(self.usr.tipo_usuario + '' == 'is_client'){
-				dominio = [['is_padre', '=' , false],["Datos_Cliente_id", "=", self.usr.id]];
-				//dominio = [["Datos_Cliente_id", "=", self.usr.id]];
-			}else if(self.usr.tipo_usuario + '' == 'is_guia'){
-				
-				dominio = [['is_padre', '=' , false], ["guia_id", "=", self.usr.id]];
-				dominioUsers = [["is_client", "=", false], ["is_rep", "=", false]];
 
-			}else if(self.usr.tipo_usuario + '' == 'is_chofer'){
-				dominio = [['is_padre', '=' , false], ["chofer_id", "=", self.usr.id]];
-				//dominio = [["is_padre", "=", 'true']];
+		var dominioUsers = null;
+		var dominio; 
+		var dominioSol = null;
+		if(self.usr.tipo_usuario + '' == 'is_root'){
+			dominio = [['is_padre', '=' , false]];
+		}else if(self.usr.tipo_usuario + '' == 'is_client'){
+			dominio = [['is_padre', '=' , false],["Datos_Cliente_id", "=", self.usr.id]];
+			//dominio = [["Datos_Cliente_id", "=", self.usr.id]];
+		}else if(self.usr.tipo_usuario + '' == 'is_guia'){
+			
+			dominio = [['is_padre', '=' , false], ["guia_id", "=", self.usr.id]];
+			dominioUsers = [["is_client", "=", false], ["is_rep", "=", false]];
+			dominioSol = [
+			["is_padre", "=", false],
+			["is_guia", "=", true],
+			["guia_id", "=", false]];
+
+		}else if(self.usr.tipo_usuario + '' == 'is_chofer'){
+			dominio = [['is_padre', '=' , false], ["chofer_id", "=", self.usr.id]];
+			//dominio = [["is_padre", "=", 'true']];
+		}
+
+		try{
+
+			await self.cargarEventos(dominio,borrar);
+			await self.cargarEventos(dominioSol,borrar);
+			await self.cargarEventos(null,borrar);
+			await self.cargarGastos(false);
+			await self.cargarAttachment(false);
+			await self.cargarGastosConceptos();
+
+			if(dominioUsers != null){
+
+				await self.cargarUsuario(dominioUsers);
 			}
 
-			console.log('-----------------eventos hijos ---------------');
-			self.cargarEventos(dominio,borrar).then(
-				res=>{
+			return self.usr;
 
-					console.log('-----------------eventos padre ---------------');
-					self.cargarEventos(null,borrar).then(
-						res=>{
+		}catch(e){
 
-							//console.log('-----------------entro1 ---------------');
-				        	self.cargarGastos(false).then(
-				        		res=>{
-
-				        			//console.log('-----------------entro2 ---------------');
-				        			self.cargarAttachment(false).then(
-						        		res=>{
-						        			
-						        			self.cargarGastosConceptos().then(
-								        		res=>{
-								        			
-								        			if(dominioUsers != null){
-
-								        				self.cargarUsuario(dominioUsers).then(
-											        		res=>{
-											        			
-										        				resolve(self.usr);													        															        			
-											        		},
-											        		fail=>{
-
-											        			reject();
-											        		}
-											        	);
-								        			}else{
-
-								        				resolve(self.usr);	
-								        			}
-								        			
-								        		},
-								        		fail=>{
-
-								        			reject();
-								        		}
-								        	);
-						        		},
-						        		fail=>{
-
-						        			reject();
-						        		}
-						        	);
-				        		},
-				        		fail=>{
-
-				        			reject();
-				        		}
-				        	);
-						},
-						fail=>{
-							resolve(self.usr);	
-						}
-					);
-				},
-				fail=>{
-					resolve(self.usr);	
-				}
-			);	      		
-
-        });
-
-        return promise;	
+			return self.usr;
+		}
 
 	}
 
