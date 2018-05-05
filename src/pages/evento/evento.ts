@@ -548,7 +548,7 @@ export class EventoPage {
     private abrirReserva(){
     	//console.log('entro');
     	// 
-    	this.navCtrl.push(DetallesReservaPage, {evento:this.evento, permisos:this.permisos});
+    	this.navCtrl.push(DetallesReservaPage, {evento:this.evento, permisos:this.permisos, padre:false});
     }
 
     private presentToast() {

@@ -16,6 +16,14 @@
 
 <ion-content>
 
+ <div *ngIf="cargar" style="text-align: center">    
+        <ion-spinner name="circles"></ion-spinner><br>
+        <b>Cargando...</b>
+    </div>
+
+<div *ngIf="!cargar">
+    
+	<h3>Mi perfil</h3>
 	<ion-grid >                 
 	    
 	    <ion-row align-items-center>  
@@ -81,52 +89,70 @@
 	           <ion-input name="user.fax" readonly type="text" [(ngModel)]="user.fax"></ion-input>
 	        </ion-col>       
 	    </ion-row> 
-<!--
-	    <ion-row align-items-center>  
-	        <ion-col col-8>
-	            <b></b>
-	        </ion-col>
-	        <ion-col col-8>
-	           <ion-input name="user." readonly type="text" [(ngModel)]="user."></ion-input>
-	        </ion-col>       
-	    </ion-row> 
 
-	    <ion-row align-items-center>  
-	        <ion-col col-8>
-	            <b></b>
-	        </ion-col>
-	        <ion-col col-8>
-	           <ion-input name="user." readonly type="text" [(ngModel)]="user."></ion-input>
-	        </ion-col>       
-	    </ion-row> 
-
-	    <ion-row align-items-center>  
-	        <ion-col col-8>
-	            <b></b>
-	        </ion-col>
-	        <ion-col col-8>
-	           <ion-input name="user." readonly type="text" [(ngModel)]="user."></ion-input>
-	        </ion-col>       
-	    </ion-row> 
-
-	    <ion-row align-items-center>  
-	        <ion-col col-8>
-	            <b></b>
-	        </ion-col>
-	        <ion-col col-8>
-	           <ion-input name="user." readonly type="text" [(ngModel)]="user."></ion-input>
-	        </ion-col>       
-	    </ion-row> 
-
-	    <ion-row align-items-center>  
-	        <ion-col col-8>
-	            <b></b>
-	        </ion-col>
-	        <ion-col col-8>
-	           <ion-input name="user." readonly type="text" [(ngModel)]="user."></ion-input>
-	        </ion-col>       
-	    </ion-row> 
--->
 	</ion-grid>
+
+	<div *ngIf="mostrar">			
+		<h3>Historial Nomina</h3>
+		<ion-grid *ngFor="let gasto of gastostoursline_ids; let i = index" (click)="abrir_reserva(reserva)">                 
+	        
+	        <ion-row align-items-center>  
+	            <ion-col col-4>
+	                <b>Concepto</b>
+	            </ion-col>
+	            <ion-col col-8>
+	                {{gasto.concepto_gasto_id[1]}}         
+	            </ion-col>       
+	        </ion-row>
+
+	        <ion-row align-items-center>  
+	            <ion-col col-4>
+	                <b>Total</b>
+	            </ion-col>
+	            <ion-col col-8>
+	                {{gasto.Total}}         
+	            </ion-col>       
+	        </ion-row>    
+
+	        <ion-row align-items-center>  
+	            <ion-col col-4>
+	                <b>Usuario</b>
+	            </ion-col>
+	            <ion-col col-8>
+	                {{gasto.usuario_id[1]}}         
+	            </ion-col>       
+	        </ion-row> 
+
+	        <ion-row align-items-center>  
+	            <ion-col col-4>
+	                <b>Evento Padre</b>
+	            </ion-col>
+	            <ion-col col-8>
+	                {{gasto.evento_padre}}         
+	            </ion-col>       
+	        </ion-row> 
+
+	        <ion-row align-items-center>  
+	            <ion-col col-4>
+	                <b>Fecha</b>
+	            </ion-col>
+	            <ion-col col-8>
+	                {{gasto.fecha}}         
+	            </ion-col>       
+	        </ion-row> 
+
+	        <ion-row align-items-center class="borde">  
+	            <ion-col col-4>
+	                <b>Pagado</b>
+	            </ion-col>
+	            <ion-col col-8>
+	                {{gasto.pagado}}         
+	            </ion-col>       
+	        </ion-row> 
+	        
+	    </ion-grid>
+	</div>
+
+</div>
 
 </ion-content>

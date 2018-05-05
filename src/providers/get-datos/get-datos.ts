@@ -15,9 +15,9 @@ export class GetDatosProvider {
 
 	private db: SQLiteObject = null;
 
-	private url = '/api';
+	//private url = '/api';
 	//private url = 'http://odoo.devoptions.mx';     //"http://odoo.devoptions.mx"
-	//private url = 'http://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
+	private url = 'http://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
 
 	public usr = null;	
 	private eventoHijo = [];
@@ -357,7 +357,9 @@ export class GetDatosProvider {
 	private parseDato(dato){
 		//console.log(typeof dato)
 		//console.log((dato == 'false'));
-		return ((dato == 'false' || dato == false)?"":dato);
+
+		//dato = 
+		return ((dato == 'false' || dato == false)?"":dato.replace("'", "''"));
 	}
 
 	//private cargarGastosEvento
@@ -367,7 +369,7 @@ export class GetDatosProvider {
 		var self = this;
 		//self.eventoHijo = [];
 		var promise = new Promise(function (resolve, reject) {
-			console.log('resolvio eventos');
+			//console.log('resolvio eventos');
   			//console.log(JSON.stringify(eventos));
   			var sql = [];
   			if(borrar == true){
@@ -534,33 +536,84 @@ export class GetDatosProvider {
 		var dominioUsers = null;
 		var dominio; 
 		var dominioSol = null;
-		if(self.usr.tipo_usuario + '' == 'is_root'){
-			dominio = [['is_padre', '=' , false]];
-		}else if(self.usr.tipo_usuario + '' == 'is_client'){
-			dominio = [['is_padre', '=' , false],["Datos_Cliente_id", "=", self.usr.id]];
-			//dominio = [["Datos_Cliente_id", "=", self.usr.id]];
-		}else if(self.usr.tipo_usuario + '' == 'is_guia'){
-			
-			dominio = [['is_padre', '=' , false], ["guia_id", "=", self.usr.id]];
-			dominioUsers = [["is_client", "=", false], ["is_rep", "=", false]];
-			dominioSol = [
-			["is_padre", "=", false],
-			["is_guia", "=", true],
-			["guia_id", "=", false]];
-
-		}else if(self.usr.tipo_usuario + '' == 'is_chofer'){
-			dominio = [['is_padre', '=' , false], ["chofer_id", "=", self.usr.id]];
-			//dominio = [["is_padre", "=", 'true']];
-		}
-
+		
 		try{
 
-			await self.cargarEventos(dominio,borrar);
-			await self.cargarEventos(dominioSol,borrar);//-> no lo carga el usuario
-			await self.cargarEventos(null,borrar);
-			await self.cargarGastos(false);
-			await self.cargarAttachment(false);
-			await self.cargarGastosConceptos();//-> no lo carga el usuario
+			if(self.usr.tipo_usuario + '' == 'is_root'){
+				dominio = [['is_padre', '=' , false]];
+				dominioSol = [
+				["is_padre", "=", false],
+				["is_guia", "=", true],
+				["guia_id", "=", false]];
+				console.log('----------  await self.cargarEventos(dominio,borrar)');
+				await self.cargarEventos(dominio,borrar);
+				console.log('----------  await self.cargarEventos(dominioSol,borrar);');
+				await self.cargarEventos(dominioSol,false);//-> no lo carga el usuario
+				console.log('----------  await self.cargarEventos(null,borrar);');
+				await self.cargarEventos(null,false);
+				console.log('----------  await self.cargarGastos(false);;');
+				await self.cargarGastos(false);
+				console.log('----------  await self.cargarAttachment(false);');
+				await self.cargarAttachment(false);
+				console.log('----------  await self.cargarGastosConceptos();');
+				await self.cargarGastosConceptos();//-> no lo carga el usuario
+				console.log('----------  await self.cargarSolicitudes(false);');
+				await self.cargarSolicitudes(false); //solo lo carga el root
+
+			}else if(self.usr.tipo_usuario + '' == 'is_client'){
+				dominio = [['is_padre', '=' , false],["Datos_Cliente_id", "=", self.usr.id]];
+
+				console.log('----------  await self.cargarEventos(dominio,borrar)');
+				await self.cargarEventos(dominio,borrar);				
+				console.log('----------  await self.cargarEventos(null,borrar);');
+				await self.cargarEventos(null,borrar);
+				console.log('----------  await self.cargarGastos(false);;');
+				await self.cargarGastos(false);
+				console.log('----------  await self.cargarAttachment(false);');
+				await self.cargarAttachment(false);
+
+			}else if(self.usr.tipo_usuario + '' == 'is_guia'){
+				
+				dominio = [['is_padre', '=' , false], ["guia_id", "=", self.usr.id]];
+				dominioUsers = [["is_client", "=", false], ["is_rep", "=", false]];
+				dominioSol = [
+				["is_padre", "=", false],
+				["is_guia", "=", true],
+				["guia_id", "=", false]];
+				
+				console.log('----------  Cargar los eventos asignados');
+				await self.cargarEventos(dominio,borrar);
+				console.log('----------  Cargar los eventos para la tabla solicitudes');
+				await self.cargarEventos(dominioSol, false);
+				console.log('----------  Cargar los eventos padres');
+				await self.cargarEventos(null, false);
+				console.log('----------  await self.cargarGastos(false);;');
+				await self.cargarGastos(false);
+				console.log('----------  await self.cargarAttachment(false);');
+				await self.cargarAttachment(false);
+				console.log('----------  await self.cargarGastosConceptos();');
+				await self.cargarGastosConceptos();//-> no lo carga el usuario
+
+			}else if(self.usr.tipo_usuario + '' == 'is_chofer'){
+				dominio = [['is_padre', '=' , false], ["chofer_id", "=", self.usr.id]];
+				dominioUsers = [["is_client", "=", false], ["is_rep", "=", false]];
+				dominioSol = [
+				["is_padre", "=", false],
+				["is_guia", "=", true],
+				["guia_id", "=", false]];				
+				console.log('----------  await self.cargarEventos(dominio,borrar)');
+				await self.cargarEventos(dominio,borrar);
+				console.log('----------  await self.cargarEventos(dominioSol,borrar);');
+				await self.cargarEventos(dominioSol,false);//-> no lo carga el usuario
+				console.log('----------  await self.cargarEventos(null,borrar);');
+				await self.cargarEventos(null,false);
+				console.log('----------  await self.cargarGastos(false);;');
+				await self.cargarGastos(false);
+				console.log('----------  await self.cargarAttachment(false);');
+				await self.cargarAttachment(false);
+				console.log('----------  await self.cargarGastosConceptos();');
+				await self.cargarGastosConceptos();//-> no lo carga el usuario
+			}			
 
 			if(dominioUsers != null){
 
@@ -889,6 +942,63 @@ export class GetDatosProvider {
 
 	}
 
+	public cargarSolicitudes(borrar){
+
+		var self = this;
+
+		console.log('-------------------cargando solicitudes');
+		var promise = new Promise(function (resolve, reject) {
+
+			self.search_read('rusia.solicitud.eventos', [["procesado", "!=", true]], self.tablas.Tbl_solicitud_odoo).then(
+		 
+		    	function (solicitud) {
+
+		    		//console.log(user[0]);
+		    		var sql = [];
+
+		    		if(borrar == true){
+			  			sql.push('DELETE FROM solicitud;');
+		  			}	
+		    		Object.keys(solicitud).forEach(key=> {
+
+
+			  			var registro = "INSERT OR IGNORE INTO solicitud "+
+					    	"(id, usuario_id, name, servicio_id, tipo, salario, fecha, observaciones_solicitud, ciudad_id) VALUES (" + solicitud[key].id +	", '"+JSON.stringify(solicitud[key].usuario_id)+"', '"+
+					    	JSON.stringify(solicitud[key].name)+"', '"+JSON.stringify(solicitud[key].servicio_id)+"', '"+solicitud[key].tipo+"', '"+solicitud[key].salario+"', '"+
+					    	solicitud[key].fecha+"', '"+solicitud[key].observaciones_solicitud+"' , '"+JSON.stringify(solicitud[key].ciudad_id)+"');"
+
+
+					    //console.log(registro);
+					    sql.push(registro);
+					});
+
+			        self.insertBatch(sql)
+				        .then(res => {
+				        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+				        	resolve();
+								
+						}).catch(e => {
+				  		console.log('Error en insertBatch DB');
+				  		console.log(e.message);
+				  		reject(e) 
+				  	});
+
+
+		    	//resolve();
+		    	
+		        },
+		    	function (){
+		    		console.log('Error get usuarios');
+		    		reject();
+		    	}
+			)
+		});
+
+		return promise;
+		
+
+	}
+
 	private crearEsquema(conexion){
 
 		var self = this;
@@ -935,7 +1045,7 @@ export class GetDatosProvider {
 
 					        self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
 					      		//
-					      		var sql = [self.tablas.Tbl_gastos_ciudad, self.tablas.Tbl_gastostours, self.tablas.Tbl_eventos, self.tablas.Tbl_gastos, self.tablas.Tbl_user, self.tablas.Tbl_attachment];
+					      		var sql = [self.tablas.Tbl_solicitud, self.tablas.Tbl_gastos_ciudad, self.tablas.Tbl_gastostours, self.tablas.Tbl_eventos, self.tablas.Tbl_gastos, self.tablas.Tbl_user, self.tablas.Tbl_attachment];
 
 						      	db.sqlBatch(sql)
 						      	.then(

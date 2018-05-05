@@ -16,7 +16,7 @@ export class LoginPage {
 
    	//guia
     //conexion = {usuario: 'joselugar8@hotmail.com', bd: 'rusia3', pwd: '123456'}; //pruebas
-    conexion = {usuario: 'cupabanoscar@gmail.com', bd: 'rusia3', pwd: '123456'};//produccion 
+    //conexion = {usuario: 'cupabanoscar@gmail.com', bd: 'rusia3', pwd: '123456'};//produccion 
 
     //admin
     //conexion = {usuario: '', bd: 'rusia3', pwd: ''};
@@ -24,12 +24,12 @@ export class LoginPage {
 
     //conexion = {usuario: 'reservas@guiarus.com', bd: 'rusia3', pwd: '123456'};//produccion 
     //cliente
-    //conexion = {usuario: 'ceballosdavid@gmail.com', bd: 'rusia3', pwd: '123456'}; //   pruebas
+    //conexion = {usuario: 'abrilgalvez5@yahoo.com.mx', bd: 'rusia3', pwd: '123456'}; //   pruebas
     
     //chofer
 
     //conexion = {usuario: 'chofersanpetersburgo@gmail.com', bd: 'rusia3', pwd: '123456'};  //  prd
-    //conexion = {usuario: '', bd: 'rusia3', pwd: ''};
+    conexion = {usuario: '', bd: 'rusia3', pwd: ''};
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getData:GetDatosProvider) {
 
 		var operacion = this.navParams.get('operacion');

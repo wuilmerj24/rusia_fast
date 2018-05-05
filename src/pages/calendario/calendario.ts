@@ -33,18 +33,20 @@ export class CalendarioPage {
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 
-        this.initCalendario();
+        this.initCalendario(false);
     }
 
-    private initCalendario(){
+    private initCalendario(borrar){
         var self = this;
         self.cargar = true;
-        this.getDatos.cargarCalendario(false).then(          
+        this.getDatos.cargarCalendario(borrar).then(          
           function(usr:{tipo_usuario:'', id:0, name:''}) {
             
             self.usuario = usr;
             var where;
             if(usr.tipo_usuario + '' == 'is_root'){
+
+                where = 'is_padre = "false"';
                 
             }else if(usr.tipo_usuario + '' == 'is_client'){
                 
@@ -78,6 +80,7 @@ export class CalendarioPage {
 
                     var tmp_guia_id = JSON.parse(evento.guia_id);
                     var tmp_chofer_id = JSON.parse(evento.chofer_id);
+                    var tmp_servicio_id = JSON.parse(evento.servicio_id);
 
                     //console.log(eventos.rows.item(i).guia_id);
                     
@@ -88,6 +91,7 @@ export class CalendarioPage {
                         title:evento.name,
                         guia:tmp_guia_id[1],
                         chofer:tmp_chofer_id[1],
+                        tipo_servicio:tmp_servicio_id[1],
                         allDay:false,
                         id:eventos.rows.item(i).id
                     });
@@ -121,7 +125,7 @@ export class CalendarioPage {
 
     refresh(){
         var self = this;
-        self.initCalendario();
+        self.initCalendario(true);
         /*var self = this;
         this.getDatos.borrarTablas(["gastostoursline", "eventos"]).then(
             res=>{

@@ -1,0 +1,121 @@
+<!--
+  Generated template for the ReservasPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar color="primary">
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Solicitudes recibidas</ion-title>
+         <!--ion-buttons end>
+            <button ion-button icon-only (click)="refresh()">
+                    <ion-icon ios="ios-refresh" md="md-refresh"></ion-icon>
+            </button>
+             <button *ngIf="add" ion-button icon-only (click)="addEvent()">
+                    <ion-icon name="add"></ion-icon>
+            </button>
+        </ion-buttons-->
+    </ion-navbar>   
+</ion-header>
+
+
+<ion-content>
+
+    <div *ngIf="cargar" style="text-align: center">    
+        <ion-spinner name="circles"></ion-spinner><br>
+        <b>Guardando...</b>
+    </div>
+
+    <div *ngIf="!cargar">
+
+    	<ion-grid *ngFor="let solicitud of solicitudes; let i = index" (click)="abrir_reserva(reserva)">                             
+            <ion-row>  
+                <ion-col col-6 align-self-center>
+                        <button ion-button color="primary" type="button" (click)="crearSolicitud(solicitud)" >Aceptar</button>
+                </ion-col>
+                <ion-col col-6 align-self-center>
+                        <button ion-button color="danger" type="button" (click)="borrarSolicitud(solicitud)" >Rechazar</button>
+                </ion-col>
+            </ion-row> 
+
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Solicitante</b>
+                </ion-col>
+                <ion-col col-8>
+                    {{solicitud.usuario_id[1]}}         
+                </ion-col>       
+            </ion-row>
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Evento</b>
+                </ion-col>
+                <ion-col col-8>
+                    {{solicitud.name[1]}}         
+                </ion-col>       
+            </ion-row>
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Servicio</b>
+                </ion-col>
+                <ion-col col-8>
+                    {{solicitud.servicio_id[1]}}         
+                </ion-col>       
+            </ion-row>
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Tipo</b>
+                </ion-col>
+                <ion-col col-8>
+                    {{solicitud.tipo}}         
+                </ion-col>       
+            </ion-row>
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Salario</b>
+                </ion-col>
+                <ion-col col-8>
+                    {{solicitud.salario}}         
+                </ion-col>       
+            </ion-row>
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Fecha</b>
+                </ion-col>
+                <ion-col col-8>
+                    {{solicitud.fecha}}         
+                </ion-col>       
+            </ion-row>
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Observaciones</b>
+                </ion-col>
+                <ion-col col-8>
+                    {{solicitud.observaciones_solicitud}}         
+                </ion-col>       
+            </ion-row>
+            <ion-row align-items-center  class="borde">  
+                <ion-col col-4>
+                    <b>Ciudad</b>
+                </ion-col>
+                <ion-col col-8>
+                    {{solicitud.ciudad_id[1]}}         
+                </ion-col>       
+            </ion-row>
+                 
+            <!--ion-row align-items-center class="borde">  
+                <ion-col col-6>
+                    <b>{{reserva.cliente_nombre}}</b>
+                </ion-col>
+                <ion-col col-6>
+                    {{reserva.representante_nombre}}         
+                </ion-col>       
+            </ion-row-->    
+            
+        </ion-grid>
+
+    </div>
+</ion-content>

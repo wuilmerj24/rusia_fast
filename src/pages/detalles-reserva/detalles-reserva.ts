@@ -85,7 +85,17 @@ export class DetallesReservaPage {
 
 	constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 
-		this.evento_hijo = this.navParams.get('evento');
+    var padre = this.navParams.get('padre');
+    if(padre){
+
+      this.evento_hijo = this.navParams.get('evento').id;
+
+    }else{
+
+      this.evento_hijo = this.navParams.get('evento').evento_id[0];
+    }
+
+		
 
     this.permisos = this.navParams.get('permisos');
     //console.log('permisos:'+ this.permisos);
@@ -113,7 +123,7 @@ export class DetallesReservaPage {
 
         self.cargar = true;
 
-        self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE id = ' + self.evento_hijo.evento_id[0]).then(
+        self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE id = ' + self.evento_hijo).then(
             function(eventos: {rows}){
 
                 /*var tmp_evento_id = JSON.parse(eventos.rows.item(0).evento_id);
@@ -175,8 +185,8 @@ export class DetallesReservaPage {
                     self.evento.hotel_id = tmp_hotel_id;
                     self.evento.ciudad_id = tmp_ciudad_id;*/
 
-                    console.log('SELECT * FROM attachment WHERE cliente_id = "' + self.evento_hijo.cliente_id[0] +'"');
-                    self.getDatos.ejecutarSQL('SELECT * FROM attachment WHERE cliente_id = "' + self.evento_hijo.cliente_id[0] +'"').then(
+                    console.log('SELECT * FROM attachment WHERE cliente_id = "' + self.reserva.cliente_id[0] +'"');
+                    self.getDatos.ejecutarSQL('SELECT * FROM attachment WHERE cliente_id = "' + self.reserva.cliente_id[0] +'"').then(
                         function(attachment: {rows}){
 
                                                          

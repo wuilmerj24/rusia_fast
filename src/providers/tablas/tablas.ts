@@ -9,6 +9,29 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class TablasProvider {
 
+	private tbl_solicitud_odoo =  [
+	"usuario_id", 
+	"name", 
+	"servicio_id", 
+	"tipo", 
+	"salario", 
+	"fecha", 
+	"observaciones_solicitud", 
+	"ciudad_id"];
+
+	private tbl_solicitud = "CREATE TABLE IF NOT EXISTS solicitud("+
+	" id INTEGER PRIMARY KEY,"+
+	" usuario_id VARCHAR(255),"+
+	" name VARCHAR(255),"+	
+	" servicio_id VARCHAR(255),"+	
+	" tipo VARCHAR(20),"+
+	" salario VARCHAR(10),"+
+	" fecha VARCHAR(20), "+
+	" observaciones_solicitud TEXT,"+
+	" ciudad_id VARCHAR(255));";
+
+	
+
 	private tbl_gastos = "CREATE TABLE IF NOT EXISTS gastostoursline("+
 	" id INTEGER PRIMARY KEY,"+
 	" concepto_gasto_id VARCHAR(255),"+
@@ -279,5 +302,13 @@ export class TablasProvider {
   	public get Tbl_attachment() : string {
   		return this.tbl_attachment;
   	}
+
+  	public get Tbl_solicitud() : string {
+		return this.tbl_solicitud;
+	}
+
+	public get Tbl_solicitud_odoo() : string[] {
+		return this.tbl_solicitud_odoo;
+	}
 
 }

@@ -1,3 +1,7 @@
+
+//------------------------------------//
+//--KEY TOOL PASSWORD: jose.123 -<rusia-fas-key.jks>
+//------------------------------------//
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -20,6 +24,8 @@ import { GastosRelPage } from '../pages/gastos-rel/gastos-rel';
 
 import { SolicitarPage } from '../pages/solicitar/solicitar';
 import { SolicitarDetallePage } from '../pages/solicitar-detalle/solicitar-detalle';
+import { SolicitarAdminPage } from '../pages/solicitar-admin/solicitar-admin';
+import { SolicitarNuevaPage } from '../pages/solicitar-nueva/solicitar-nueva'; //-> borrar si no la piden
 
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -53,7 +59,9 @@ import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
     GastosRelPage,
     AutocompleteComponent,
     SolicitarPage,
-    SolicitarDetallePage
+    SolicitarDetallePage,
+    SolicitarAdminPage,
+    SolicitarNuevaPage
   ],
   imports: [
     BrowserModule,
@@ -78,7 +86,9 @@ import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
     PerfilPage,
     GastosRelPage,
     SolicitarPage,
-    SolicitarDetallePage
+    SolicitarDetallePage,
+    SolicitarAdminPage,
+    SolicitarNuevaPage
   ],
   providers: [ 
     File,   

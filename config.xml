@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.inso.guiarus" version="1.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.inso.guiarus" version="1.0.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>GuiaRus</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="jose1914luis@gmail.com" href="https://www.linkedin.com/in/jose1914luis/">Jose Luis Garcia Hernandez</author>
-    <content original-src="index.html" src="http://192.168.1.197:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -101,8 +101,8 @@
     <plugin name="cordova-android-support-gradle-release" spec="^1.4.1">
         <variable name="ANDROID_SUPPORT_VERSION" value="27.+" />
     </plugin>
-    <allow-navigation href="http://192.168.1.197:8100" />
     <engine name="browser" spec="5.0.3" />
     <engine name="android" spec="7.0.0" />
     <engine name="ios" spec="4.5.4" />
+    <allow-navigation href="http://192.168.1.197:8100" />
 </widget>

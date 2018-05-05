@@ -14,6 +14,7 @@ import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 import { LoginPage } from '../../pages/login/login';
 import { PerfilPage } from '../../pages/perfil/perfil';
 import { SolicitarPage } from '../../pages/solicitar/solicitar';
+import { SolicitarAdminPage } from '../../pages/solicitar-admin/solicitar-admin';
 
 
 @Component({
@@ -26,13 +27,16 @@ export class PanelPage {
 
   rootPage:any = CalendarioPage;
 
-  pages: Array<{title: string, component: any}>;
+  pages: any; //Array<{title: string, component: any}>
 
   constructor(public platform: Platform, public navParams: NavParams) {
 
     var tipo_usuario = this.navParams.get('usr');
 
+    this.pages = []; 
+    console.log('-----------------------------------------------------------------');
     console.log(tipo_usuario);
+    console.log('-----------------------------------------------------------------');
 
     // used for an example of ngFor and navigation
     if("is_chofer" == tipo_usuario){
@@ -67,10 +71,11 @@ export class PanelPage {
     }else if("is_root" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
-        { title: 'Chofer adjudicado', component: ChoferPage },
-        { title: 'Guia adjudicado',  component:GuiaPage },        
+        //{ title: 'Chofer adjudicado', component: ChoferPage },
+        //{ title: 'Guia adjudicado',  component:GuiaPage },        
+        //{ title: 'Reservas', component: ReservasPage },
         { title: 'Reservas', component: ReservasPage },
-        { title: 'Ganancias', component: GananciasPage },
+        { title: 'Solicitudes recibidas', component: SolicitarAdminPage },
         { title: 'Configuración', component: ConfiPage },
         { title: 'Gastos Temporal',  component:GatosTourPage },
         { title: 'Mi Perfil', component: PerfilPage },

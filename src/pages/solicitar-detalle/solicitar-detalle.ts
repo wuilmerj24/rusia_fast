@@ -122,7 +122,7 @@ export class SolicitarDetallePage {
 	private abrirReserva(){
     	//console.log('entro');
     	// 
-    	this.navCtrl.push(DetallesReservaPage, {evento:this.evento, permisos:'is_guia'});
+    	this.navCtrl.push(DetallesReservaPage, {evento:this.evento, permisos:'is_guia', padre:false});
     }
 
     private guardar(){
@@ -158,17 +158,38 @@ export class SolicitarDetallePage {
 
 		var self = this;
     	self.cargar = true;
-    	self.getDatos.call('rusia.eventos', 'get_solicitar_servicio_guia', [self.evento.id]).then(
-			res=>{
-				console.log('save event ok');
-				self.presentToast();
-				self.cargar = false;
-			},
-			fail=>{
-				console.log('error saving event');
-				self.cargar = false;
-			} 
+
+    	
+    	self.getDatos.ejecutarSQL("SELECT * FROM user WHERE usuario IS NOT NULL").then(
+    		(usrs: {rows})=>{
+
+    			var usr = usrs.rows.item(0);
+    			var metodo = '';
+    			if(usr.tipo_usuario = "is_guia"){
+    				metodo = 'get_solicitar_servicio_guia';
+
+    			}else if(usr.tipo_usuario = "is_chofer"){
+    				metodo = 'get_solicitar_servicio_chofer';
+    			}    			
+
+    			self.getDatos.call('rusia.eventos', metodo, [self.evento.id]).then(
+					res=>{
+						console.log('save event ok');
+						self.presentToast();
+						self.cargar = false;
+					},
+					fail=>{
+						console.log('error saving event');
+						self.cargar = false;
+					} 
+				);
+
+    		},
+    		fails=>{
+
+    		}
 		);
+    	
     }
 
     private presentToast() {
