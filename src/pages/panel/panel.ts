@@ -42,8 +42,8 @@ export class PanelPage {
     if("is_chofer" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
-        { title: 'Mi Perfil', component: PerfilPage },
-        //{ title: 'Acerca de', component: AcercaPage },
+        { title: 'Solicitar Servicio', component: SolicitarPage },
+        { title: 'Mi Perfil', component: PerfilPage },        
         { title: 'Salir', component: 'salir' },
       ];
     } else if("is_guia" == tipo_usuario){

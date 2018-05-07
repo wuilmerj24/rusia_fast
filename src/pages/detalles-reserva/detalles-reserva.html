@@ -15,37 +15,6 @@
     </ion-buttons-->
   </ion-navbar>
 
-    
-<!--
-    <ion-toolbar>
-        <ion-row class="filters">
-            <ion-col class="col-with-arrow" (click)="slidePrev()" no-padding col-1>
-                <ion-icon *ngIf="showLeftButton" name="ios-arrow-back"></ion-icon>
-            </ion-col>
-            <ion-col no-padding col-10>
-                <ion-slides (ionSlideDidChange)="slideChanged()" slidesPerView="3">
-                    <ion-slide (click)="filterData(category.id)" *ngFor="let category of categories">
-                        <p [class.selected]="selectedCategory?.id === category.id">{{ category.name }}</p>
-                    </ion-slide>
-                </ion-slides>
-            </ion-col>
-            <ion-col class="col-with-arrow" (click)="slideNext()" no-padding col-1>
-                <ion-icon *ngIf="showRightButton" name="ios-arrow-forward"></ion-icon>
-            </ion-col>
-        </ion-row>
-
-    </ion-toolbar>
-    <ion-segment *ngIf="ver_segmento">
-        <ion-segment-button  value="camera" icon-start (click)="editar()">
-                            <ion-icon ios="ios-create" md="md-create"></ion-icon>
-            Editar
-        </ion-segment-button>
-        <ion-segment-button value="bookmark" icon-start (click)="guardar(null)">
-                            <ion-icon ios="ios-cloud-upload" md="md-cloud-upload"></ion-icon>
-            Guardar
-        </ion-segment-button>
-    </ion-segment>
--->
 </ion-header>
 
 
@@ -89,181 +58,6 @@
             </ion-col>       
         </ion-row> 
 
-           
-<!--
-        <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Tipo de servicio</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva."  [readonly]="!editable" type="text" [(ngModel)]="reserva."></ion-input>
-            </ion-col>       
-        </ion-row>    
-
-
-        <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Transporte</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.Transporte"  [readonly]="!editable" type="text" [(ngModel)]="reserva.Transporte"></ion-input>
-            </ion-col>       
-        </ion-row>    
-
-        <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Fecha</b>
-            </ion-col>
-            <ion-col col-6>
-
-                <ion-input name="reserva.Fecha_Inicio"  [readonly]="!editable" type="text" [(ngModel)]="reserva.Fecha_Inicio"></ion-input>
-            </ion-col>       
-        </ion-row>    
-
-        <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Hora inicio</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.hora_inicio"  [readonly]="!editable" type="text" [(ngModel)]="reserva.hora_inicio"></ion-input>
-            </ion-col>       
-        </ion-row>    
-
-        <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Hora fin</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.hora_final"  [readonly]="!editable" type="text" [(ngModel)]="reserva.hora_final"></ion-input>
-            </ion-col>       
-        </ion-row>    
-
-        <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Guía</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.guia_id"  readonly type="text" [(ngModel)]="reserva.guia_id[1]"></ion-input>
-            </ion-col>       
-        </ion-row>    
-
-        <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Chofer</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.chofer_id"  readonly type="text" [(ngModel)]="reserva.chofer_id[1]"></ion-input>
-            </ion-col>       
-        </ion-row>    
-
-         <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Hotel</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.hotel_id"  readonly type="text" [(ngModel)]="reserva.hotel_id[1]"></ion-input>
-            </ion-col>       
-        </ion-row>
-
-         <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Numero de personas</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.numero_pax"  [readonly]="!editable" type="number" [(ngModel)]="reserva.numero_pax"></ion-input>
-            </ion-col>       
-        </ion-row>
-
-         <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Ciudad</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.ciudad_id"  readonly type="text" [(ngModel)]="reserva.ciudad_id[1]"></ion-input>
-            </ion-col>       
-        </ion-row>
-
-         <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Servicios (gastos)</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.Servicio_Gastos"  [readonly]="!editable" type="number" [(ngModel)]="reserva.Servicio_Gastos"></ion-input>
-            </ion-col>       
-        </ion-row>
-        
-         <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Gastos RUB</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.gasto_rub"  readonly type="number" [(ngModel)]="reserva.gasto_rub"></ion-input>
-            </ion-col>       
-        </ion-row>
-
-         <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Gastos USD</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.gasto_usd"  readonly type="number" [(ngModel)]="reserva.gasto_usd"></ion-input>
-            </ion-col>       
-        </ion-row>
-
-         <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Gastos EUR</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.gasto_eur"  readonly type="number" [(ngModel)]="reserva.gasto_eur"></ion-input>
-            </ion-col>       
-        </ion-row>
-
-         <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Gastos TC RUB</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.tarjeta_rub"  readonly type="number" [(ngModel)]="reserva.tarjeta_rub"></ion-input>
-            </ion-col>       
-        </ion-row>
-
-         <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Gastos TC USD</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.tarjeta_usd"  readonly type="number" [(ngModel)]="reserva.tarjeta_usd"></ion-input>
-            </ion-col>       
-        </ion-row>
-
-         <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Gastos TC EUR</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.tarjeta_eur"  readonly type="number" [(ngModel)]="reserva.tarjeta_eur"></ion-input>
-            </ion-col>       
-        </ion-row>
-
-        <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Gastos PayPal</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.gasto_paypal"  readonly type="number" [(ngModel)]="reserva.gasto_paypal"></ion-input>
-            </ion-col>       
-        </ion-row>
-
-         <ion-row align-items-center>  
-            <ion-col col-6>
-                <b>Total Representante</b>
-            </ion-col>
-            <ion-col col-6>
-                <ion-input name="reserva.Total_Representante"  [readonly]="!editable" type="number" [(ngModel)]="reserva.Total_Representante"></ion-input>
-            </ion-col>       
-        </ion-row>      
--->
     </ion-grid>
 
     <h4>Descripción itinerario</h4>
@@ -281,9 +75,9 @@
                 <b>Ciudad</b>
             </ion-col>
         </ion-row>        
-        <ion-row class="borde" *ngFor="let ite of itinerario; let i = index" align-items-center>  
+        <ion-row class="borde" *ngFor="let ite of itinerario; let i = index" align-items-center (click)="cargarEvento(ite)">  
             <ion-col col-4>
-                {{ite.name}}
+                <a>{{ite.name}}</a>
             </ion-col>                    
             <ion-col col-3>
                 {{ite.Fecha_Inicio}}
@@ -304,7 +98,7 @@
     <h4>Documentos</h4>
 
 
- <ion-grid *ngIf="ver_documentos">
+    <ion-grid *ngIf="ver_documentos">
 
         <div *ngIf="ver_download" style="text-align: center">    
             <ion-spinner name="circles"></ion-spinner><br>

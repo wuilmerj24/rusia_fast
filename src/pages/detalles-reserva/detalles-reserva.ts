@@ -3,6 +3,9 @@ import { Slides, NavController, NavParams,ViewController } from 'ionic-angular';
 import { AcercaPage } from '../../pages/acerca/acerca';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 import { GastosRelPage } from '../../pages/gastos-rel/gastos-rel';
+import { File, IWriteOptions } from '@ionic-native/file';
+import { FileOpener } from '@ionic-native/file-opener';
+import { EventoPage } from '../../pages/evento/evento';
 
 
 @Component({
@@ -24,6 +27,7 @@ export class DetallesReservaPage {
     public selectedCategory;
     public showLeftButton: boolean;
     public showRightButton: boolean;
+    private ver_download = false;
 
     private reserva = {id:-1,
          cliente_id :[0,''],
@@ -83,7 +87,7 @@ export class DetallesReservaPage {
     private evento_hijo;
     private permisos = '';
 
-	constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
+	constructor(private fileOpener: FileOpener, private file:File, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 
     var padre = this.navParams.get('padre');
     if(padre){
@@ -126,12 +130,7 @@ export class DetallesReservaPage {
         self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE id = ' + self.evento_hijo).then(
             function(eventos: {rows}){
 
-                /*var tmp_evento_id = JSON.parse(eventos.rows.item(0).evento_id);
-                
-                
-                var tmp_guia_id = JSON.parse(eventos.rows.item(0).guia_id);
-                var tmp_chofer_id = JSON.parse(eventos.rows.item(0).chofer_id);
-                var tmp_hotel_id = JSON.parse(eventos.rows.item(0).hotel_id);*/
+
                 var tmp_gastos_ids = JSON.parse(eventos.rows.item(0).gastos_ids);
                 var tmp_representante_id = JSON.parse(eventos.rows.item(0).representante_id);
                 var tmp_cliente_id = JSON.parse(eventos.rows.item(0).cliente_id);
@@ -140,13 +139,9 @@ export class DetallesReservaPage {
                 self.reserva.gastos_ids = tmp_gastos_ids;
                 self.reserva.representante_id = tmp_representante_id;
                 self.reserva.cliente_id = tmp_cliente_id;
-                /*
-                self.evento.guia_id = tmp_guia_id;
-                self.evento.chofer_id = tmp_chofer_id;
-                self.evento.hotel_id = tmp_hotel_id;
-                self.evento.ciudad_id = tmp_ciudad_id;*/
 
-                self.getDatos.ejecutarSQL('SELECT name, ciudad_id, Fecha_Inicio FROM eventos WHERE is_padre = "false" and  name = "' + self.reserva.name +'"').then(
+
+                self.getDatos.ejecutarSQL('SELECT name, ciudad_id, Fecha_Inicio, id FROM eventos WHERE is_padre = "false" and  name = "' + self.reserva.name +'"').then(
                 function(eventos: {rows}){
 
                     console.log(JSON.stringify(eventos));
@@ -165,25 +160,6 @@ export class DetallesReservaPage {
                         
                     }
 
-
-                    //self.cargar = false;
-                    /*var tmp_evento_id = JSON.parse(eventos.rows.item(0).evento_id);
-                    var tmp_cliente_id = JSON.parse(eventos.rows.item(0).cliente_id);
-                    var tmp_representante_id = JSON.parse(eventos.rows.item(0).representante_id);
-                    var tmp_guia_id = JSON.parse(eventos.rows.item(0).guia_id);
-                    var tmp_chofer_id = JSON.parse(eventos.rows.item(0).chofer_id);
-                    var tmp_hotel_id = JSON.parse(eventos.rows.item(0).hotel_id);
-                    var tmp_ciudad_id = JSON.parse(eventos.rows.item(0).ciudad_id);
-
-
-                    self.evento = eventos.rows.item(0);
-                    self.evento.evento_id = tmp_evento_id;
-                    self.evento.cliente_id = tmp_cliente_id;
-                    self.evento.representante_id = tmp_representante_id;
-                    self.evento.guia_id = tmp_guia_id;
-                    self.evento.chofer_id = tmp_chofer_id;
-                    self.evento.hotel_id = tmp_hotel_id;
-                    self.evento.ciudad_id = tmp_ciudad_id;*/
 
                     console.log('SELECT * FROM attachment WHERE cliente_id = "' + self.reserva.cliente_id[0] +'"');
                     self.getDatos.ejecutarSQL('SELECT * FROM attachment WHERE cliente_id = "' + self.reserva.cliente_id[0] +'"').then(
@@ -322,6 +298,71 @@ export class DetallesReservaPage {
     private abrirGasto(gasto){
 
         this.navCtrl.push(GastosRelPage, {gastos_rel:gasto});
+    }
+
+    private descargarAtt(att){
+
+      var self  = this;
+      self.ver_download = true;
+      console.log(att.id);
+      self.getDatos.search_read('ir.attachment', [["id", "=", att.id]], ["datas", "mimetype"]).then(
+
+        (res : [{datas:'', mimetype:''}])=>{
+          //var tabla = 
+          console.log(JSON.stringify(res[0].mimetype));
+          var ext = '';
+          if(res[0].mimetype.toString() == "application/pdf"){
+            ext = '.pdf';
+          }else if(res[0].mimetype.toString() == "image/png"){
+            ext = '.png';
+          }
+
+          let downloadPDF: any = res[0].datas;
+            let base64pdf = downloadPDF;
+            var binary = atob(base64pdf.replace(/\s/g, ''));
+            var len = binary.length;
+            var buffer = new ArrayBuffer(len);
+            var view = new Uint8Array(buffer);
+            for (var i = 0; i < len; i++) {
+                view[i] = binary.charCodeAt(i);
+            }
+               
+            var blobPdf = new Blob( [view], { type: res[0].mimetype.toString() });
+
+          const opt: IWriteOptions = { replace: true }
+
+
+          self.file.writeFile(self.file.externalDataDirectory, att.name + ext, blobPdf, opt).then(
+            res=>{
+              console.log('file saved'+ res.nativeURL);
+              //self.presentToast();
+              self.fileOpener.open(
+                res.toInternalURL(),
+                'application/pdf'//file mimeType
+              ).then((success) => {
+                console.log('success open file: ', success);
+              }, (err) => {
+                console.log('error open file', err.message);
+              });
+
+            },
+            fail=>{
+              console.log(JSON.stringify(fail));
+            }
+          );
+          self.ver_download = false;
+        },
+        fail=>{
+          console.log('Fail downloading att');
+        }
+    );
+
+    }   
+
+    private cargarEvento(evt){
+
+      this.navCtrl.push(EventoPage, {evento: evt, permisos:'is_root'});
+
     }
 
 }

@@ -37,7 +37,8 @@ import { NgCalendarModule } from 'ionic2-calendar';
 import { GetDatosProvider } from '../providers/get-datos/get-datos';
 import { SQLite } from '@ionic-native/sqlite';
 import { TablasProvider } from '../providers/tablas/tablas';
-
+import { FileChooser } from '@ionic-native/file-chooser';
+import { FilePath } from '@ionic-native/file-path';
 import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
 
 @NgModule({
@@ -61,7 +62,7 @@ import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
     SolicitarPage,
     SolicitarDetallePage,
     SolicitarAdminPage,
-    SolicitarNuevaPage
+    SolicitarNuevaPage    
   ],
   imports: [
     BrowserModule,
@@ -93,6 +94,8 @@ import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
   providers: [ 
     File,   
     FileOpener,
+    FileChooser,
+    FilePath,
     SQLite,
     StatusBar,
     SplashScreen,

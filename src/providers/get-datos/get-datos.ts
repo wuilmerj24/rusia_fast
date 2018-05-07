@@ -15,9 +15,9 @@ export class GetDatosProvider {
 
 	private db: SQLiteObject = null;
 
-	//private url = '/api';
+	private url = '/api';
 	//private url = 'http://odoo.devoptions.mx';     //"http://odoo.devoptions.mx"
-	private url = 'http://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
+	//private url = 'http://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
 
 	public usr = null;	
 	private eventoHijo = [];
@@ -599,8 +599,8 @@ export class GetDatosProvider {
 				dominioUsers = [["is_client", "=", false], ["is_rep", "=", false]];
 				dominioSol = [
 				["is_padre", "=", false],
-				["is_guia", "=", true],
-				["guia_id", "=", false]];				
+				["is_traslado", "=", true],
+				["chofer_id", "=", false]];				
 				console.log('----------  await self.cargarEventos(dominio,borrar)');
 				await self.cargarEventos(dominio,borrar);
 				console.log('----------  await self.cargarEventos(dominioSol,borrar);');

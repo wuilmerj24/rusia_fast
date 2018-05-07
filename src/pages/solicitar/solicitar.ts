@@ -38,8 +38,19 @@ export class SolicitarPage {
 			//["is_guia", "=", true],
 			//["guia_id", "=", false]]
 		var self = this;	
-		self.cargar = true;		
-		self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE is_guia = "true" and is_padre = "false" and guia_id = "false"  ORDER BY id DESC').then(
+		self.cargar = true;	
+
+        var sql = '';
+        if(self.getDatos.usr.tipo_usuario == 'is_chofer'){
+
+            sql = 'SELECT * FROM eventos WHERE is_traslado = "true" and is_padre = "false" and chofer_id = "false"  ORDER BY id DESC';
+
+        }else if(self.getDatos.usr.tipo_usuario == 'is_guia'){
+
+            sql = 'SELECT * FROM eventos WHERE is_guia = "true" and is_padre = "false" and guia_id = "false"  ORDER BY id DESC';
+        }
+        console.log(sql);
+		self.getDatos.ejecutarSQL(sql).then(
 
               function(eventos: {rows}){
                 console.log('eventos loaded - OK');

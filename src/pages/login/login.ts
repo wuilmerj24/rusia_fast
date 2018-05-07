@@ -16,10 +16,10 @@ export class LoginPage {
 
    	//guia
     //conexion = {usuario: 'joselugar8@hotmail.com', bd: 'rusia3', pwd: '123456'}; //pruebas
-    //conexion = {usuario: 'cupabanoscar@gmail.com', bd: 'rusia3', pwd: '123456'};//produccion 
+    conexion = {usuario: 'cupabanoscar@gmail.com', bd: 'rusia3', pwd: '123456'};//produccion 
 
-    //admin
-    //conexion = {usuario: '', bd: 'rusia3', pwd: ''};
+    //chofer
+    //conexion = {usuario: 'anton1985info@gmail.com', bd: 'rusia3', pwd: '123456'};
     
 
     //conexion = {usuario: 'reservas@guiarus.com', bd: 'rusia3', pwd: '123456'};//produccion 
@@ -29,7 +29,7 @@ export class LoginPage {
     //chofer
 
     //conexion = {usuario: 'chofersanpetersburgo@gmail.com', bd: 'rusia3', pwd: '123456'};  //  prd
-    conexion = {usuario: '', bd: 'rusia3', pwd: ''};
+    //conexion = {usuario: '', bd: 'rusia3', pwd: ''};
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getData:GetDatosProvider) {
 
 		var operacion = this.navParams.get('operacion');

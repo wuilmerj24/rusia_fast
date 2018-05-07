@@ -5,7 +5,8 @@ import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 import { DetallesReservaPage } from '../../pages/detalles-reserva//detalles-reserva';
 import { File, IWriteOptions } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
-
+import { FileChooser } from '@ionic-native/file-chooser';
+import { FilePath } from '@ionic-native/file-path';
 
 @Component({
   selector: 'page-evento',
@@ -78,7 +79,7 @@ export class EventoPage {
 
 
 	//private fileOpener: FileOpener,
-	constructor(private fileOpener: FileOpener, private toastCtrl: ToastController, private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
+	constructor(private filePath: FilePath, private fileChooser: FileChooser, private fileOpener: FileOpener, private toastCtrl: ToastController, private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 		
 		this.evento_cal = this.navParams.get('evento');
 		this.permisos = this.navParams.get('permisos');
@@ -92,8 +93,7 @@ export class EventoPage {
 			{id:4, name:'Documentos', visible:false},	//2
 			{id:5, name:'Comentarios', visible:false}];//3
 
-		}else if(this.permisos == 'is_chofer'){
-			this.ver_segmento = true;
+		}else if(this.permisos == 'is_chofer'){			
 
 			this.categories = [{id:1, name:'Resumen', visible:false},//0
 			{id:2, name:'Descripción', visible:false},//1
@@ -564,5 +564,40 @@ export class EventoPage {
 
 	  toast.present();
 	} 
+
+	private agregarAttachment(){
+
+		var self = this;
+		this.fileChooser.open()
+		  .then(uri => {
+		  	//self.file.readAsDataURL()
+		  	//console.log(uri
+		  	this.filePath.resolveNativePath(uri)
+  			.then(filePath => {
+  				console.log(filePath)
+  				let path = filePath.substring(0, filePath.lastIndexOf('/'));
+  				let archivo = filePath.substring(filePath.lastIndexOf('/')+1, filePath.length);
+
+  				console.log(path);
+  				console.log(archivo);
+
+  				self.file.readAsDataURL(path, archivo)
+			      .then(content=>{
+			        //content = (<any>window).btoa(content);
+			        console.log(content);
+			        console.log(JSON.stringify(content));
+			        
+			      })
+			      .catch(err=>{
+
+			        console.log(JSON.stringify(err));			        
+			      });
+  			}
+  			)
+			.catch(err => console.log(err));
+
+		  })
+		  .catch(e => console.log(e));
+	}
 
 }
