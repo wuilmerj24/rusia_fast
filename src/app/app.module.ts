@@ -21,6 +21,7 @@ import { GatosTourPage } from '../pages/gatos-tour/gatos-tour';
 import { PanelPage } from '../pages/panel/panel';
 import { PerfilPage } from '../pages/perfil/perfil';
 import { GastosRelPage } from '../pages/gastos-rel/gastos-rel';
+import { DocumentoPage } from '../pages/documento/documento';
 
 import { SolicitarPage } from '../pages/solicitar/solicitar';
 import { SolicitarDetallePage } from '../pages/solicitar-detalle/solicitar-detalle';
@@ -32,6 +33,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
+import { Base64 } from '@ionic-native/base64';
 
 import { NgCalendarModule } from 'ionic2-calendar';
 import { GetDatosProvider } from '../providers/get-datos/get-datos';
@@ -40,6 +42,7 @@ import { TablasProvider } from '../providers/tablas/tablas';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
+
 
 @NgModule({
   declarations: [
@@ -62,7 +65,8 @@ import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
     SolicitarPage,
     SolicitarDetallePage,
     SolicitarAdminPage,
-    SolicitarNuevaPage    
+    SolicitarNuevaPage,
+    DocumentoPage    
   ],
   imports: [
     BrowserModule,
@@ -89,13 +93,15 @@ import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
     SolicitarPage,
     SolicitarDetallePage,
     SolicitarAdminPage,
-    SolicitarNuevaPage
+    SolicitarNuevaPage,
+    DocumentoPage
   ],
   providers: [ 
     File,   
     FileOpener,
     FileChooser,
     FilePath,
+    Base64,
     SQLite,
     StatusBar,
     SplashScreen,

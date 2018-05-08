@@ -3,10 +3,9 @@ import { Slides, NavController, NavParams,ViewController, ModalController, Toast
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 import { DetallesReservaPage } from '../../pages/detalles-reserva//detalles-reserva';
+import { DocumentoPage } from '../../pages/documento/documento';
 import { File, IWriteOptions } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
-import { FileChooser } from '@ionic-native/file-chooser';
-import { FilePath } from '@ionic-native/file-path';
 
 @Component({
   selector: 'page-evento',
@@ -79,7 +78,7 @@ export class EventoPage {
 
 
 	//private fileOpener: FileOpener,
-	constructor(private filePath: FilePath, private fileChooser: FileChooser, private fileOpener: FileOpener, private toastCtrl: ToastController, private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
+	constructor(private fileOpener: FileOpener, private toastCtrl: ToastController, private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 		
 		this.evento_cal = this.navParams.get('evento');
 		this.permisos = this.navParams.get('permisos');
@@ -176,11 +175,11 @@ export class EventoPage {
 		                    
 		                }
 		                //self.cargar = false;
-		                //console.log('SELECT * FROM attachment WHERE cliente_id = "' + self.evento.cliente_id[0] +'"');
-		                self.getDatos.ejecutarSQL('SELECT * FROM attachment WHERE cliente_id = "' + self.evento.cliente_id[0] +'"').then(
+		                console.log('SELECT * FROM attachment WHERE res_id = "' + self.evento.id +'"');
+		                self.getDatos.ejecutarSQL('SELECT * FROM attachment WHERE eventos_id = "' + self.evento.id +'"').then(
 							function(attachment: {rows}){
 
-															 
+								console.log(JSON.stringify(attachment.rows));															 
 								for(var i=0; i<attachment.rows.length; i++) {
 
 									var att = attachment.rows.item(i)
@@ -242,7 +241,7 @@ export class EventoPage {
         }
     }
 
-    private guardar(dato){
+    private guardar(dato, opcion){
 
     	var self = this;
     	self.cargar = true;
@@ -290,12 +289,25 @@ export class EventoPage {
 
 					};
 				}else{
-					campos = {
-						gastostoursline_ids: [[0,0,dato]]
-					}
+					switch (opcion) {
+						case 1:
+							campos = {
+								gastostoursline_ids: [[0,0,dato]]
+							}
+							break;
+						case 2:
+							campos = {
+								documentos_ids: [[0,false,dato]]
+							}
+							break;
+						
+						default:
+							// code...
+							break;
+					}					
 				}						
 
-				console.log(JSON.stringify(campos));
+				//console.log(JSON.stringify(campos));
 				//console.log('ID:' + this.evento.id)
 				//console.log('usd:' + campos.gasto_usd)
 				self.getDatos.write('rusia.eventos', self.evento.id, campos).then(
@@ -450,7 +462,7 @@ export class EventoPage {
 
             if (data != 'x') {
             	
-            	self.guardar(data).then(
+            	self.guardar(data, 1).then(
 	        		res=>{
 	        			self.cargar = true;
 	        			self.getDatos.cargarCalendario(true).then(
@@ -567,37 +579,44 @@ export class EventoPage {
 
 	private agregarAttachment(){
 
+
 		var self = this;
-		this.fileChooser.open()
-		  .then(uri => {
-		  	//self.file.readAsDataURL()
-		  	//console.log(uri
-		  	this.filePath.resolveNativePath(uri)
-  			.then(filePath => {
-  				console.log(filePath)
-  				let path = filePath.substring(0, filePath.lastIndexOf('/'));
-  				let archivo = filePath.substring(filePath.lastIndexOf('/')+1, filePath.length);
+        let profileModal = this.modalCtrl.create(DocumentoPage);
+        
+        profileModal.onDidDismiss(data => {
+        				
 
-  				console.log(path);
-  				console.log(archivo);
+            if (data != 'x') {
+            	
+            	data.cliente_id = self.evento.cliente_id[0];
+            	data.res_id = self.evento.id;
+            	console.log(data.cliente_id)
 
-  				self.file.readAsDataURL(path, archivo)
-			      .then(content=>{
-			        //content = (<any>window).btoa(content);
-			        console.log(content);
-			        console.log(JSON.stringify(content));
-			        
-			      })
-			      .catch(err=>{
+            	self.guardar(data, 2).then(
+	        		res=>{
+	        			self.cargar = true;
+	        			self.getDatos.cargarCalendario(true).then(
+			        		res=>{
+			        			console.log('Update complete');
+			        			self.initEvento();
+			        		},
+			        		fail=>{
 
-			        console.log(JSON.stringify(err));			        
-			      });
-  			}
-  			)
-			.catch(err => console.log(err));
+			        			console.log('Error loading cgastos');
+			        		}
+			        	);
+	        		},
+	        		fail=>{
 
-		  })
-		  .catch(e => console.log(e));
+	        			console.log('Error loading cgastos');
+	        		}
+	        	);
+            	
+            }
+        });
+
+        profileModal.present();
+
 	}
 
 }

@@ -15,9 +15,9 @@ export class GetDatosProvider {
 
 	private db: SQLiteObject = null;
 
-	private url = '/api';
+	//private url = '/api';
 	//private url = 'http://odoo.devoptions.mx';     //"http://odoo.devoptions.mx"
-	//private url = 'http://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
+	private url = 'http://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
 
 	public usr = null;	
 	private eventoHijo = [];
@@ -189,16 +189,14 @@ export class GetDatosProvider {
 	            
 		  		Object.keys(attachment).forEach(key=> {
 
-				    /*console.log("INSERT OR IGNORE INTO attachment "+
-				    	"(id, cliente_id, file_size, name)"+
+		  			var registro = "INSERT OR IGNORE INTO attachment "+
+				    	"(id, cliente_id, file_size, name, eventos_id)"+
 				    	" VALUES (" + attachment[key].id + ", '"+attachment[key].cliente_id[0]+"', '" +attachment[key].file_size+"', '" 
-				    	+attachment[key].name +"');"); */
+				    	+attachment[key].name +"', '"+attachment[key].eventos_id[0]+"');";
+				    //console.log(registro); 
 
 
-				    sql.push("INSERT OR IGNORE INTO attachment "+
-				    	"(id, cliente_id, file_size, name)"+
-				    	" VALUES (" + attachment[key].id + ", '"+attachment[key].cliente_id[0]+"', '" +attachment[key].file_size+"', '" 
-				    	+attachment[key].name +"');");
+				    sql.push(registro);
 				}); 
 
 				self.insertBatch(sql)
@@ -554,7 +552,7 @@ export class GetDatosProvider {
 				console.log('----------  await self.cargarGastos(false);;');
 				await self.cargarGastos(false);
 				console.log('----------  await self.cargarAttachment(false);');
-				await self.cargarAttachment(false);
+				await self.cargarAttachment(borrar);
 				console.log('----------  await self.cargarGastosConceptos();');
 				await self.cargarGastosConceptos();//-> no lo carga el usuario
 				console.log('----------  await self.cargarSolicitudes(false);');
@@ -570,7 +568,7 @@ export class GetDatosProvider {
 				console.log('----------  await self.cargarGastos(false);;');
 				await self.cargarGastos(false);
 				console.log('----------  await self.cargarAttachment(false);');
-				await self.cargarAttachment(false);
+				await self.cargarAttachment(borrar);
 
 			}else if(self.usr.tipo_usuario + '' == 'is_guia'){
 				
@@ -590,7 +588,7 @@ export class GetDatosProvider {
 				console.log('----------  await self.cargarGastos(false);;');
 				await self.cargarGastos(false);
 				console.log('----------  await self.cargarAttachment(false);');
-				await self.cargarAttachment(false);
+				await self.cargarAttachment(borrar);
 				console.log('----------  await self.cargarGastosConceptos();');
 				await self.cargarGastosConceptos();//-> no lo carga el usuario
 
@@ -610,7 +608,7 @@ export class GetDatosProvider {
 				console.log('----------  await self.cargarGastos(false);;');
 				await self.cargarGastos(false);
 				console.log('----------  await self.cargarAttachment(false);');
-				await self.cargarAttachment(false);
+				await self.cargarAttachment(borrar);
 				console.log('----------  await self.cargarGastosConceptos();');
 				await self.cargarGastosConceptos();//-> no lo carga el usuario
 			}			

@@ -49,13 +49,15 @@ export class TablasProvider {
 	" id INTEGER PRIMARY KEY,"+
 	" file_size VARCHAR(20),"+
 	" cliente_id VARCHAR(20),"+
+	" eventos_id VARCHAR(20),"+
 	" name VARCHAR(255));";
 
 	private tbl_attachment_odoo = [
 	"id",
 	"file_size",
 	"name",
-	"cliente_id"];
+	"cliente_id",	
+	"eventos_id"];
 
 
 	private tbl_gastos_odoo =[

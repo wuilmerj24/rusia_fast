@@ -1,0 +1,173 @@
+<!--
+  Generated template for the GatosTourPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Cargar Documento</ion-title>
+     <ion-buttons end>
+        <button ion-button icon-only (click)="closeModal('x')">
+                <ion-icon item-right name="ios-close-outline"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+
+   <ion-segment>
+        <ion-segment-button  value="camera" icon-start (click)="guardar()">
+                <ion-icon ios="ios-cloud-upload" md="md-cloud-upload"></ion-icon>
+            Guardar
+        </ion-segment-button>
+        <ion-segment-button value="bookmark" icon-start (click)="eliminar()">
+                <ion-icon name="ios-trash" ></ion-icon>
+            Eliminar
+        </ion-segment-button>
+    </ion-segment>
+
+</ion-header>
+
+
+<ion-content>
+
+	<div *ngIf="cargar" style="text-align: center">    
+        <ion-spinner name="circles"></ion-spinner><br>
+        <b>Guardando...</b>
+	</div>
+
+	<ion-grid *ngIf="!cargar">
+		<ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Nombre</b>
+	        </ion-col>
+	        <ion-col col-8>	        	
+	            <ion-input name="doc.name" type="text"  [(ngModel)]="doc.name"></ion-input> 
+	        </ion-col>    
+	    </ion-row>  
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Tipo</b>
+	        </ion-col>
+	        <ion-col col-8>	            	            
+	            <ion-select name="doc.type" [(ngModel)]="doc.type" ionChange="onChange($event)">	            	
+	            	<ion-option value="binary">Archivo</ion-option>
+	            	<ion-option value="url">URL</ion-option>
+	            </ion-select>
+	        </ion-col>    
+	    </ion-row> 
+
+	    <ion-row align-items-center *ngIf="archivo">  
+	        <ion-col col-4>
+	            <b>Contenido</b>
+	        </ion-col>
+	        <ion-col col-8>
+	             <ion-col col-4>
+                <button ion-button color="danger" type="button" (click)="agregarAttachment()" >Subir</button>
+            </ion-col>
+	        </ion-col>    
+	    </ion-row>   
+
+	    <ion-row align-items-center *ngIf="url">  
+	        <ion-col col-4>
+	            <b>URL</b>
+	        </ion-col>
+	        <ion-col col-8>	        	
+	            <ion-input name="doc.url" type="text"  [(ngModel)]="doc.url"></ion-input> 
+	        </ion-col>    
+	    </ion-row>  
+
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Tipo Documento</b>
+	        </ion-col>
+	        <ion-col col-8>	        	
+	            <ion-input name="doc.Tipo_documento" type="text"  [(ngModel)]="doc.Tipo_documento"></ion-input> 
+	        </ion-col>    
+	    </ion-row>  
+
+	               	
+	    <ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Ciudades</b>
+	        </ion-col>
+	        <ion-col col-8>
+	            <ion-select name="doc.ciudades" multiple [(ngModel)]="doc.ciudades">	            	
+	            	<ion-option value="3">Moscu</ion-option>
+	            	<ion-option value="2">San petersburgo</ion-option>
+	            	<ion-option value="4">Sochi</ion-option>
+	            	<ion-option value="5">Kasan</ion-option>
+	            	<ion-option value="6">Samara</ion-option>	            	
+	            </ion-select>
+	        </ion-col>    
+	    </ion-row>   
+
+     	<ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Concepto</b>
+	        </ion-col>
+	        <ion-col col-8>	        	
+	            <ion-select name="doc.concepto_id"  [(ngModel)]="doc.concepto_id">
+	            	<!--ion-option *ngFor="let gasto_t of gastostours" [value]="gasto_t.id">{{gasto_t.name}}</ion-option-->
+
+					<ion-option value="1">Ganancia</ion-option>						            	
+					<ion-option value="2">Servicios</ion-option>
+					<ion-option value="3">Pago Reserva</ion-option>
+					<ion-option value="4">Itinerarios tours</ion-option>
+					<ion-option value="5">Comision Getyourgide</ion-option>
+					<ion-option value="6">Comision Paykepeer</ion-option>
+					<ion-option value="7">Entradas shows</ion-option>
+					<ion-option value="8">Compra de Entradas a Shows</ion-option>
+					<ion-option value="9">Coste billetes de tren</ion-option>
+					<ion-option value="10">Deposito Krasnie Kvadrat</ion-option>
+					<ion-option value="11">Billetes tren</ion-option>
+					<ion-option value="12">Comision Tatiana Sochi</ion-option>
+	            </ion-select>    
+	        </ion-col>    
+	    </ion-row> 
+
+	    <!--ion-row align-items-center>  
+	        <ion-col col-4>
+	            <b>Cliente</b>
+	        </ion-col>
+	        <ion-col col-8>
+	        	<ion-datetime  name="doc.fecha" displayFormat="YYYY-MM-DD" [(ngModel)]="doc.fecha"></ion-datetime>-->
+
+	        	<!--autocomplete [lista]="clientes" placeholder="Usuario" (onselect) = "seleccionCliente($event)"></autocomplete-->
+
+	            <!--<ion-input name="doc.fecha" type="text" [readonly]="!ver_segmento" [(ngModel)]="doc.fecha"></ion-input>
+	        </ion-col>    
+	    </ion-row>-->
+		
+		<ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Cliente</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-checkbox name="doc.is_cliente" [(ngModel)]="doc.is_cliente"></ion-checkbox>
+	        </ion-col>       
+	    </ion-row>
+
+	    <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Interno</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-checkbox name="doc.is_interno" [(ngModel)]="doc.is_interno"></ion-checkbox>
+	        </ion-col>       
+	    </ion-row>
+	    <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>General</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-checkbox name="doc.is_general" [(ngModel)]="doc.is_general"></ion-checkbox>
+	        </ion-col>       
+	    </ion-row>
+
+
+
+    			
+    </ion-grid>
+
+</ion-content>
