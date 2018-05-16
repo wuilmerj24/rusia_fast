@@ -33,13 +33,13 @@ export class CalendarioPage {
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 
-        this.initCalendario(false);
+        this.initCalendario(true);
     }
 
     private initCalendario(borrar){
         var self = this;
         self.cargar = true;
-        this.getDatos.cargarCalendario(borrar).then(          
+        this.getDatos.cargarCalendario(borrar, borrar, borrar, borrar).then(          
           function(usr:{tipo_usuario:'', id:0, name:''}) {
             
             self.usuario = usr;

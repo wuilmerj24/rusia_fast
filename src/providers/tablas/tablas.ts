@@ -49,6 +49,7 @@ export class TablasProvider {
 	" id INTEGER PRIMARY KEY,"+
 	" file_size VARCHAR(20),"+
 	" cliente_id VARCHAR(20),"+
+	" is_cliente VARCHAR(10),"+
 	" eventos_id VARCHAR(20),"+
 	" name VARCHAR(255));";
 
@@ -57,7 +58,8 @@ export class TablasProvider {
 	"file_size",
 	"name",
 	"cliente_id",	
-	"eventos_id"];
+	"eventos_id",
+	"is_cliente"];
 
 
 	private tbl_gastos_odoo =[
@@ -154,6 +156,7 @@ export class TablasProvider {
 	" Fecha_Fin VARCHAR(20),"+
 	" hora_inicio VARCHAR(10),"+
 	" hora_final VARCHAR(10),"+
+	" hora_chofer VARCHAR(10),"+
 	" name VARCHAR(255),"+
 	" is_padre VARCHAR(5),"+
 	" is_traslado VARCHAR(5),"+
@@ -241,7 +244,8 @@ export class TablasProvider {
 	"Fecha_Fin",
 	"hora_inicio",
 	"hora_final", 
-	"is_adjudicado"];
+	"is_adjudicado",
+	"hora_chofer"];
 
 	/*constructor() {
     	console.log('Hello TablasProvider Provider');

@@ -16,8 +16,8 @@ export class DocumentoPage {
 		type:'binary',
 		datas:'',
 		url:'',		
-		ciudades:null,
-		concepto_id:null,
+		ciudades:'',
+		concepto_id:'',
 		is_cliente:false,
 		is_general:true,
 		is_interno:true,
@@ -59,13 +59,15 @@ export class DocumentoPage {
 		  	(result) => {
 
 		  		let path = result.substring(0, result.lastIndexOf('/'));
-		  		self.nombre_archivo = result.substring(result.lastIndexOf('/')+1, result.length);		  		
+		  		console.log(path);
+		  		self.nombre_archivo = result.substring(result.lastIndexOf('/')+1, result.length);	
+		  		self.doc.name = self.nombre_archivo;	  		
 
 		  		self.file.readAsBinaryString(path, self.nombre_archivo)
 					      .then(content=>{
 					        content = (<any>window).btoa(content);
 					        self.doc.datas = content;
-					        //console.log(content);
+					        //console.log(self.doc.datas);
 					        //alert(JSON.stringify(content));
 					      })
 					      .catch(err=>{
@@ -95,11 +97,13 @@ export class DocumentoPage {
 	private guardar(){
 
 
+		var self = this;
+
 		if(self.doc.concepto_id == null || self.doc.name == null){
 			return;
 		}
 		this.cargar = true;
-    	var self = this;
+    	
 		
 		/*ciudades:[[6, false, [3]]],
 								Tipo_Documento:false,
@@ -125,7 +129,7 @@ export class DocumentoPage {
 				name:self.doc.name,
 				type:self.doc.type,
 				datas:self.doc.datas,
-				ciudades: [6, false, self.doc.ciudades],//self.doc.ciudades,
+				ciudades: [0, false, self.doc.ciudades],//self.doc.ciudades,
 				is_cliente:self.doc.is_cliente,
 				is_general:self.doc.is_general,
 				is_interno:self.doc.is_interno,

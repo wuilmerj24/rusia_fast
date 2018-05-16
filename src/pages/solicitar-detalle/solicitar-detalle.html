@@ -52,7 +52,7 @@
 	            <b>Salario</b>
 	        </ion-col>
 	        <ion-col col-6>
-	           <ion-input name="evento.salario"  type="number" [readonly]="!editable" [(ngModel)]="evento.salario"></ion-input>
+	           <ion-input name="evento.salario"  type="number" [readonly]="!editable" placeholder="0" [(ngModel)]="evento.salario"></ion-input>
 	        </ion-col>       
 	    </ion-row>  
 
@@ -64,7 +64,7 @@
 
 	    <ion-row align-items-center>  
 	        <ion-col col-12>
-	            <ion-textarea name="evento.observaciones_solicitud" rows="2" [readonly]="!editable" [(ngModel)]="evento.observaciones_solicitud"> </ion-textarea>
+	            <ion-textarea name="evento.observaciones_solicitud" rows="2" placeholder="Observaciones" [readonly]="!editable" [(ngModel)]="evento.observaciones_solicitud"> </ion-textarea>
 	        </ion-col>       
 	    </ion-row>
 
@@ -139,6 +139,15 @@
 	            <ion-input name="evento.hora_final"  readonly type="text" [(ngModel)]="evento.hora_final"></ion-input>
 	        </ion-col>       
 	    </ion-row>    
+
+	    <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Hora chofer</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.hora_chofer"  placeholder="HH:mm" [readonly]="!editable" type="text" [(ngModel)]="evento.hora_chofer"></ion-input>
+	        </ion-col>       
+	    </ion-row> 
 
 	    <ion-row align-items-center>  
 	        <ion-col col-6>

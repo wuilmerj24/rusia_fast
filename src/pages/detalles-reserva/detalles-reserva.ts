@@ -77,7 +77,7 @@ export class DetallesReservaPage {
     private cargar  = true;
     private ver_segmento = true;
 
-    private ver_gastos= false;
+    private ver_gastos= true;
 
     //private gastostoursline_ids = [];
     private gastos_ciudad = [];

@@ -93,7 +93,7 @@
 	            <b>Tipo de servicio</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name="evento."  [readonly]="!editable" type="text" [(ngModel)]="evento."></ion-input>
+	            <ion-input name="evento."  placeholder="" [readonly]="!editable" type="text" [(ngModel)]="evento."></ion-input>
 	        </ion-col>       
 	    </ion-row>    
 -->
@@ -102,7 +102,7 @@
 	            <b>Transporte</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name="evento.Transporte"  [readonly]="!editable" type="text" [(ngModel)]="evento.Transporte"></ion-input>
+	            <ion-input name="evento.Transporte"  placeholder="Transporte" [readonly]="!editable"  type="text" [(ngModel)]="evento.Transporte"></ion-input>
 	        </ion-col>       
 	    </ion-row>    
 
@@ -113,7 +113,7 @@
 	        <ion-col col-6>
 	        	<!--ion-datetime  name="evento.Fecha_Inicio" displayFormat="YYYY-MM-DD"  [disabled]="!editable" [(ngModel)]="evento.Fecha_Inicio"></ion-datetime-->
 
-	            <ion-input name="evento.Fecha_Inicio"  [readonly]="!editable" type="text" [(ngModel)]="evento.Fecha_Inicio"></ion-input>
+	            <ion-input name="evento.Fecha_Inicio"  placeholder="YYYY-MM-DD" [readonly]="!editable" type="text" [(ngModel)]="evento.Fecha_Inicio"></ion-input>
 	        </ion-col>       
 	    </ion-row>    
 
@@ -124,7 +124,7 @@
 	        <ion-col col-6>
 	        	<!--ion-datetime  name="evento.hora_inicio" displayFormat="HH:mm"  [disabled]="!editable" [(ngModel)]="evento.hora_inicio"></ion-datetime-->
 
-	            <ion-input name="evento.hora_inicio"  [readonly]="!editable" type="text" [(ngModel)]="evento.hora_inicio"></ion-input>
+	            <ion-input name="evento.hora_inicio"  placeholder="HH:mm" [readonly]="!editable" type="text" [(ngModel)]="evento.hora_inicio"></ion-input>
 	        </ion-col>       
 	    </ion-row>    
 
@@ -133,7 +133,16 @@
 	            <b>Hora fin</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name="evento.hora_final"  [readonly]="!editable" type="text" [(ngModel)]="evento.hora_final"></ion-input>
+	            <ion-input name="evento.hora_final"  placeholder="HH:mm" [readonly]="!editable" type="text" [(ngModel)]="evento.hora_final"></ion-input>
+	        </ion-col>       
+	    </ion-row>    
+
+	    <ion-row align-items-center>  
+	        <ion-col col-6>
+	            <b>Hora chofer</b>
+	        </ion-col>
+	        <ion-col col-6>
+	            <ion-input name="evento.hora_chofer"  placeholder="HH:mm" [readonly]="!editable" type="text" [(ngModel)]="evento.hora_chofer"></ion-input>
 	        </ion-col>       
 	    </ion-row>    
 
@@ -169,7 +178,7 @@
 	            <b>Numero de personas</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name="evento.numero_pax"  [readonly]="!editable" type="number" [(ngModel)]="evento.numero_pax"></ion-input>
+	            <ion-input name="evento.numero_pax"  placeholder="0" [readonly]="!editable" type="number" [(ngModel)]="evento.numero_pax"></ion-input>
 	        </ion-col>       
 	    </ion-row>
 
@@ -187,7 +196,7 @@
 		            <b>Servicios (gastos)</b>
 		        </ion-col>
 		        <ion-col col-6>
-		            <ion-input name="evento.Servicio_Gastos"  [readonly]="!editable" type="number" [(ngModel)]="evento.Servicio_Gastos"></ion-input>
+		            <ion-input name="evento.Servicio_Gastos"  placeholder="" [readonly]="!editable" type="number" [(ngModel)]="evento.Servicio_Gastos"></ion-input>
 		        </ion-col>       
 		    </ion-row>
 		    
@@ -259,7 +268,7 @@
 		            <b>Total Representante</b>
 		        </ion-col>
 		        <ion-col col-6>
-		            <ion-input name="evento.Total_Representante"  [readonly]="!editable" type="number" [(ngModel)]="evento.Total_Representante"></ion-input>
+		            <ion-input name="evento.Total_Representante"  placeholder="0" [readonly]="!editable" type="number" [(ngModel)]="evento.Total_Representante"></ion-input>
 		        </ion-col>       
 		    </ion-row>	    
 		</div>
@@ -276,7 +285,7 @@
 	    <ion-row align-items-center>  
 	        <ion-col col-12>
 
-	            <textarea class="desText" id="message" rows="15" (click)="adjustTextarea($event);" name="evento.message" [readonly]="!editable" [(ngModel)]="evento.message"  #message> </textarea>
+	            <textarea class="desText" id="message" rows="15" (click)="adjustTextarea($event);" name="evento.message" placeholder="" [readonly]="!editable" [(ngModel)]="evento.message"  #message> </textarea>
 	        </ion-col>       
 	    </ion-row>
 
@@ -350,20 +359,27 @@
 		</div>
 		
 		<ion-row align-items-center>  
-            <ion-col col-8>
+            <ion-col col-6>
                 <b>Nombre</b>
             </ion-col>
             <ion-col col-4>
                 <b>Decargar</b>
+            </ion-col>
+
+            <ion-col col-2 *ngIf="ver_segmento && editable">
+                <b>Eliminar</b>
             </ion-col>                  
         </ion-row>        
         <ion-row class="borde" *ngFor="let att of attachment; let i = index" align-items-center >  
-            <ion-col col-8>
+            <ion-col col-6>
                 {{att.name}}
             </ion-col>
             <ion-col col-4>
                 <a (click)="descargarAtt(att)">Descargar: {{att.file_size}}</a>
-            </ion-col>                    
+            </ion-col>
+            <ion-col col-2 *ngIf="ver_segmento && editable">
+            	<button ion-button small color="danger" type="button" (click)="borrarAttachment(att.id)" ><ion-icon name="ios-trash" ></ion-icon></button>                
+            </ion-col>                      
         </ion-row>	        
     	<ion-row *ngIf="editable" align-items-center>  
             <ion-col col-4>
@@ -384,7 +400,7 @@
 
 	    <ion-row align-items-center>  
 	        <ion-col col-12>
-	            <ion-textarea name="evento.Comentarios_Cliente" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Cliente"> </ion-textarea>
+	            <ion-textarea name="evento.Comentarios_Cliente" placeholder="Comentarios cliente" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Cliente"> </ion-textarea>
 	        </ion-col>       
 	    </ion-row>
 	    <div *ngIf="ver_segmento">
@@ -396,7 +412,7 @@
 
 		    <ion-row align-items-center>  
 		        <ion-col col-12>
-		            <ion-textarea name="evento.Comentarios_Internos" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Internos"> </ion-textarea>
+		            <ion-textarea name="evento.Comentarios_Internos" placeholder="Comentarios internos" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Internos"> </ion-textarea>
 		        </ion-col>       
 		    </ion-row>
 
@@ -408,7 +424,7 @@
 
 		    <ion-row align-items-center>  
 		        <ion-col col-12>
-		            <ion-textarea name="evento.Comentarios_Guia" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Guia"> </ion-textarea>
+		            <ion-textarea name="evento.Comentarios_Guia" placeholder="Comentarios guía" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Guia"> </ion-textarea>
 		        </ion-col>       
 		    </ion-row>	    
 
@@ -420,7 +436,7 @@
 
 		    <ion-row align-items-center>  
 		        <ion-col col-12>
-		            <ion-textarea name="evento.Comentarios_Chofer" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Chofer"> </ion-textarea>
+		            <ion-textarea name="evento.Comentarios_Chofer" placeholder="Comentarios chofer" [readonly]="!editable" [(ngModel)]="evento.Comentarios_Chofer"> </ion-textarea>
 		        </ion-col>       
 		    </ion-row>
     

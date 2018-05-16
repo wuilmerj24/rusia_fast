@@ -65,6 +65,7 @@ export class SolicitarPage {
 
                     var tmp_guia_id = JSON.parse(evento.guia_id);
                     var tmp_chofer_id = JSON.parse(evento.chofer_id);
+                    var tmp_servicio_id = JSON.parse(evento.servicio_id);
 
                     //console.log(eventos.rows.item(i).guia_id);
                     
@@ -75,6 +76,7 @@ export class SolicitarPage {
                         title:evento.name,
                         guia:tmp_guia_id[1],
                         chofer:tmp_chofer_id[1],
+                        tipo_servicio:tmp_servicio_id[1],
                         allDay:false,
                         id:eventos.rows.item(i).id
                     });
@@ -98,17 +100,17 @@ export class SolicitarPage {
     }
 
     refresh(){
-        //var self = this;
-        //self.initCalendario();
-        /*var self = this;
-        this.getDatos.borrarTablas(["gastostoursline", "eventos"]).then(
+        var self = this;
+        
+        self.cargar = true;
+        this.getDatos.cargarCalendario(true,true,true,true).then(
             res=>{
-                self.initCalendario();
+                self.initSolicitar();
             },
             fail=>{
                 console.log('Error refresh tables');
             }
-        );*/
+        );
     }
 
 }

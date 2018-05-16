@@ -101,74 +101,75 @@ id, fecha_pago_reserva, Total_Beneficios, tarjeta_usd_pos,
 
     </ion-grid>
 
-	<h4>Montos Negativos</h4>
+	<div *ngIf="ver_negativos">
+		<h4>Montos Negativos</h4>
 
-    <ion-grid>
-    	
-	     <ion-row align-items-center>  
-	        <ion-col col-6>
-	            <b>Gastos RUB</b>
-	        </ion-col>
-	        <ion-col col-6>
-	            <ion-input name="gastos_rel.gasto_rub"  readonly type="number" [(ngModel)]="gastos_rel.gasto_rub"></ion-input>
-	        </ion-col>       
-	    </ion-row>
+	    <ion-grid>
+	    	
+		     <ion-row align-items-center>  
+		        <ion-col col-6>
+		            <b>Gastos RUB</b>
+		        </ion-col>
+		        <ion-col col-6>
+		            <ion-input name="gastos_rel.gasto_rub"  readonly type="number" [(ngModel)]="gastos_rel.gasto_rub"></ion-input>
+		        </ion-col>       
+		    </ion-row>
 
-	     <ion-row align-items-center>  
-	        <ion-col col-6>
-	            <b>Gastos EUR</b>
-	        </ion-col>
-	        <ion-col col-6>
-	            <ion-input name="gastos_rel.gasto_eur"  readonly type="number" [(ngModel)]="gastos_rel.gasto_eur"></ion-input>
-	        </ion-col>       
-	    </ion-row>
+		     <ion-row align-items-center>  
+		        <ion-col col-6>
+		            <b>Gastos EUR</b>
+		        </ion-col>
+		        <ion-col col-6>
+		            <ion-input name="gastos_rel.gasto_eur"  readonly type="number" [(ngModel)]="gastos_rel.gasto_eur"></ion-input>
+		        </ion-col>       
+		    </ion-row>
 
-	     <ion-row align-items-center>  
-	        <ion-col col-6>
-	            <b>Gastos TC RUB</b>
-	        </ion-col>
-	        <ion-col col-6>
-	            <ion-input name="gastos_rel.tarjeta_rub"  readonly type="number" [(ngModel)]="gastos_rel.tarjeta_rub"></ion-input>
-	        </ion-col>       
-	    </ion-row>
+		     <ion-row align-items-center>  
+		        <ion-col col-6>
+		            <b>Gastos TC RUB</b>
+		        </ion-col>
+		        <ion-col col-6>
+		            <ion-input name="gastos_rel.tarjeta_rub"  readonly type="number" [(ngModel)]="gastos_rel.tarjeta_rub"></ion-input>
+		        </ion-col>       
+		    </ion-row>
 
-	     <ion-row align-items-center>  
-	        <ion-col col-6>
-	            <b>Gastos Paypal</b>
-	        </ion-col>
-	        <ion-col col-6>
-	            <ion-input name="gastos_rel.gasto_paypal"  readonly type="number" [(ngModel)]="gastos_rel.gasto_paypal"></ion-input>
-	        </ion-col>       
-	    </ion-row>
-	    
-	     <ion-row align-items-center>  
-	        <ion-col col-6>
-	            <b>Gastos USD</b>
-	        </ion-col>
-	        <ion-col col-6>
-	            <ion-input name="gastos_rel.gasto_usd"  readonly type="number" [(ngModel)]="gastos_rel.gasto_usd"></ion-input>
-	        </ion-col>       
-	    </ion-row>
+		     <ion-row align-items-center>  
+		        <ion-col col-6>
+		            <b>Gastos Paypal</b>
+		        </ion-col>
+		        <ion-col col-6>
+		            <ion-input name="gastos_rel.gasto_paypal"  readonly type="number" [(ngModel)]="gastos_rel.gasto_paypal"></ion-input>
+		        </ion-col>       
+		    </ion-row>
+		    
+		     <ion-row align-items-center>  
+		        <ion-col col-6>
+		            <b>Gastos USD</b>
+		        </ion-col>
+		        <ion-col col-6>
+		            <ion-input name="gastos_rel.gasto_usd"  readonly type="number" [(ngModel)]="gastos_rel.gasto_usd"></ion-input>
+		        </ion-col>       
+		    </ion-row>
 
-	     <ion-row align-items-center>  
-	        <ion-col col-6>
-	            <b>Gastos TC USD</b>
-	        </ion-col>
-	        <ion-col col-6>
-	            <ion-input name="gastos_rel.tarjeta_usd"  readonly type="number" [(ngModel)]="gastos_rel.tarjeta_usd"></ion-input>
-	        </ion-col>       
-	    </ion-row>
+		     <ion-row align-items-center>  
+		        <ion-col col-6>
+		            <b>Gastos TC USD</b>
+		        </ion-col>
+		        <ion-col col-6>
+		            <ion-input name="gastos_rel.tarjeta_usd"  readonly type="number" [(ngModel)]="gastos_rel.tarjeta_usd"></ion-input>
+		        </ion-col>       
+		    </ion-row>
 
-	     <ion-row align-items-center>  
-	        <ion-col col-6>
-	            <b>Gastos TC EUR</b>
-	        </ion-col>
-	        <ion-col col-6>
-	            <ion-input name="gastos_rel.tarjeta_eur"  readonly type="number" [(ngModel)]="gastos_rel.tarjeta_eur"></ion-input>
-	        </ion-col>       
-	    </ion-row>
-
-
-    </ion-grid>
+		     <ion-row align-items-center>  
+		        <ion-col col-6>
+		            <b>Gastos TC EUR</b>
+		        </ion-col>
+		        <ion-col col-6>
+		            <ion-input name="gastos_rel.tarjeta_eur"  readonly type="number" [(ngModel)]="gastos_rel.tarjeta_eur"></ion-input>
+		        </ion-col>       
+		    </ion-row>
+	    </ion-grid>
+	</div>
+	
 
 </ion-content>

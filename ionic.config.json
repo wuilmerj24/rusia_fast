@@ -8,7 +8,8 @@
 	"proxies": [
 	    {
 	        "path": "/api",
-	        "proxyUrl":"http://rusiatoursmoscu.com"
+	        "proxyUrl":"https://rusiatoursmoscu.com:443",
+			"rejectUnauthorized":false
 	    }
 	]
 }

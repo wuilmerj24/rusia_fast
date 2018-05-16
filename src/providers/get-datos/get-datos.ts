@@ -17,7 +17,9 @@ export class GetDatosProvider {
 
 	//private url = '/api';
 	//private url = 'http://odoo.devoptions.mx';     //"http://odoo.devoptions.mx"
-	private url = 'http://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
+	//private url = 'https://rusiatoursmoscu.com:443';    //"proxyUrl":"http://rusiatoursmoscu.com"
+	//private url = '185.129.251.102:443';    //"proxyUrl":"http://rusiatoursmoscu.com"
+	private url = 'https://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
 
 	public usr = null;	
 	private eventoHijo = [];
@@ -190,9 +192,9 @@ export class GetDatosProvider {
 		  		Object.keys(attachment).forEach(key=> {
 
 		  			var registro = "INSERT OR IGNORE INTO attachment "+
-				    	"(id, cliente_id, file_size, name, eventos_id)"+
+				    	"(id, cliente_id, file_size, name, eventos_id, is_cliente)"+
 				    	" VALUES (" + attachment[key].id + ", '"+attachment[key].cliente_id[0]+"', '" +attachment[key].file_size+"', '" 
-				    	+attachment[key].name +"', '"+attachment[key].eventos_id[0]+"');";
+				    	+attachment[key].name +"', '"+attachment[key].eventos_id[0]+"', '"+attachment[key].is_cliente+"');";
 				    //console.log(registro); 
 
 
@@ -357,7 +359,7 @@ export class GetDatosProvider {
 		//console.log((dato == 'false'));
 
 		//dato = 
-		return ((dato == 'false' || dato == false)?"":dato.replace("'", "''"));
+		return ((dato == 'false' || dato == false)?"":dato.replace(/\'/g, ""));
 	}
 
 	//private cargarGastosEvento
@@ -417,14 +419,15 @@ export class GetDatosProvider {
 	  			}			  			
 	  			var registro = "INSERT OR IGNORE INTO eventos "+
 			    	"(id, cliente_id_tmp, cliente_id, representante_id,"+
-			    	" Fecha_Inicio, hora_inicio , hora_final , name, is_padre, fecha_padre, guia_id,"+
+			    	" Fecha_Inicio, hora_inicio , hora_final, hora_chofer, name, is_padre, fecha_padre, guia_id,"+
 			    	" chofer_id_tmp, chofer_id, gasto_rub, gasto_eur, gasto_usd, gasto_paypal, Comentarios_Chofer,"+
 			    	" Comentarios_Internos, Comentarios_Cliente, Comentarios_Guia, Fecha_Fin, Transporte, hotel_id,"+
 			    	" ciudad_id, Total_Representante, message, numero_pax, evento_id, Servicio_Gastos, tarjeta_eur,"+
-			    	" tarjeta_rub, tarjeta_usd, is_guia, is_traslado, gastostoursline_ids, guia_id_tmp, gastos_ids, servicio_id, salario, observaciones_solicitud)"+
+			    	" tarjeta_rub, tarjeta_usd, is_guia, is_traslado, gastostoursline_ids, guia_id_tmp, gastos_ids,"+
+			    	" servicio_id, salario, observaciones_solicitud)"+
 			    	" VALUES (" + eventos[key].id + ", '"+eventos[key].Datos_Cliente_id[0]+"', '" + JSON.stringify(eventos[key].Datos_Cliente_id)+"', '" +
 			    	JSON.stringify(eventos[key].representante_id)+ "', '" + eventos[key].Fecha_Inicio +"','" + 
-			    	eventos[key].hora_inicio + "', '" + eventos[key].hora_final + "', '" + 
+			    	eventos[key].hora_inicio + "', '" + eventos[key].hora_final + "', '" + self.parseDato(eventos[key].hora_chofer) + "', '" + 
 			    	eventos[key].name + "', '" + eventos[key].is_padre +"', '" + 
 			    	eventos[key].fecha_padre +"', '" + JSON.stringify(eventos[key].guia_id)+ "' , '" + 
 			    	eventos[key].chofer_id[0] + "' , '" +JSON.stringify(eventos[key].chofer_id) + "' , '" + eventos[key].gasto_rub + "' , '" + 
@@ -432,13 +435,13 @@ export class GetDatosProvider {
 			    	eventos[key].gasto_paypal + "', '" + self.parseDato(eventos[key].Comentarios_Chofer) + "', '" + 
 			    	self.parseDato(eventos[key].Comentarios_Internos) + "', '" + self.parseDato(eventos[key].Comentarios_Cliente) + "', '" + 
 			    	self.parseDato(eventos[key].Comentarios_Guia) + "', '" + eventos[key].Fecha_Fin + "', '"+
-			    	eventos[key].Transporte+"', '"+JSON.stringify(eventos[key].hotel_id)+"', '"+JSON.stringify(eventos[key].ciudad_id)+"', '"+
-			    	eventos[key].Total_Representante+"', '"+eventos[key].message+"', '"+eventos[key].numero_pax+"', '"+
+			    	self.parseDato(eventos[key].Transporte)+"', '"+JSON.stringify(eventos[key].hotel_id)+"', '"+JSON.stringify(eventos[key].ciudad_id)+"', '"+
+			    	eventos[key].Total_Representante+"', '"+self.parseDato(eventos[key].message)+"', '"+eventos[key].numero_pax+"', '"+
 			    	JSON.stringify(eventos[key].evento_id)+"', '"+eventos[key].Servicio_Gastos+"', '"+eventos[key].tarjeta_eur+"', '"+
 			    	eventos[key].tarjeta_rub+"', '"+eventos[key].tarjeta_usd+"' , '"+eventos[key].is_guia+"', '"+eventos[key].is_traslado+"', '"+ 
 			    	JSON.stringify(eventos[key].gastostoursline_ids)+"', '"+eventos[key].guia_id[0]+"', '"+ JSON.stringify(eventos[key].gastos_ids) +"', '"+
-			    	JSON.stringify(eventos[key].servicio_id)+"', '"+eventos[key].salario+"', '"+eventos[key].observaciones_solicitud+"');";
-			    //console.log(registro);							  			
+			    	JSON.stringify(eventos[key].servicio_id)+"', '"+eventos[key].salario+"', '"+self.parseDato(eventos[key].observaciones_solicitud)+"');";
+			    console.log(registro);							  			
 			    sql.push(registro);
 			});
 
@@ -495,6 +498,7 @@ export class GetDatosProvider {
 					},
 					fail=>{
 
+						reject();
 					}
 					
 				)
@@ -527,7 +531,7 @@ export class GetDatosProvider {
 	}
 
 
-	public async cargarCalendario(borrar){
+	public async cargarCalendario(borrarE, borrarG, borrarA, borrarC){
 
 		var self = this;
 
@@ -543,32 +547,10 @@ export class GetDatosProvider {
 				["is_padre", "=", false],
 				["is_guia", "=", true],
 				["guia_id", "=", false]];
-				console.log('----------  await self.cargarEventos(dominio,borrar)');
-				await self.cargarEventos(dominio,borrar);
-				console.log('----------  await self.cargarEventos(dominioSol,borrar);');
-				await self.cargarEventos(dominioSol,false);//-> no lo carga el usuario
-				console.log('----------  await self.cargarEventos(null,borrar);');
-				await self.cargarEventos(null,false);
-				console.log('----------  await self.cargarGastos(false);;');
-				await self.cargarGastos(false);
-				console.log('----------  await self.cargarAttachment(false);');
-				await self.cargarAttachment(borrar);
-				console.log('----------  await self.cargarGastosConceptos();');
-				await self.cargarGastosConceptos();//-> no lo carga el usuario
-				console.log('----------  await self.cargarSolicitudes(false);');
-				await self.cargarSolicitudes(false); //solo lo carga el root
+
 
 			}else if(self.usr.tipo_usuario + '' == 'is_client'){
 				dominio = [['is_padre', '=' , false],["Datos_Cliente_id", "=", self.usr.id]];
-
-				console.log('----------  await self.cargarEventos(dominio,borrar)');
-				await self.cargarEventos(dominio,borrar);				
-				console.log('----------  await self.cargarEventos(null,borrar);');
-				await self.cargarEventos(null,borrar);
-				console.log('----------  await self.cargarGastos(false);;');
-				await self.cargarGastos(false);
-				console.log('----------  await self.cargarAttachment(false);');
-				await self.cargarAttachment(borrar);
 
 			}else if(self.usr.tipo_usuario + '' == 'is_guia'){
 				
@@ -579,18 +561,7 @@ export class GetDatosProvider {
 				["is_guia", "=", true],
 				["guia_id", "=", false]];
 				
-				console.log('----------  Cargar los eventos asignados');
-				await self.cargarEventos(dominio,borrar);
-				console.log('----------  Cargar los eventos para la tabla solicitudes');
-				await self.cargarEventos(dominioSol, false);
-				console.log('----------  Cargar los eventos padres');
-				await self.cargarEventos(null, false);
-				console.log('----------  await self.cargarGastos(false);;');
-				await self.cargarGastos(false);
-				console.log('----------  await self.cargarAttachment(false);');
-				await self.cargarAttachment(borrar);
-				console.log('----------  await self.cargarGastosConceptos();');
-				await self.cargarGastosConceptos();//-> no lo carga el usuario
+															
 
 			}else if(self.usr.tipo_usuario + '' == 'is_chofer'){
 				dominio = [['is_padre', '=' , false], ["chofer_id", "=", self.usr.id]];
@@ -599,19 +570,35 @@ export class GetDatosProvider {
 				["is_padre", "=", false],
 				["is_traslado", "=", true],
 				["chofer_id", "=", false]];				
-				console.log('----------  await self.cargarEventos(dominio,borrar)');
-				await self.cargarEventos(dominio,borrar);
-				console.log('----------  await self.cargarEventos(dominioSol,borrar);');
-				await self.cargarEventos(dominioSol,false);//-> no lo carga el usuario
-				console.log('----------  await self.cargarEventos(null,borrar);');
-				await self.cargarEventos(null,false);
-				console.log('----------  await self.cargarGastos(false);;');
-				await self.cargarGastos(false);
+			}
+
+
+			if(borrarE){
+
+				console.log('----------  Cargar los eventos asignados');
+				await self.cargarEventos(dominio,borrarE);
+				console.log('----------  Cargar los eventos para la tabla solicitudes');
+				await self.cargarEventos(dominioSol, false);
+				console.log('----------  Cargar los eventos padres');
+				await self.cargarEventos(null, false);	
+			}
+			
+
+			if(borrarG){
+
+				console.log('----------  await self.cargarGastos(false);;');				
+				await self.cargarGastos(borrarG);	
+			}
+			if(borrarA){
+
 				console.log('----------  await self.cargarAttachment(false);');
-				await self.cargarAttachment(borrar);
+				await self.cargarAttachment(borrarA);	
+			}
+			if(borrarC){
+
 				console.log('----------  await self.cargarGastosConceptos();');
 				await self.cargarGastosConceptos();//-> no lo carga el usuario
-			}			
+			}				
 
 			if(dominioUsers != null){
 
@@ -905,7 +892,7 @@ export class GetDatosProvider {
 					    	" company_id, ciudades, fax, is_correo, name, eventos_ids, state,"+
 					    	"email, active, reps_gastos_ids, login, phone, mobile) VALUES (" + users[key].id +	", '"+JSON.stringify(users[key].gastos_users_ids)+"', '"+
 					    	JSON.stringify(users[key].company_id)+"', '"+users[key].ciudades+"', '"+users[key].fax+"', '"+users[key].is_correo+"', '"+
-					    	users[key].name+"', '"+JSON.stringify(users[key].eventos_ids)+"', '"+users[key].state+"', '"+users[key].email+"', '"+
+					    	self.parseDato(users[key].name)+"', '"+JSON.stringify(users[key].eventos_ids)+"', '"+users[key].state+"', '"+users[key].email+"', '"+
 					    	users[key].active+"', '"+JSON.stringify(users[key].reps_gastos_ids)+"', '"+users[key].login+"' ,'"+users[key].phone+"', '"+users[key].mobile+"' );"
 
 

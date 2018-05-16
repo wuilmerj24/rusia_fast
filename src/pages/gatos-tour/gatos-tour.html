@@ -52,7 +52,7 @@
 	            <b>Total</b>
 	        </ion-col>
 	        <ion-col col-8>
-	            <ion-input name="gasto.Total" type="number" [readonly]="!ver_segmento" [(ngModel)]="gasto.Total"></ion-input>
+	            <ion-input name="gasto.Total" type="number" placeholder="0" [readonly]="!ver_segmento" [(ngModel)]="gasto.Total"></ion-input>
 	        </ion-col>    
 	    </ion-row>            	
 	    <ion-row align-items-center>  
@@ -92,7 +92,7 @@
 	        <ion-col col-8>
 	        	<!--<ion-datetime  name="gasto.fecha" displayFormat="YYYY-MM-DD" [(ngModel)]="gasto.fecha"></ion-datetime>-->
 
-	        	<autocomplete [lista]="clientes" placeholder="Usuario" (onselect) = "seleccionCliente($event)"></autocomplete>
+	        	<autocomplete [lista]="clientes" [default]="default" placeholder="Usuario" (onselect) = "seleccionCliente($event)"></autocomplete>
 
 	            <!--<ion-input name="gasto.fecha" type="text" [readonly]="!ver_segmento" [(ngModel)]="gasto.fecha"></ion-input-->
 	        </ion-col>    
@@ -102,7 +102,7 @@
 	            <b>Fecha usuario</b>
 	        </ion-col>
 	        <ion-col col-8>
-	        	<ion-datetime  name="gasto.fecha" displayFormat="YYYY-MM-DD" [(ngModel)]="gasto.fecha"></ion-datetime>
+	        	<ion-datetime  name="gasto.fecha" placeholder="YYYY-MM-DD" displayFormat="YYYY-MM-DD" [(ngModel)]="gasto.fecha"></ion-datetime>
 
 	            <!--<ion-input name="gasto.fecha" type="text" [readonly]="!ver_segmento" [(ngModel)]="gasto.fecha"></ion-input-->
 	        </ion-col>    
@@ -116,7 +116,7 @@
 
 		<ion-row align-items-center>  
 			<ion-col col-12>
-				<ion-textarea name="evento.observaciones" [readonly]="!ver_segmento" [(ngModel)]="gasto.observaciones"> </ion-textarea>
+				<ion-textarea name="evento.observaciones" placeholder = "Observaciones" [readonly]="!ver_segmento" [(ngModel)]="gasto.observaciones"> </ion-textarea>
 			</ion-col>       
 		</ion-row>
 

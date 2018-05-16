@@ -146,7 +146,7 @@
             </ion-row>        
             <ion-row class="borde" *ngFor="let gasto of gastos_ciudad; let i = index" align-items-center (click)="abrirGasto(gasto)">  
                 <ion-col col-4>
-                    {{gasto.display_name}}
+                    <a>{{gasto.display_name}}</a>
                 </ion-col>
                 <ion-col col-4>
                     {{gasto.evento_id[1]}}

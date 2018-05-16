@@ -20,16 +20,25 @@ export class GatosTourPage {
 	private clientes = [];
 
 	private usuario_id: any = false;
-	/*[
-		{name:'jose', id:1},
-		{name:'alvaro', id:2},
-		{name:'camilo', id:3},
-		{name:'jorge', id:4},
-	];*/
+	
+	private default = [];
+	private prueba = 'hola mundo';
+
 	constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 		
 
-		this.gasto = this.navParams.get('gasto');			
+		this.gasto = this.navParams.get('gasto');
+
+		//console.log(this.gasto.usuario_id);
+		
+		this.default = this.gasto.usuario_id;	
+
+		console.log(JSON.stringify(this.gasto));
+		if(this.default.length > 0){
+
+			this.usuario_id = this.default[0];	
+		}
+		
 		
 		this.ver_segmento = this.navParams.get('ver_segmento');
 		this.gastostours = this.navParams.get('lista_gastos');		
@@ -100,44 +109,24 @@ export class GatosTourPage {
 				usuario_id: self.usuario_id
 			};
 
-			/*console.log(JSON.stringify(self.gasto.concepto_gasto_id));
-			console.log(JSON.stringify(self.gasto.ciudad_id));
-*/
-			//console.log(JSON.stringify(campos));
 			self.closeModal(campos)
 			 
-			/*self.getDatos.create('rusia.gastostoursline', campos).then(
-				res=>{
-					console.log('create gastos ok:' + res);
-					//self.cargar = false;
-					//self.closeModal(res);
-				},
-				fail=>{
-					console.log('error create gastos');
-				}
-
-			);*/
 		}else{
 
-			/*campos = {
+			campos = {
 				concepto_gasto_id:self.gasto.concepto_gasto_id[0],				
 				Total:self.gasto.Total,
 				tipo_moneda:self.gasto.tipo_moneda,
-				ciudad_id:3,
-				//usuario_id:this.gasto.,
+				ciudad_id:self.gasto.ciudad_id[0],				
+				//usuario_id:83,
 				observaciones:self.gasto.observaciones,
-				eventos_id: self.eventos_id
+				eventos_id: self.gasto.eventos_id, 
+				fecha: self.getDatos.convertirFecha(new Date(self.gasto.fecha)),
+				evento_padre:self.gasto.evento_padre,
+				usuario_id: self.usuario_id
 			};
-			/*self.getDatos.write('rusia.gastostoursline', self.gasto.id, campos).then(
-				res=>{
-					console.log('write gastos ok');
-					self.cargar = false;
-				},
-				fail=>{
-					console.log('error writing gastos');
-				}
-
-			);*/
+			
+			self.closeModal(campos)
 		}
 
 		

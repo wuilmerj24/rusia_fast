@@ -30,6 +30,7 @@ export class LoginPage {
 
     //conexion = {usuario: 'chofersanpetersburgo@gmail.com', bd: 'rusia3', pwd: '123456'};  //  prd
     conexion = {usuario: '', bd: 'rusia3', pwd: ''};
+    mensaje;
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getData:GetDatosProvider) {
 
 		var operacion = this.navParams.get('operacion');

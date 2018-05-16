@@ -20,6 +20,7 @@ export class SolicitarDetallePage {
 	 Fecha_Fin :'',
 	 hora_inicio :'',
 	 hora_final :'',
+	 hora_chofer:'',
 	 name :'',
 	 is_padre :'',
 	 fecha_padre :'',	
@@ -143,8 +144,17 @@ export class SolicitarDetallePage {
 			//console.log('usd:' + campos.gasto_usd)
 			self.getDatos.write('rusia.eventos', self.evento.id, campos).then(
 				res=>{
-					console.log('save event ok');
-					self.cargar = false;
+
+					self.getDatos.cargarCalendario(true,false,false,false).then(
+		        		res=>{
+		        			console.log('Update complete');
+		        			self.initSolitarDetalles();
+		        		},
+		        		fail=>{
+
+		        			console.log('Error loading cgastos');
+		        		}
+		        	);
 				},
 				fail=>{
 					console.log('error saving event');
@@ -159,18 +169,48 @@ export class SolicitarDetallePage {
 		var self = this;
     	self.cargar = true;
 
-    	
-    	self.getDatos.ejecutarSQL("SELECT * FROM user WHERE usuario IS NOT NULL").then(
+    	//console.log("tomarlo directamente");
+    	//console.log(JSON.stringify(self.getDatos.usr));
+
+    	var usr = self.getDatos.usr;
+
+    	var metodo = '';
+		if(usr.tipo_usuario == "is_guia"){
+			metodo = 'get_solicitar_servicio_guia';
+
+		}else if(usr.tipo_usuario == "is_chofer"){
+			metodo = 'get_solicitar_servicio_chofer';
+		}   
+		//console.log(metodo);
+
+		self.getDatos.call('rusia.eventos', metodo, [self.evento.id]).then(
+					res=>{
+						console.log('save event ok');
+						self.presentToast();
+						self.cargar = false;
+					},
+					fail=>{
+						console.log('error saving event');
+						self.cargar = false;
+					} 
+				);
+
+
+    	/*self.getDatos.ejecutarSQL("SELECT * FROM user WHERE usuario IS NOT NULL").then(
     		(usrs: {rows})=>{
 
     			var usr = usrs.rows.item(0);
+
+    			console.log(JSON.stringify(usr));
+
     			var metodo = '';
-    			if(usr.tipo_usuario = "is_guia"){
+    			if(usr.tipo_usuario == "is_guia"){
     				metodo = 'get_solicitar_servicio_guia';
 
-    			}else if(usr.tipo_usuario = "is_chofer"){
+    			}else if(usr.tipo_usuario == "is_chofer"){
     				metodo = 'get_solicitar_servicio_chofer';
-    			}    			
+    			}   
+    			console.log(metodo); 			
 
     			self.getDatos.call('rusia.eventos', metodo, [self.evento.id]).then(
 					res=>{
@@ -188,7 +228,7 @@ export class SolicitarDetallePage {
     		fails=>{
 
     		}
-		);
+		);*/
     	
     }
 
