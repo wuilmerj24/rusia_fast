@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { NavController, NavParams, ViewController, Platform } from 'ionic-angular';
 import { FilePath } from '@ionic-native/file-path';
 import { Base64 } from '@ionic-native/base64';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { File, IWriteOptions, FileEntry, IFile } from '@ionic-native/file';
+import { IOSFilePicker } from '@ionic-native/file-picker';
 
 @Component({
   selector: 'page-documento',
@@ -32,7 +33,7 @@ export class DocumentoPage {
 	private archivo = true;
 	private url = false;
 
-	constructor(private file:File, public viewCtrl: ViewController, private base64: Base64, private filePath: FilePath, private fileChooser: FileChooser, public navCtrl: NavController, public navParams: NavParams) {
+	constructor(private filePicker: IOSFilePicker, public plt: Platform, private file:File, public viewCtrl: ViewController, private base64: Base64, private filePath: FilePath, private fileChooser: FileChooser, public navCtrl: NavController, public navParams: NavParams) {
 	}
 
 	ionViewDidLoad() {
@@ -51,43 +52,79 @@ export class DocumentoPage {
 
 
 		var self = this;
-		self.fileChooser.open()
+		if (this.plt.is('ios')) {
+	      // This will only print when on iOS
+	      console.log('I am an iOS device!');
+	      self.filePicker.pickFile()
 		  .then(uri => {
-
-
-		  self.filePath.resolveNativePath(uri).then( 
-		  	(result) => {
-
-		  		let path = result.substring(0, result.lastIndexOf('/'));
-		  		console.log(path);
-		  		self.nombre_archivo = result.substring(result.lastIndexOf('/')+1, result.length);	
-		  		self.doc.name = self.nombre_archivo;	  		
-
-		  		self.file.readAsBinaryString(path, self.nombre_archivo)
-					      .then(content=>{
-					        content = (<any>window).btoa(content);
-					        self.doc.datas = content;
-					        //console.log(self.doc.datas);
-					        //alert(JSON.stringify(content));
-					      })
-					      .catch(err=>{
-					        console.log(err);
-					        //alert(JSON.stringify(err));
-					      });
-
-   		
-   			}).catch(e => console.log(e));
-
 		  	
+		  	self.filePath.resolveNativePath(uri).then( 
+			  	(result) => {
 
-		  	 
+			  		let path = result.substring(0, result.lastIndexOf('/'));
+			  		console.log(path);
+			  		self.nombre_archivo = result.substring(result.lastIndexOf('/')+1, result.length);	
+			  		self.doc.name = self.nombre_archivo;	  		
 
-		  	//self.file.readAsDataURL()
-		  	//console.log(uri
-		  	/**/
+			  		self.file.readAsBinaryString(path, self.nombre_archivo)
+						      .then(content=>{
+						        content = (<any>window).btoa(content);
+						        self.doc.datas = content;
+						        //console.log(self.doc.datas);
+						        //alert(JSON.stringify(content));
+						      })
+						      .catch(err=>{
+						        console.log(err);
+						        //alert(JSON.stringify(err));
+						      });
+
+	   		
+	   			}).catch(e => console.log(e));
 
 		  })
-		  .catch(e => console.log(e));
+		  .catch(err => console.log('Error', err));
+
+	    }else{
+
+			self.fileChooser.open()
+			  .then(uri => {
+
+
+			  self.filePath.resolveNativePath(uri).then( 
+			  	(result) => {
+
+			  		let path = result.substring(0, result.lastIndexOf('/'));
+			  		console.log(path);
+			  		self.nombre_archivo = result.substring(result.lastIndexOf('/')+1, result.length);	
+			  		self.doc.name = self.nombre_archivo;	  		
+
+			  		self.file.readAsBinaryString(path, self.nombre_archivo)
+						      .then(content=>{
+						        content = (<any>window).btoa(content);
+						        self.doc.datas = content;
+						        //console.log(self.doc.datas);
+						        //alert(JSON.stringify(content));
+						      })
+						      .catch(err=>{
+						        console.log(err);
+						        //alert(JSON.stringify(err));
+						      });
+
+	   		
+	   			}).catch(e => console.log(e));
+
+			  	
+
+			  	 
+
+			  	//self.file.readAsDataURL()
+			  	//console.log(uri
+			  	/**/
+
+			  })
+			  .catch(e => console.log(e));
+	    }
+
 	}
 
 	onChange($event){

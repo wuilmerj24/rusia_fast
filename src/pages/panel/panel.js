@@ -8,83 +8,95 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, Nav, Platform, NavParams } from 'ionic-angular';
+import { Nav, Platform, NavParams } from 'ionic-angular';
 import { CalendarioPage } from '../../pages/calendario/calendario';
-import { ChoferPage } from '../../pages/chofer/chofer';
 import { ConfiPage } from '../../pages/confi/confi';
-import { GuiaPage } from '../../pages/guia/guia';
-import { GananciasPage } from '../../pages/ganancias/ganancias';
 import { ReservasPage } from '../../pages/reservas/reservas';
-import { AcercaPage } from '../../pages/acerca/acerca';
 import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 import { LoginPage } from '../../pages/login/login';
+import { PerfilPage } from '../../pages/perfil/perfil';
+import { SolicitarPage } from '../../pages/solicitar/solicitar';
+import { SolicitarAdminPage } from '../../pages/solicitar-admin/solicitar-admin';
 var PanelPage = /** @class */ (function () {
     function PanelPage(platform, navParams) {
         this.platform = platform;
         this.navParams = navParams;
         this.rootPage = CalendarioPage;
         var tipo_usuario = this.navParams.get('usr');
+        this.pages = [];
+        console.log('-----------------------------------------------------------------');
         console.log(tipo_usuario);
+        console.log('-----------------------------------------------------------------');
         // used for an example of ngFor and navigation
         if ("is_chofer" == tipo_usuario) {
             this.pages = [
                 { title: 'Calendario', component: CalendarioPage },
-                { title: 'Acerca de', component: AcercaPage },
+                { title: 'Solicitar Servicio', component: SolicitarPage },
+                { title: 'Mi Perfil', component: PerfilPage },
                 { title: 'Salir', component: 'salir' },
             ];
         }
         else if ("is_guia" == tipo_usuario) {
             this.pages = [
                 { title: 'Calendario', component: CalendarioPage },
-                { title: 'Acerca de', component: AcercaPage },
+                { title: 'Solicitar Servicio', component: SolicitarPage },
+                { title: 'Mi Perfil', component: PerfilPage },
+                //{ title: 'Acerca de', component: AcercaPage },
                 { title: 'Salir', component: 'salir' },
             ];
         }
         else if ("is_rep" == tipo_usuario) {
             this.pages = [
                 { title: 'Calendario', component: CalendarioPage },
-                { title: 'Acerca de', component: AcercaPage },
+                { title: 'Mi Perfil', component: PerfilPage },
+                //{ title: 'Acerca de', component: AcercaPage },
                 { title: 'Salir', component: 'salir' },
             ];
         }
         else if ("is_client" == tipo_usuario) {
             this.pages = [
                 { title: 'Calendario', component: CalendarioPage },
-                { title: 'Acerca de', component: AcercaPage },
+                { title: 'Mi Perfil', component: PerfilPage },
+                //{ title: 'Acerca de', component: AcercaPage },
                 { title: 'Salir', component: 'salir' },
             ];
         }
         else if ("is_root" == tipo_usuario) {
             this.pages = [
                 { title: 'Calendario', component: CalendarioPage },
-                { title: 'Chofer adjudicado', component: ChoferPage },
-                { title: 'Guia adjudicado', component: GuiaPage },
+                //{ title: 'Chofer adjudicado', component: ChoferPage },
+                //{ title: 'Guia adjudicado',  component:GuiaPage },        
+                //{ title: 'Reservas', component: ReservasPage },
                 { title: 'Reservas', component: ReservasPage },
-                { title: 'Ganancias', component: GananciasPage },
+                { title: 'Solicitudes recibidas', component: SolicitarAdminPage },
                 { title: 'Configuración', component: ConfiPage },
                 { title: 'Gastos Temporal', component: GatosTourPage },
-                { title: 'Acerca de', component: AcercaPage },
+                { title: 'Mi Perfil', component: PerfilPage },
+                //{ title: 'Acerca de', component: AcercaPage },
                 { title: 'Salir', component: 'salir' },
             ];
         }
         else if ("is_general" == tipo_usuario) {
             this.pages = [
                 { title: 'Calendario', component: CalendarioPage },
-                { title: 'Acerca de', component: AcercaPage },
+                { title: 'Mi Perfil', component: PerfilPage },
+                //{ title: 'Acerca de', component: AcercaPage },       
                 { title: 'Salir', component: 'salir' },
             ];
         }
         else if ("is_traslados" == tipo_usuario) {
             this.pages = [
                 { title: 'Calendario', component: CalendarioPage },
-                { title: 'Acerca de', component: AcercaPage },
+                { title: 'Mi Perfil', component: PerfilPage },
+                //{ title: 'Acerca de', component: AcercaPage },        
                 { title: 'Salir', component: 'salir' },
             ];
         }
         else {
             this.pages = [
                 { title: 'Calendario', component: CalendarioPage },
-                { title: 'Acerca de', component: AcercaPage },
+                { title: 'Mi Perfil', component: PerfilPage },
+                //{ title: 'Acerca de', component: AcercaPage },
                 { title: 'Salir', component: 'salir' },
             ];
         }
@@ -104,7 +116,6 @@ var PanelPage = /** @class */ (function () {
         __metadata("design:type", Nav)
     ], PanelPage.prototype, "nav", void 0);
     PanelPage = __decorate([
-        IonicPage(),
         Component({
             selector: 'page-panel',
             templateUrl: 'panel.html',

@@ -41,7 +41,8 @@ import { SQLite } from '@ionic-native/sqlite';
 import { TablasProvider } from '../providers/tablas/tablas';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
-import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
+import { AutocompleteComponent } from '../components/autocomplete/autocomplete';
+import { IOSFilePicker } from '@ionic-native/file-picker';
 
 
 @NgModule({
@@ -98,6 +99,7 @@ import { AutocompleteComponent } from '../components/autocomplete/autocomplete'
   ],
   providers: [ 
     File,   
+    IOSFilePicker,
     FileOpener,
     FileChooser,
     FilePath,

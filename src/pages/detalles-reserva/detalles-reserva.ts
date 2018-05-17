@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Slides, NavController, NavParams,ViewController } from 'ionic-angular';
+import { Slides, NavController, NavParams,ViewController, Platform} from 'ionic-angular';
 import { AcercaPage } from '../../pages/acerca/acerca';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 import { GastosRelPage } from '../../pages/gastos-rel/gastos-rel';
@@ -87,7 +87,7 @@ export class DetallesReservaPage {
     private evento_hijo;
     private permisos = '';
 
-	constructor(private fileOpener: FileOpener, private file:File, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
+	constructor(public plt: Platform,private fileOpener: FileOpener, private file:File, public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 
     var padre = this.navParams.get('padre');
     if(padre){
@@ -311,9 +311,11 @@ export class DetallesReservaPage {
           //var tabla = 
           console.log(JSON.stringify(res[0].mimetype));
           var ext = '';
-          if(res[0].mimetype.toString() == "application/pdf"){
+          var mimetype_tmp = res[0].mimetype.toString();
+
+          if(mimetype_tmp == "application/pdf"){
             ext = '.pdf';
-          }else if(res[0].mimetype.toString() == "image/png"){
+          }else if(mimetype_tmp == "image/png"){
             ext = '.png';
           }
 
@@ -331,25 +333,56 @@ export class DetallesReservaPage {
 
           const opt: IWriteOptions = { replace: true }
 
+          if (self.plt.is('ios')) {
+            console.log('------------------loading in IOS');
+            //var nativeUrl = (self.file.applicationStorageDirectory + "tmp/" + att.name.replace(/ /g,'')).substring(7) + ext;
+            //console.log(nativeUrl)
+            //self.file.applicationStorageDirectory
+            self.file.writeFile(self.file.documentsDirectory, att.name.replace(/ /g,'') + ext, blobPdf, opt).then(
+              res=>{
+                console.log('file saved'+ res.nativeURL);
+                console.log('file saved'+ res.toInternalURL());
+                console.log('file saved'+ res.toURL());
+                
+                //self.presentToast();
+                self.fileOpener.open(
+                  res.toURL(),
+                  mimetype_tmp//file mimeType
+                ).then((success) => {
+                  console.log('success open file: ', success);
+                }, (err) => {
+                  console.log('error open file', err.message);
+                });
 
-          self.file.writeFile(self.file.externalDataDirectory, att.name + ext, blobPdf, opt).then(
-            res=>{
-              console.log('file saved'+ res.nativeURL);
-              //self.presentToast();
-              self.fileOpener.open(
-                res.toInternalURL(),
-                'application/pdf'//file mimeType
-              ).then((success) => {
-                console.log('success open file: ', success);
-              }, (err) => {
-                console.log('error open file', err.message);
-              });
+              },
+              fail=>{
+                console.log(JSON.stringify(fail));
+              }
+            );
 
-            },
-            fail=>{
-              console.log(JSON.stringify(fail));
-            }
-          );
+          }else{
+            self.file.writeFile(self.file.externalDataDirectory, att.name + ext, blobPdf, opt).then(
+              res=>{
+                console.log('file saved'+ res.nativeURL);
+                //self.presentToast();
+                self.fileOpener.open(
+                  res.toInternalURL(),
+                  mimetype_tmp//file mimeType
+                ).then((success) => {
+                  console.log('success open file: ', success);
+                }, (err) => {
+                  console.log('error open file', err.message);
+                });
+
+              },
+              fail=>{
+                console.log(JSON.stringify(fail));
+              }
+            );
+          }
+
+          //self.file.writeFile(self.file.dataDirectory, att.name + ext, blobPdf, opt).then(
+          
           self.ver_download = false;
         },
         fail=>{

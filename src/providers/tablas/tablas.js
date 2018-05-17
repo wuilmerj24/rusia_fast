@@ -4,9 +4,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 import { Injectable } from '@angular/core';
 /*
   Generated class for the TablasProvider provider.
@@ -16,6 +13,26 @@ import { Injectable } from '@angular/core';
 */
 var TablasProvider = /** @class */ (function () {
     function TablasProvider() {
+        this.tbl_solicitud_odoo = [
+            "usuario_id",
+            "name",
+            "servicio_id",
+            "tipo",
+            "salario",
+            "fecha",
+            "observaciones_solicitud",
+            "ciudad_id"
+        ];
+        this.tbl_solicitud = "CREATE TABLE IF NOT EXISTS solicitud(" +
+            " id INTEGER PRIMARY KEY," +
+            " usuario_id VARCHAR(255)," +
+            " name VARCHAR(255)," +
+            " servicio_id VARCHAR(255)," +
+            " tipo VARCHAR(20)," +
+            " salario VARCHAR(10)," +
+            " fecha VARCHAR(20), " +
+            " observaciones_solicitud TEXT," +
+            " ciudad_id VARCHAR(255));";
         this.tbl_gastos = "CREATE TABLE IF NOT EXISTS gastostoursline(" +
             " id INTEGER PRIMARY KEY," +
             " concepto_gasto_id VARCHAR(255)," +
@@ -27,6 +44,21 @@ var TablasProvider = /** @class */ (function () {
             " usuario_id VARCHAR(255)," +
             " evento_padre VARCHAR(50)," +
             " eventos_id VARCHAR(5));";
+        this.tbl_attachment = "CREATE TABLE IF NOT EXISTS attachment(" +
+            " id INTEGER PRIMARY KEY," +
+            " file_size VARCHAR(20)," +
+            " cliente_id VARCHAR(20)," +
+            " is_cliente VARCHAR(10)," +
+            " eventos_id VARCHAR(20)," +
+            " name VARCHAR(255));";
+        this.tbl_attachment_odoo = [
+            "id",
+            "file_size",
+            "name",
+            "cliente_id",
+            "eventos_id",
+            "is_cliente"
+        ];
         this.tbl_gastos_odoo = [
             "id",
             "tipo_moneda",
@@ -40,11 +72,25 @@ var TablasProvider = /** @class */ (function () {
             "eventos_id"
         ];
         this.tbl_user = "CREATE TABLE IF NOT EXISTS user(" +
-            " id INTEGER," +
+            " id INTEGER PRIMARY KEY," +
             " usuario VARCHAR(255)," +
             " pwd VARCHAR(20)," +
             " bd VARCHAR(20)," +
-            " tipo_usuario VARCHAR(20));";
+            " tipo_usuario VARCHAR(20)," +
+            " gastos_users_ids  VARCHAR(255)," +
+            " company_id VARCHAR(255)," +
+            " ciudades VARCHAR(255)," +
+            " fax VARCHAR(20)," +
+            " is_correo VARCHAR(255)," +
+            " name VARCHAR(255)," +
+            " eventos_ids VARCHAR(255)," +
+            " state VARCHAR(20)," +
+            " email VARCHAR(255)," +
+            " active VARCHAR(20)," +
+            " reps_gastos_ids VARCHAR(255)," +
+            " login VARCHAR(255)," +
+            " phone VARCHAR(20)," +
+            " mobile VARCHAR(20));";
         this.tbl_user_odoo = ["email",
             "is_chofer",
             "is_guia",
@@ -52,15 +98,57 @@ var TablasProvider = /** @class */ (function () {
             "is_client",
             "is_root",
             "is_general",
-            "is_traslados"];
+            "is_traslados",
+            "gastos_users_ids",
+            "company_id",
+            "ciudades",
+            "fax",
+            "is_correo",
+            "name",
+            "eventos_ids",
+            "state",
+            "email",
+            "active",
+            "reps_gastos_ids",
+            "login",
+            "phone",
+            "mobile"];
+        this.tbl_gastos_ciudad_odoo = ["dia", "evento_id", "fecha_pago_reserva", "Total_Beneficios", "tarjeta_usd_pos", "tarjeta_usd", "tarjeta_rub", "Total_Pagado_Web", "tarjeta_eur_pos", "Total_Tarjeta", "Total_Paypal", "Total_Rub", "Total_Representante", "Total_Pago_Clientes", "gasto_usd", "concepto_id", "gasto_paypal", "Total_Usd", "tarjeta_eur", "gasto_rub", "gasto_eur", "Total_Euros", "display_name", "__last_update"];
+        this.tbl_gastos_ciudad = "CREATE TABLE IF NOT EXISTS gastosciudad(" +
+            " id INTEGER PRIMARY KEY," +
+            " fecha_pago_reserva VARCHAR(20)," +
+            " Total_Beneficios VARCHAR(20)," +
+            " tarjeta_usd_pos VARCHAR(20)," +
+            " tarjeta_usd VARCHAR(20)," +
+            " tarjeta_rub VARCHAR(20)," +
+            " Total_Pagado_Web VARCHAR(20)," +
+            " tarjeta_eur_pos VARCHAR(20)," +
+            " Total_Tarjeta VARCHAR(20)," +
+            " Total_Paypal VARCHAR(20)," +
+            " Total_Rub VARCHAR(20)," +
+            " Total_Representante VARCHAR(20)," +
+            " Total_Pago_Clientes VARCHAR(20)," +
+            " gasto_usd VARCHAR(20)," +
+            " concepto_id VARCHAR(255)," +
+            " gasto_paypal VARCHAR(20)," +
+            " Total_Usd VARCHAR(20)," +
+            " tarjeta_eur VARCHAR(20)," +
+            " gasto_rub VARCHAR(20)," +
+            " gasto_eur VARCHAR(20)," +
+            " Total_Euros VARCHAR(20)," +
+            " dia VARCHAR(20)," +
+            " evento_id VARCHAR(255)," +
+            " display_name VARCHAR(255));";
         this.tbl_eventos = "CREATE TABLE IF NOT EXISTS eventos(" +
             " id INTEGER PRIMARY KEY," +
-            " cliente_id VARCHAR(255)," +
+            " cliente_id_tmp VARCHAR(255)," +
+            " cliente_id VARCHAR(20)," +
             " representante_id VARCHAR(255)," +
             " Fecha_Inicio VARCHAR(20)," +
             " Fecha_Fin VARCHAR(20)," +
             " hora_inicio VARCHAR(10)," +
             " hora_final VARCHAR(10)," +
+            " hora_chofer VARCHAR(10)," +
             " name VARCHAR(255)," +
             " is_padre VARCHAR(5)," +
             " is_traslado VARCHAR(5)," +
@@ -68,6 +156,7 @@ var TablasProvider = /** @class */ (function () {
             " fecha_padre VARCHAR(20)," +
             " guia_id VARCHAR(255)," +
             " chofer_id VARCHAR(255)," +
+            " chofer_id_tmp VARCHAR(20)," +
             " gasto_rub VARCHAR(10)," +
             " gasto_eur VARCHAR(10)," +
             " gasto_usd VARCHAR(10)," +
@@ -87,37 +176,18 @@ var TablasProvider = /** @class */ (function () {
             " tarjeta_eur VARCHAR(10)," +
             " tarjeta_rub VARCHAR(10)," +
             " tarjeta_usd VARCHAR(10)," +
+            " guia_id_tmp VARCHAR(5)," +
+            " gastos_ids VARCHAR(255)," +
+            " servicio_id VARCHAR(255)," +
+            " observaciones_solicitud TEXT," +
+            " salario VARCHAR(10)," +
             " gastostoursline_ids VARCHAR(255));";
-        /*
-            "tarjeta_usd_pos",
-            "Total_Rub",
-            "tarjeta_usd",
-            "tarjeta_rub",
-            "tarjeta_eur_pos",
-            "Total_Beneficios",
-            "Total_Pagado_Web",
-            "Total_Tarjeta",
-            "Total_Pago_Clientes",
-            "Total_Paypal",
-            "",
-            "gastostoursline_ids",
-            "evento_ids",
-            "is_padre",
-            "representante_id",
-            "gastos_ids",
-            "documentos_ids",
-            "gastos_reps_ids",
-            "Total_Euros",
-            "name",
-            "Total_Usd",
-            "tarjeta_eur",
-            "display_name",
-            "__last_update",
-            "fecha_padre",,,
-            "is_adjudicado"*/
         this.tbl_eventos_odoo = ["Comentarios_Chofer",
             "Total_Beneficios",
             "tarjeta_usd_pos",
+            "servicio_id",
+            "salario",
+            "observaciones_solicitud",
             "Transporte",
             "is_traslado",
             "is_guia",
@@ -164,9 +234,35 @@ var TablasProvider = /** @class */ (function () {
             "Fecha_Fin",
             "hora_inicio",
             "hora_final",
-            "is_adjudicado"];
-        console.log('Hello TablasProvider Provider');
+            "is_adjudicado",
+            "hora_chofer"];
+        /*constructor() {
+            console.log('Hello TablasProvider Provider');
+        }*/
+        this.tbl_gastostours = "CREATE TABLE IF NOT EXISTS gastostours(" +
+            " id INTEGER PRIMARY KEY," +
+            " name VARCHAR(255)," +
+            " ciudades VARCHAR(255));";
+        /*private tbl_gastostours = "CREATE TABLE IF NOT EXISTS gastostours("+
+        " id INTEGER PRIMARY KEY,"+
+        " name VARCHAR(255),"
+        " ciudades VARCHAR(255));";*/
+        this.tbl_gastostours_odoo = ["id", "name", "ciudades"];
     }
+    Object.defineProperty(TablasProvider.prototype, "Tbl_gastostours_odoo", {
+        get: function () {
+            return this.tbl_gastostours_odoo;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TablasProvider.prototype, "Tbl_gastostours", {
+        get: function () {
+            return this.tbl_gastostours;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(TablasProvider.prototype, "Tbl_user_odoo", {
         get: function () {
             return this.tbl_user_odoo;
@@ -195,6 +291,20 @@ var TablasProvider = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(TablasProvider.prototype, "Tbl_gastos_ciudad_odoo", {
+        get: function () {
+            return this.tbl_gastos_ciudad_odoo;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TablasProvider.prototype, "Tbl_gastos_ciudad", {
+        get: function () {
+            return this.tbl_gastos_ciudad;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(TablasProvider.prototype, "Tbl_user", {
         get: function () {
             return this.tbl_user;
@@ -209,9 +319,36 @@ var TablasProvider = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(TablasProvider.prototype, "Tbl_attachment_odoo", {
+        get: function () {
+            return this.tbl_attachment_odoo;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TablasProvider.prototype, "Tbl_attachment", {
+        get: function () {
+            return this.tbl_attachment;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TablasProvider.prototype, "Tbl_solicitud", {
+        get: function () {
+            return this.tbl_solicitud;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TablasProvider.prototype, "Tbl_solicitud_odoo", {
+        get: function () {
+            return this.tbl_solicitud_odoo;
+        },
+        enumerable: true,
+        configurable: true
+    });
     TablasProvider = __decorate([
-        Injectable(),
-        __metadata("design:paramtypes", [])
+        Injectable()
     ], TablasProvider);
     return TablasProvider;
 }());
