@@ -56,9 +56,37 @@ export class DocumentoPage {
 	      // This will only print when on iOS
 	      console.log('I am an iOS device!');
 	      self.filePicker.pickFile()
-		  .then(uri => {
-		  	
-		  	self.filePath.resolveNativePath(uri).then( 
+		  .then(result => {
+		  	console.log(result);
+		  	let path = result.substring(0, result.lastIndexOf('/'));
+	  		console.log(path);
+	  		self.nombre_archivo = result.substring(result.lastIndexOf('/')+1, result.length);	
+	  		self.doc.name = self.nombre_archivo;
+	  		console.log(self.nombre_archivo);
+	  		console.log('file://'+path);
+	  		/*self.file.resolveLocalFilesystemUrl(result)
+	  		.then(content=>{
+						        console.log(content);
+						        //console.log(self.doc.datas);
+						        //alert(JSON.stringify(content));
+						      })
+						      .catch(err=>{
+						        console.log(err);
+						        //alert(JSON.stringify(err));
+						      });*/
+		  	self.file.readAsBinaryString('file://'+path, self.nombre_archivo)
+						      .then(content=>{
+						        content = (<any>window).btoa(content);
+						        self.doc.datas = content;
+						        console.log(self.doc.datas);
+						        //alert(JSON.stringify(content));
+						      })
+						      .catch(err=>{
+						        console.log(err);
+						        //alert(JSON.stringify(err));
+						      });
+
+		  	/*self.filePath.resolveNativePath(uri).then( 
 			  	(result) => {
 
 			  		let path = result.substring(0, result.lastIndexOf('/'));
@@ -79,7 +107,7 @@ export class DocumentoPage {
 						      });
 
 	   		
-	   			}).catch(e => console.log(e));
+	   			}).catch(e => console.log(e));*/
 
 		  })
 		  .catch(err => console.log('Error', err));

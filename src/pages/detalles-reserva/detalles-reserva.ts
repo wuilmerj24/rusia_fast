@@ -340,8 +340,8 @@ export class DetallesReservaPage {
             //self.file.applicationStorageDirectory
             self.file.writeFile(self.file.documentsDirectory, att.name.replace(/ /g,'') + ext, blobPdf, opt).then(
               res=>{
-                console.log('file saved'+ res.nativeURL);
-                console.log('file saved'+ res.toInternalURL());
+                //console.log('file saved'+ res.nativeURL);
+                //console.log('file saved'+ res.toInternalURL());
                 console.log('file saved'+ res.toURL());
                 
                 //self.presentToast();
