@@ -30,9 +30,9 @@ export class GetDatosProvider {
       location: 'default'
     };
 
-	constructor(private sqlite: SQLite, private tablas:TablasProvider) {
-
-		var self = this;
+	constructor(private sqlite: SQLite, private tablas:TablasProvider){
+		
+		var self = this;		
 
 		//console.log('constructor creado primero');
     	self.ejecutarSQL("SELECT * FROM user WHERE usuario IS NOT NULL").then(

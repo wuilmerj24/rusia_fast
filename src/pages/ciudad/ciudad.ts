@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, ModalController } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
+import { CiudadDPage } from '../../pages/ciudad-d/ciudad-d';
 
 @Component({
   selector: 'page-ciudad',
@@ -10,7 +11,7 @@ export class CiudadPage {
 
 	private cargar = true;
 	private ciudades = [];
-	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 
 		this.initCiudades();
 	}
@@ -34,6 +35,23 @@ export class CiudadPage {
 
 	    	}
     	);
+	}
+
+	abrir_ciudad(ciudad){
+		this.navCtrl.push(CiudadDPage, {ciudad:ciudad});
+	}
+
+	add(){
+
+		var self = this;
+        let profileModal = this.modalCtrl.create(CiudadDPage, {ciudad:false});
+        profileModal.onDidDismiss(data => {
+            if (data.id != null) {
+
+                self.initCiudades();
+            }
+        });
+        profileModal.present();
 	}
 
 }

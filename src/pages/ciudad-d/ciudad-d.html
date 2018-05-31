@@ -1,18 +1,13 @@
 <!--
-  Generated template for the CiudadPage page.
+  Generated template for the CiudadDPage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
 <ion-header>
 
-  <ion-navbar color="primary">
-    <ion-title>Ciudades</ion-title>
-    <ion-buttons end>        
-         <button *ngIf="add" ion-button icon-only (click)="add()">
-                <ion-icon name="add"></ion-icon>
-        </button>
-    </ion-buttons>
+  <ion-navbar>
+    <ion-title>Ciudad detalle</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -22,27 +17,27 @@
 
 	<div *ngIf="cargar" style="text-align: center">    
         <ion-spinner name="circles"></ion-spinner><br>
-        <b>Cargando...</b>
+        <b>Guardando...</b>
     </div>
 
     <div *ngIf="!cargar">
 
-    	<ion-grid *ngFor="let ciudad of ciudades; let i = index" (click)="abrir_ciudad(ciudad)">                             
-            <!--ion-row>  
+    	<ion-grid>
+            <ion-row>  
                 <ion-col col-6 align-self-center>
-                        <button ion-button color="primary" type="button" (click)="crearSolicitud(solicitud)" >Aceptar</button>
+                        <button ion-button color="primary" type="button" (click)="editar()">Editar</button>
                 </ion-col>
                 <ion-col col-6 align-self-center>
-                        <button ion-button color="danger" type="button" (click)="borrarSolicitud(solicitud)" >Rechazar</button>
+                        <button ion-button color="danger" type="button" (click)="borrar()">Eliminar</button>
                 </ion-col>
-            </ion-row!--> 
+            </ion-row> 
 
             <ion-row align-items-center>  
                 <ion-col col-4>
                     <b>Ciudad</b>
                 </ion-col>
                 <ion-col col-8>
-                    {{ciudad.name}}         
+                	<ion-input name="ciudad.name" type="text" placeholder="Ciudad" [(ngModel)]="ciudad.name"></ion-input>                     
                 </ion-col>       
             </ion-row>
             <ion-row align-items-center>  
@@ -50,7 +45,7 @@
                     <b>Teléfono</b>
                 </ion-col>
                 <ion-col col-8>
-                    {{ciudad.Tel_Emergency}}         
+                	<ion-input name="ciudad.Tel_Emergency" type="text" placeholder="Teléfono" [(ngModel)]="ciudad.Tel_Emergency"></ion-input>                    
                 </ion-col>       
             </ion-row>
             <ion-row align-items-center class="borde">  
@@ -58,7 +53,8 @@
                     <b>Código</b>
                 </ion-col>
                 <ion-col col-8>
-                    {{ciudad.Code}}         
+                	<ion-input name="ciudad.Code" type="text" placeholder="Código" [(ngModel)]="ciudad.Code"></ion-input>
+                            
                 </ion-col>       
             </ion-row>
             

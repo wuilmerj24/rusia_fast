@@ -38,7 +38,20 @@ import { GastosEPage } from '../pages/gastos-e/gastos-e';
 import { BenePage } from '../pages/bene/bene';
 import { ConcepPage } from '../pages/concep/concep';
 import { DocPage } from '../pages/doc/doc';
+
+import { CiudadDPage } from '../pages/ciudad-d/ciudad-d';
+import { UsuarioDPage } from '../pages/usuario-d/usuario-d';
+import { ClienteDPage } from '../pages/cliente-d/cliente-d';
+import { TipoDPage } from '../pages/tipo-d/tipo-d';
+import { GastosTdPage } from '../pages/gastos-td/gastos-td';
+import { GastosEdPage } from '../pages/gastos-ed/gastos-ed';
+import { BeneDPage } from '../pages/bene-d/bene-d';
+import { ConcepDPage } from '../pages/concep-d/concep-d';
+//import { DocPage } from '../pages/doc/doc';
+
 import { FormPage } from '../pages/form/form';
+
+
 
 //de ganancias
 import {GanPage} from '../pages/gan/gan';
@@ -65,6 +78,14 @@ import { IOSFilePicker } from '@ionic-native/file-picker';
 @NgModule({
   declarations: [
     MyApp,
+    CiudadDPage,
+    UsuarioDPage,
+    ClienteDPage,
+    TipoDPage,
+    GastosTdPage,
+    GastosEdPage,
+    BeneDPage,
+    ConcepDPage,
     GanPage,
     ResumenPage,
     GeneralPage,
@@ -107,6 +128,17 @@ import { IOSFilePicker } from '@ionic-native/file-picker';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    CiudadDPage,
+    UsuarioDPage,
+    ClienteDPage,
+    TipoDPage,
+    GastosTdPage,
+    GastosEdPage,
+    BeneDPage,
+    ConcepDPage,
+    GanPage,
+    ResumenPage,
+    GeneralPage,
     CiudadPage,
     UsuarioPage,
     ClientePage,

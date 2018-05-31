@@ -27,7 +27,7 @@ export class GeneralPage {
 	    var self = this; 
 	    self.general = [];
 	    self.cargar = true;
-	    self.getDatos.search_read('rusia.general.extras',[], ["concepto_id", "evento_id", "fecha", "ciudad_id", "rublos", "euros", "usd", "tc_rub", "tc_eur", "tc_usd", "tarjeta_pp", "cancelado"]).then(
+	    self.getDatos.search_read('rusia.general',[], ["concepto_id", "evento_id", "fecha", "ciudad_id", "rublos", "euros", "usd", "tc_rub", "tc_eur", "tc_usd", "tarjeta_pp", "cancelado"]).then(
 	    	function (datos:any[]){
 	    		self.general = datos;
 	    		self.initItems();

@@ -27,7 +27,7 @@ export class GananciasPage {
 	    var self = this; 
 	    self.ganancias = [];
 	    self.cargar = true;
-	    self.getDatos.search_read('rusia.ganancias.totales',[], ["name", "fecha", "tipo_moneda", "monto", "ciudad_id").then(
+	    self.getDatos.search_read('rusia.ganancias.totales',[], ["name", "fecha", "tipo_moneda", "monto", "ciudad_id"]).then(
 	    	function (datos:any[]){
 	    		self.ganancias = datos;
 	    		self.initItems();
