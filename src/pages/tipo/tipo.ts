@@ -4,32 +4,32 @@ import { NavController, NavParams } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 
 @Component({
-  selector: 'page-ganancias',
-  templateUrl: 'ganancias.html',
+  selector: 'page-tipo',
+  templateUrl: 'tipo.html',
 })
-export class GananciasPage {
+export class TipoPage {
 
-    	private cargar = true;
-	private ganancias = [];	
+  	private cargar = true;
+	private tipos = [];	
 	private items = [];
     private max = 10;
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 
-		this.init();
+		this.initTipos();
 	}
 
 	ionViewDidLoad() {
 	console.log('ionViewDidLoad CiudadPage');
 	}
 
-	init(){
+	initTipos(){
 
 	    var self = this; 
-	    self.ganancias = [];
+	    self.tipos = [];
 	    self.cargar = true;
-	    self.getDatos.search_read('rusia.ganancias.totales',[], ["name", "fecha", "tipo_moneda", "monto", "ciudad_id").then(
+	    self.getDatos.search_read('rusia.tiposervicios',[], ["ciudad_id", "name", "Code", "Hora_Inicio", "Hora_Finalizar"]).then(
 	    	function (datos:any[]){
-	    		self.ganancias = datos;
+	    		self.tipos = datos;
 	    		self.initItems();
 	    		self.cargar = false;
 	    		console.log(JSON.stringify(datos));
@@ -42,8 +42,8 @@ export class GananciasPage {
 
 	private initItems(){
 
-        for (var i = 0; i <  this.ganancias.length && i < this.max; i++) {
-            this.items.push(this.ganancias[i]);
+        for (var i = 0; i <  this.tipos.length && i < this.max; i++) {
+            this.items.push(this.tipos[i]);
         }
     }
 
@@ -55,8 +55,8 @@ export class GananciasPage {
         setTimeout(() => {
           
           let i;
-          for (i = self.max; i < this.ganancias.length && i < this.max + 10 ; i++) {
-            this.items.push(this.ganancias[i]);
+          for (i = self.max; i < this.tipos.length && i < this.max + 10 ; i++) {
+            this.items.push(this.tipos[i]);
           }
           this.max = i;
 

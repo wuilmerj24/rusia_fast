@@ -13,6 +13,14 @@ export class LoginPage {
 
     cargar = false;    
    
+    //admin x ciudad     
+    //conexion = {usuario: 'sp@guiarus.com', bd: 'rusia3', pwd: '123456'};
+
+    //Admin traslados    
+    //conexion = {usuario: 'eu@guiarus.com', bd: 'rusia3', pwd: '123456'};
+
+    //Representante    
+    //conexion = {usuario: 'info@guiarus.com', bd: 'rusia3', pwd: '123456'};
 
    	//guia
     //conexion = {usuario: 'joselugar8@hotmail.com', bd: 'rusia3', pwd: '123456'}; //pruebas
@@ -22,14 +30,16 @@ export class LoginPage {
     //conexion = {usuario: 'anton1985info@gmail.com', bd: 'rusia3', pwd: '123456'};
     
 
-    //conexion = {usuario: 'reservas@guiarus.com', bd: 'rusia3', pwd: '123456'};//produccion 
+    conexion = {usuario: 'reservas@guiarus.com', bd: 'rusia3', pwd: '123456'};//produccion 
     //cliente
     //conexion = {usuario: 'abrilgalvez5@yahoo.com.mx', bd: 'rusia3', pwd: '123456'}; //   pruebas
     
     //chofer
 
     //conexion = {usuario: 'chofersanpetersburgo@gmail.com', bd: 'rusia3', pwd: '123456'};  //  prd
-    conexion = {usuario: '', bd: 'rusia3', pwd: ''};
+    //conexion = {usuario: '', bd: 'rusia3', pwd: ''};
+    //conexion = {usuario: 'sergey.guiarus@gmail.com', bd: 'rusia3', pwd: '123456'};
+    //conexion = {usuario: 'sp@guiarus.com', bd: 'rusia3', pwd: '123456'};
     mensaje;
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getData:GetDatosProvider) {
 

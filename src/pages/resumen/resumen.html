@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Ganancias</ion-title>
+    <ion-title>Resumen de movimientos</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -22,7 +22,7 @@
 
     <div *ngIf="!cargar">
 
-    	<ion-grid *ngFor="let gann of items; let i = index" (click)="abrir_gann(gann)">                             
+    	<ion-grid *ngFor="let resumen of items; let i = index" (click)="abrir_resumen(resumen)">                             
             <!--ion-row>  
                 <ion-col col-6 align-self-center>
                         <button ion-button color="primary" type="button" (click)="crearSolicitud(solicitud)" >Aceptar</button>
@@ -34,44 +34,57 @@
 
             <ion-row align-items-center>  
                 <ion-col col-4>
-                    <b>Nombre</b>
+                    <b>Concepto</b>
                 </ion-col>
                 <ion-col col-8>
-                    {{gann.name[1]}}         
+                    {{resumen.concepto_id[1]}}         
                 </ion-col>       
             </ion-row>
-            <ion-row align-items-center>  
-                <ion-col col-4>
-                    <b>Fecha</b>
-                </ion-col>
-                <ion-col col-8>
-                    {{gann.fecha}}         
-                </ion-col>       
-            </ion-row>
-            <ion-row align-items-center>  
-                <ion-col col-4>
-                    <b>Moneda</b>
-                </ion-col>
-                <ion-col col-8>
-                    {{gann.tipo_moneda}}         
-                </ion-col>       
-            </ion-row>
-            <ion-row align-items-center>  
-                <ion-col col-4>
-                    <b>Monto</b>
-                </ion-col>
-                <ion-col col-8>
-                    {{gann.monto}}         
-                </ion-col>       
-            </ion-row>
-            <ion-row align-items-center class="borde">  
+            <ion-row align-items-center >  
                 <ion-col col-4>
                     <b>Ciudad</b>
                 </ion-col>
                 <ion-col col-8>
-                    {{gann.ciudad_id[1]}}         
+                    {{resumen.name[1]}}         
                 </ion-col>       
-            </ion-row>          
+            </ion-row>   
+
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Evento</b>
+                </ion-col>
+                <ion-col col-8>
+                    {{resumen.evento_id[1]}}         
+                </ion-col>       
+            </ion-row>
+
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Día</b>
+                </ion-col>
+                <ion-col col-8>
+                    {{resumen.dia}}         
+                </ion-col>       
+            </ion-row>
+            
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Total pago clientes</b>
+                </ion-col>
+                <ion-col col-8>
+                    {{resumen.Total_Pago_Clientes}}         
+                </ion-col>       
+            </ion-row>
+
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Total pago web</b>
+                </ion-col>
+                <ion-col col-8>
+                    {{resumen.Total_Pagado_Web}}         
+                </ion-col>       
+            </ion-row>
+                   
             
         </ion-grid>
 

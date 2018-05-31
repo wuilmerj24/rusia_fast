@@ -33,7 +33,7 @@ export class CalendarioPage {
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 
-        this.initCalendario(true);
+        //this.initCalendario(true);
     }
 
     private initCalendario(borrar){
@@ -55,13 +55,20 @@ export class CalendarioPage {
 
             }else if(usr.tipo_usuario + '' == 'is_guia'){//+ JSON.stringify([usr.id, usr.name]  and guia_id = "[71,"Natalia Kazan"]"
                 where = 'is_padre = "false" and guia_id_tmp = "' + usr.id + '"';
-              //  console.log(where);
-                //dominio = [["guia_id", "=", self.usr.id]];
+              
             } else if(usr.tipo_usuario + '' == 'is_chofer'){//+ JSON.stringify([usr.id, usr.name]  and guia_id = "[71,"Natalia Kazan"]"
                 where = 'is_padre = "false" and chofer_id_tmp = "' + usr.id + '"';
-              //  console.log(where);
-                //dominio = [["guia_id", "=", self.usr.id]];
-            } 
+              
+            }else if(usr.tipo_usuario + '' == 'is_rep'){                
+                where = 'is_padre = "false" and representante_id_tmp = "' + usr.id + '"';
+
+            }else if(usr.tipo_usuario + '' == 'is_traslados'){                
+
+                where = 'is_padre = "false" and is_traslado = "true"';
+            }else if(usr.tipo_usuario + '' == 'is_general'){                
+
+                where = 'is_padre = "false"';
+            }
 
             //console.log()
 

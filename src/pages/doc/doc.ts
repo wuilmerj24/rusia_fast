@@ -1,16 +1,15 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 
 @Component({
-  selector: 'page-ganancias',
-  templateUrl: 'ganancias.html',
+  selector: 'page-doc',
+  templateUrl: 'doc.html',
 })
-export class GananciasPage {
+export class DocPage {
 
-    	private cargar = true;
-	private ganancias = [];	
+	private cargar = true;
+	private docs = [];	
 	private items = [];
     private max = 10;
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
@@ -25,11 +24,11 @@ export class GananciasPage {
 	init(){
 
 	    var self = this; 
-	    self.ganancias = [];
+	    self.docs = [];
 	    self.cargar = true;
-	    self.getDatos.search_read('rusia.ganancias.totales',[], ["name", "fecha", "tipo_moneda", "monto", "ciudad_id").then(
+	    self.getDatos.search_read('ir.attachment',[["concepto_id", "!=", false]], ["eventos_id", "create_date", "name", "Tipo_Documento", "file_size", "ciudades", "concepto_id"]).then(
 	    	function (datos:any[]){
-	    		self.ganancias = datos;
+	    		self.docs = datos;
 	    		self.initItems();
 	    		self.cargar = false;
 	    		console.log(JSON.stringify(datos));
@@ -42,8 +41,8 @@ export class GananciasPage {
 
 	private initItems(){
 
-        for (var i = 0; i <  this.ganancias.length && i < this.max; i++) {
-            this.items.push(this.ganancias[i]);
+        for (var i = 0; i <  this.docs.length && i < this.max; i++) {
+            this.items.push(this.docs[i]);
         }
     }
 
@@ -55,8 +54,8 @@ export class GananciasPage {
         setTimeout(() => {
           
           let i;
-          for (i = self.max; i < this.ganancias.length && i < this.max + 10 ; i++) {
-            this.items.push(this.ganancias[i]);
+          for (i = self.max; i < this.docs.length && i < this.max + 10 ; i++) {
+            this.items.push(this.docs[i]);
           }
           this.max = i;
 
@@ -64,5 +63,6 @@ export class GananciasPage {
           infiniteScroll.complete();
         }, 500);
     }
+
 
 }

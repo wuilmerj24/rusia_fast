@@ -1,35 +1,34 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 
 @Component({
-  selector: 'page-ganancias',
-  templateUrl: 'ganancias.html',
+  selector: 'page-gastos-e',
+  templateUrl: 'gastos-e.html',
 })
-export class GananciasPage {
+export class GastosEPage {
 
-    	private cargar = true;
-	private ganancias = [];	
+  	private cargar = true;
+	private gastos = [];	
 	private items = [];
     private max = 10;
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 
-		this.init();
+		this.initGastos();
 	}
 
 	ionViewDidLoad() {
 	console.log('ionViewDidLoad CiudadPage');
 	}
 
-	init(){
+	initGastos(){
 
 	    var self = this; 
-	    self.ganancias = [];
+	    self.gastos = [];
 	    self.cargar = true;
-	    self.getDatos.search_read('rusia.ganancias.totales',[], ["name", "fecha", "tipo_moneda", "monto", "ciudad_id").then(
+	    self.getDatos.search_read('rusia.gastos.extras',[], ["name", "fecha", "tipo_moneda", "monto", "ciudad_id", "cancelado"]).then(
 	    	function (datos:any[]){
-	    		self.ganancias = datos;
+	    		self.gastos = datos;
 	    		self.initItems();
 	    		self.cargar = false;
 	    		console.log(JSON.stringify(datos));
@@ -42,8 +41,8 @@ export class GananciasPage {
 
 	private initItems(){
 
-        for (var i = 0; i <  this.ganancias.length && i < this.max; i++) {
-            this.items.push(this.ganancias[i]);
+        for (var i = 0; i <  this.gastos.length && i < this.max; i++) {
+            this.items.push(this.gastos[i]);
         }
     }
 
@@ -55,8 +54,8 @@ export class GananciasPage {
         setTimeout(() => {
           
           let i;
-          for (i = self.max; i < this.ganancias.length && i < this.max + 10 ; i++) {
-            this.items.push(this.ganancias[i]);
+          for (i = self.max; i < this.gastos.length && i < this.max + 10 ; i++) {
+            this.items.push(this.gastos[i]);
           }
           this.max = i;
 

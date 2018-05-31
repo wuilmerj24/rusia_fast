@@ -152,6 +152,7 @@ export class TablasProvider {
 	" cliente_id_tmp VARCHAR(255),"+	
 	" cliente_id VARCHAR(20),"+	
 	" representante_id VARCHAR(255),"+	
+	" representante_id_tmp VARCHAR(20),"+
 	" Fecha_Inicio VARCHAR(20),"+
 	" Fecha_Fin VARCHAR(20),"+
 	" hora_inicio VARCHAR(10),"+

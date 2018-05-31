@@ -2,34 +2,33 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
-
 @Component({
-  selector: 'page-ganancias',
-  templateUrl: 'ganancias.html',
+  selector: 'page-cliente',
+  templateUrl: 'cliente.html',
 })
-export class GananciasPage {
+export class ClientePage {
 
-    	private cargar = true;
-	private ganancias = [];	
+  	private cargar = true;
+	private clientes = [];	
 	private items = [];
     private max = 10;
 	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
 
-		this.init();
+		this.initClientes();
 	}
 
 	ionViewDidLoad() {
 	console.log('ionViewDidLoad CiudadPage');
 	}
 
-	init(){
+	initClientes(){
 
 	    var self = this; 
-	    self.ganancias = [];
+	    self.clientes = [];
 	    self.cargar = true;
-	    self.getDatos.search_read('rusia.ganancias.totales',[], ["name", "fecha", "tipo_moneda", "monto", "ciudad_id").then(
+	    self.getDatos.search_read('res.users',[["is_client", "=", true]], ["name", "email", "groups_id"]).then(
 	    	function (datos:any[]){
-	    		self.ganancias = datos;
+	    		self.clientes = datos;
 	    		self.initItems();
 	    		self.cargar = false;
 	    		console.log(JSON.stringify(datos));
@@ -42,8 +41,8 @@ export class GananciasPage {
 
 	private initItems(){
 
-        for (var i = 0; i <  this.ganancias.length && i < this.max; i++) {
-            this.items.push(this.ganancias[i]);
+        for (var i = 0; i <  this.clientes.length && i < this.max; i++) {
+            this.items.push(this.clientes[i]);
         }
     }
 
@@ -55,8 +54,8 @@ export class GananciasPage {
         setTimeout(() => {
           
           let i;
-          for (i = self.max; i < this.ganancias.length && i < this.max + 10 ; i++) {
-            this.items.push(this.ganancias[i]);
+          for (i = self.max; i < this.clientes.length && i < this.max + 10 ; i++) {
+            this.items.push(this.clientes[i]);
           }
           this.max = i;
 

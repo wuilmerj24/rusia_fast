@@ -11,7 +11,7 @@ import { CalendarioPage } from '../pages/calendario/calendario';
 import { ChoferPage } from '../pages/chofer/chofer';
 import { ConfiPage } from '../pages/confi/confi';
 import { GuiaPage } from '../pages/guia/guia';
-import { GananciasPage } from '../pages/ganancias/ganancias';
+
 import { ReservasPage } from '../pages/reservas/reservas';
 import { AcercaPage } from '../pages/acerca/acerca';
 import { DetallesReservaPage } from '../pages/detalles-reserva//detalles-reserva';
@@ -28,6 +28,23 @@ import { SolicitarDetallePage } from '../pages/solicitar-detalle/solicitar-detal
 import { SolicitarAdminPage } from '../pages/solicitar-admin/solicitar-admin';
 import { SolicitarNuevaPage } from '../pages/solicitar-nueva/solicitar-nueva'; //-> borrar si no la piden
 
+//de configuracion
+import { CiudadPage } from '../pages/ciudad/ciudad';
+import { UsuarioPage } from '../pages/usuario/usuario';
+import { ClientePage } from '../pages/cliente/cliente';
+import { TipoPage } from '../pages/tipo/tipo';
+import { GastosTPage } from '../pages/gastos-t/gastos-t';
+import { GastosEPage } from '../pages/gastos-e/gastos-e';
+import { BenePage } from '../pages/bene/bene';
+import { ConcepPage } from '../pages/concep/concep';
+import { DocPage } from '../pages/doc/doc';
+import { FormPage } from '../pages/form/form';
+
+//de ganancias
+import {GanPage} from '../pages/gan/gan';
+import {GananciasPage} from '../pages/ganancias/ganancias';
+import {ResumenPage} from '../pages/resumen/resumen';
+import {GeneralPage} from '../pages/general/general';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -48,6 +65,19 @@ import { IOSFilePicker } from '@ionic-native/file-picker';
 @NgModule({
   declarations: [
     MyApp,
+    GanPage,
+    ResumenPage,
+    GeneralPage,
+    CiudadPage,
+    UsuarioPage,
+    ClientePage,
+    TipoPage,
+    GastosTPage,
+    GastosEPage,
+    BenePage,
+    ConcepPage,
+    DocPage,
+    FormPage,
     CalendarioPage,
     ChoferPage,
     ConfiPage,
@@ -77,6 +107,16 @@ import { IOSFilePicker } from '@ionic-native/file-picker';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    CiudadPage,
+    UsuarioPage,
+    ClientePage,
+    TipoPage,
+    GastosTPage,
+    GastosEPage,
+    BenePage,
+    ConcepPage,
+    DocPage,
+    FormPage,
     CalendarioPage,
     ChoferPage,
     ConfiPage,

@@ -15,11 +15,11 @@ export class GetDatosProvider {
 
 	private db: SQLiteObject = null;
 
-	//private url = '/api';
+	private url = '/api';
 	//private url = 'http://odoo.devoptions.mx';     //"http://odoo.devoptions.mx"
 	//private url = 'https://rusiatoursmoscu.com:443';    //"proxyUrl":"http://rusiatoursmoscu.com"
 	//private url = '185.129.251.102:443';    //"proxyUrl":"http://rusiatoursmoscu.com"
-	private url = 'https://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
+	//private url = 'https://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
 
 	public usr = null;	
 	private eventoHijo = [];
@@ -418,7 +418,7 @@ export class GetDatosProvider {
 	  				//console.log(JSON.stringify(self.gastos_ciudad));
 	  			}			  			
 	  			var registro = "INSERT OR IGNORE INTO eventos "+
-			    	"(id, cliente_id_tmp, cliente_id, representante_id,"+
+			    	"(id, cliente_id_tmp, cliente_id, representante_id, representante_id_tmp,"+
 			    	" Fecha_Inicio, hora_inicio , hora_final, hora_chofer, name, is_padre, fecha_padre, guia_id,"+
 			    	" chofer_id_tmp, chofer_id, gasto_rub, gasto_eur, gasto_usd, gasto_paypal, Comentarios_Chofer,"+
 			    	" Comentarios_Internos, Comentarios_Cliente, Comentarios_Guia, Fecha_Fin, Transporte, hotel_id,"+
@@ -426,7 +426,7 @@ export class GetDatosProvider {
 			    	" tarjeta_rub, tarjeta_usd, is_guia, is_traslado, gastostoursline_ids, guia_id_tmp, gastos_ids,"+
 			    	" servicio_id, salario, observaciones_solicitud)"+
 			    	" VALUES (" + eventos[key].id + ", '"+eventos[key].Datos_Cliente_id[0]+"', '" + JSON.stringify(eventos[key].Datos_Cliente_id)+"', '" +
-			    	JSON.stringify(eventos[key].representante_id)+ "', '" + eventos[key].Fecha_Inicio +"','" + 
+			    	JSON.stringify(eventos[key].representante_id)+ "', '"+ eventos[key].representante_id[0] +"', '" + eventos[key].Fecha_Inicio +"','" + 
 			    	eventos[key].hora_inicio + "', '" + eventos[key].hora_final + "', '" + self.parseDato(eventos[key].hora_chofer) + "', '" + 
 			    	eventos[key].name + "', '" + eventos[key].is_padre +"', '" + 
 			    	eventos[key].fecha_padre +"', '" + JSON.stringify(eventos[key].guia_id)+ "' , '" + 
@@ -441,7 +441,7 @@ export class GetDatosProvider {
 			    	eventos[key].tarjeta_rub+"', '"+eventos[key].tarjeta_usd+"' , '"+eventos[key].is_guia+"', '"+eventos[key].is_traslado+"', '"+ 
 			    	JSON.stringify(eventos[key].gastostoursline_ids)+"', '"+eventos[key].guia_id[0]+"', '"+ JSON.stringify(eventos[key].gastos_ids) +"', '"+
 			    	JSON.stringify(eventos[key].servicio_id)+"', '"+eventos[key].salario+"', '"+self.parseDato(eventos[key].observaciones_solicitud)+"');";
-			    console.log(registro);							  			
+			    //console.log(registro);							  			
 			    sql.push(registro);
 			});
 
@@ -570,6 +570,19 @@ export class GetDatosProvider {
 				["is_padre", "=", false],
 				["is_traslado", "=", true],
 				["chofer_id", "=", false]];				
+			}else if(self.usr.tipo_usuario == 'is_rep'){
+
+				dominio = [['is_padre', '=' , false], ["representante_id", "=", self.usr.id]];
+			}else if(self.usr.tipo_usuario == 'is_traslados'){
+
+				dominio = [['is_padre', '=' , false], ["is_traslado", "=", true]];
+			}else if(self.usr.tipo_usuario == 'is_general'){
+
+				dominio = [['is_padre', '=' , false]];
+				dominioSol = [
+				["is_padre", "=", false],
+				["is_guia", "=", true],
+				["guia_id", "=", false]];
 			}
 
 

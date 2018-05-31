@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Ganancias</ion-title>
+    <ion-title>Beneficios extras</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -22,7 +22,7 @@
 
     <div *ngIf="!cargar">
 
-    	<ion-grid *ngFor="let gann of items; let i = index" (click)="abrir_gann(gann)">                             
+    	<ion-grid *ngFor="let bene of items; let i = index" (click)="abrir_bene(bene)">                             
             <!--ion-row>  
                 <ion-col col-6 align-self-center>
                         <button ion-button color="primary" type="button" (click)="crearSolicitud(solicitud)" >Aceptar</button>
@@ -34,10 +34,10 @@
 
             <ion-row align-items-center>  
                 <ion-col col-4>
-                    <b>Nombre</b>
+                    <b>Concepto</b>
                 </ion-col>
                 <ion-col col-8>
-                    {{gann.name[1]}}         
+                    {{bene.name[1]}}         
                 </ion-col>       
             </ion-row>
             <ion-row align-items-center>  
@@ -45,7 +45,7 @@
                     <b>Fecha</b>
                 </ion-col>
                 <ion-col col-8>
-                    {{gann.fecha}}         
+                    {{bene.fecha}}         
                 </ion-col>       
             </ion-row>
             <ion-row align-items-center>  
@@ -53,7 +53,7 @@
                     <b>Moneda</b>
                 </ion-col>
                 <ion-col col-8>
-                    {{gann.tipo_moneda}}         
+                    {{bene.tipo_moneda}}         
                 </ion-col>       
             </ion-row>
             <ion-row align-items-center>  
@@ -61,17 +61,33 @@
                     <b>Monto</b>
                 </ion-col>
                 <ion-col col-8>
-                    {{gann.monto}}         
+                    {{bene.monto}}         
                 </ion-col>       
             </ion-row>
-            <ion-row align-items-center class="borde">  
+            <ion-row align-items-center>  
                 <ion-col col-4>
                     <b>Ciudad</b>
                 </ion-col>
                 <ion-col col-8>
-                    {{gann.ciudad_id[1]}}         
+                    {{bene.ciudad_id[1]}}         
                 </ion-col>       
-            </ion-row>          
+            </ion-row>
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Cancelado</b>
+                </ion-col>
+                <ion-col col-8>
+                    {{bene.cancelado}}         
+                </ion-col>       
+            </ion-row>
+            <ion-row align-items-center class="borde">  
+                <ion-col col-4>
+                    <b>Ciudades</b>
+                </ion-col>
+                <ion-col col-8>
+                    {{bene.ciudades}}         
+                </ion-col>       
+            </ion-row>           
             
         </ion-grid>
 

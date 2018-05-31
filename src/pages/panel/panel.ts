@@ -16,6 +16,8 @@ import { PerfilPage } from '../../pages/perfil/perfil';
 import { SolicitarPage } from '../../pages/solicitar/solicitar';
 import { SolicitarAdminPage } from '../../pages/solicitar-admin/solicitar-admin';
 
+import { GanPage } from '../../pages/gan/gan';
+
 
 @Component({
   selector: 'page-panel',
@@ -76,8 +78,11 @@ export class PanelPage {
         //{ title: 'Reservas', component: ReservasPage },
         { title: 'Reservas', component: ReservasPage },
         { title: 'Solicitudes recibidas', component: SolicitarAdminPage },
+        
         { title: 'Configuración', component: ConfiPage },
-        { title: 'Gastos Temporal',  component:GatosTourPage },
+        { title: 'Ganancias', component: GanPage },
+
+        //{ title: 'Gastos Temporal',  component:GatosTourPage },
         { title: 'Mi Perfil', component: PerfilPage },
         //{ title: 'Acerca de', component: AcercaPage },
         { title: 'Salir', component: 'salir' },
@@ -85,6 +90,7 @@ export class PanelPage {
     }else if("is_general" == tipo_usuario){
       this.pages = [
         { title: 'Calendario', component: CalendarioPage },
+        { title: 'Solicitudes recibidas', component: SolicitarAdminPage },
         { title: 'Mi Perfil', component: PerfilPage },
         //{ title: 'Acerca de', component: AcercaPage },       
         { title: 'Salir', component: 'salir' },
