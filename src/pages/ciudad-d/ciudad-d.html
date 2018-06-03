@@ -7,7 +7,12 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Ciudad detalle</ion-title>
+    <ion-title>Detalles ciudad</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-end (click)="closeModal()">
+                     <ion-icon ios="ios-close" md="md-close"></ion-icon>
+            </button>
+        </ion-buttons>
   </ion-navbar>
 
 </ion-header>
@@ -23,12 +28,17 @@
     <div *ngIf="!cargar">
 
     	<ion-grid>
-            <ion-row>  
+            <ion-row *ngIf="!control" >  
                 <ion-col col-6 align-self-center>
                         <button ion-button color="primary" type="button" (click)="editar()">Editar</button>
                 </ion-col>
                 <ion-col col-6 align-self-center>
                         <button ion-button color="danger" type="button" (click)="borrar()">Eliminar</button>
+                </ion-col>
+            </ion-row> 
+            <ion-row *ngIf="control" >  
+                <ion-col col-12 align-self-center>
+                        <button ion-button color="primary" type="button" (click)="guardar()">Guardar</button>
                 </ion-col>
             </ion-row> 
 
@@ -37,7 +47,7 @@
                     <b>Ciudad</b>
                 </ion-col>
                 <ion-col col-8>
-                	<ion-input name="ciudad.name" type="text" placeholder="Ciudad" [(ngModel)]="ciudad.name"></ion-input>                     
+                	<ion-input name="ciudad.name" [readonly]="read" type="text" placeholder="Ciudad" [(ngModel)]="ciudad.name"></ion-input>                     
                 </ion-col>       
             </ion-row>
             <ion-row align-items-center>  
@@ -45,7 +55,7 @@
                     <b>Teléfono</b>
                 </ion-col>
                 <ion-col col-8>
-                	<ion-input name="ciudad.Tel_Emergency" type="text" placeholder="Teléfono" [(ngModel)]="ciudad.Tel_Emergency"></ion-input>                    
+                	<ion-input name="ciudad.Tel_Emergency" [readonly]="read" type="text" placeholder="Teléfono" [(ngModel)]="ciudad.Tel_Emergency"></ion-input>                    
                 </ion-col>       
             </ion-row>
             <ion-row align-items-center class="borde">  
@@ -53,7 +63,7 @@
                     <b>Código</b>
                 </ion-col>
                 <ion-col col-8>
-                	<ion-input name="ciudad.Code" type="text" placeholder="Código" [(ngModel)]="ciudad.Code"></ion-input>
+                	<ion-input name="ciudad.Code" type="text" [readonly]="read" placeholder="Código" [(ngModel)]="ciudad.Code"></ion-input>
                             
                 </ion-col>       
             </ion-row>

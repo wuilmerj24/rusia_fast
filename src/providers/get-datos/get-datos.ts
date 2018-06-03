@@ -16,9 +16,6 @@ export class GetDatosProvider {
 	private db: SQLiteObject = null;
 
 	private url = '/api';
-	//private url = 'http://odoo.devoptions.mx';     //"http://odoo.devoptions.mx"
-	//private url = 'https://rusiatoursmoscu.com:443';    //"proxyUrl":"http://rusiatoursmoscu.com"
-	//private url = '185.129.251.102:443';    //"proxyUrl":"http://rusiatoursmoscu.com"
 	//private url = 'https://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
 
 	public usr = null;	
@@ -618,13 +615,53 @@ export class GetDatosProvider {
 				await self.cargarUsuario(dominioUsers);
 			}
 
-			return self.usr;
+			//return self.usr;
 
 		}catch(e){
 
-			return self.usr;
+			//return self.usr;
 		}
 
+	}
+
+	public delete(tabla, id){
+
+		var self = this;//http://185.129.251.102
+		var promise = new Promise(function (resolve, reject) {
+
+			//for(var i=0; i<data.rows.length; i++) {
+                
+            //    self.reservas.push(data.rows.item(i));                    
+            //}
+            var odoo = new OdooApi(self.url, self.usr.bd);
+			odoo.login(self.usr.usuario, self.usr.pwd).then(
+			function (uid) {
+
+				
+
+				odoo.delete(tabla, id).then(
+
+		        function (ok_delete) {
+
+		        	/*console.log(ok_delete);
+		        	resolve(ok_delete);*/
+
+		        	resolve(ok_delete);		        					
+		        },
+		    	function (){
+		    		console.log('Error creating Odoo');
+		    		reject();
+		    	})
+
+			},
+			function (){
+				console.log('error');
+				reject()
+			});
+						
+        });
+
+        return promise;	   
 	}
 
 	public eliminar(tabla, id){
@@ -1138,19 +1175,28 @@ export class GetDatosProvider {
 					//console.log(JSON.stringify(data.rows.item(0)));
 					//
 		            if(self.usr != null){
-
-		            	resolve(self.usr.tipo_usuario);
-		            }else{
-		            	//console.log('-----------------------------1');
 		            	
+		            	resolve(self.usr.tipo_usuario);		            	
+		            }else{
+		            	reject();		            	
 		            }
 				},
 				function(){
 					//console.log('Error get table user');				
 					//console.log('---------------login by connet ---------------1');
 					self.crearEsquema(conexion).then(
-						res=>{
-							resolve(res);
+						res=>{							
+
+							self.cargarCalendario(true, true, true, true).then(          
+			          			function() {			            			            
+			          				resolve(res);			                    
+					          	},
+					          	function(e){
+					               console.log('Error en calendario');
+					               console.log(e);
+					               reject();		            	
+					           	}
+					        );
 						},
 						fail=>{
 							reject();

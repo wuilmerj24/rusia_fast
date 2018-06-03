@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 import { EventoPage } from '../../pages/evento/evento';
 /**
@@ -26,22 +26,67 @@ export class CalendarioPage {
         noEventsLabel: 'Sin Eventos',
         formatMonthTitle: 'MMMM yyyy',
         allDayLabel: 'Todo el día',
-        formatWeekTitle: 'MMMM yyyy, Se $n'
+        formatWeekTitle: 'MMMM yyyy, Se $n',
+        locale: 'es-US'
     };
 
     usuario;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public alertCtrl: AlertController) {
 
-        //this.initCalendario(true);
+        //this.initCalendario(false);
     }
 
     private initCalendario(borrar){
+     
         var self = this;
         self.cargar = true;
-        this.getDatos.cargarCalendario(borrar, borrar, borrar, borrar).then(          
-          function(usr:{tipo_usuario:'', id:0, name:''}) {
+        if(borrar == true){
+
             
+            this.getDatos.cargarCalendario(borrar, borrar, borrar, borrar).then(          
+              function() {                                
+                self.datosOffline().then(
+                    good=>{
+                        console.log('exito');
+                    },
+                    bad =>{
+                        console.log('error');
+                    }
+                );                                                            
+              },
+               function(e){
+                   console.log('Error en calendario');
+                   console.log(e);
+               }
+            );
+
+        }else{
+
+            this.datosOffline().then(
+                good=>{
+                    console.log('exito');
+                    self.presentConfirm();
+                },
+                bad =>{
+                    console.log('error');
+                }
+            );
+        }
+    }
+
+
+    private datosOffline(){
+
+
+        var self = this;
+        self.cargar = true;
+
+
+        var self = this;
+        var promise = new Promise(function (resolve, reject) {
+
+            let usr = self.getDatos.usr;
             self.usuario = usr;
             var where;
             if(usr.tipo_usuario + '' == 'is_root'){
@@ -70,11 +115,9 @@ export class CalendarioPage {
                 where = 'is_padre = "false"';
             }
 
-            //console.log()
-
             self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE '+ where +'  ORDER BY id DESC').then(
 
-              function(eventos: {rows}){
+                function(eventos: {rows}){
                 console.log('eventos loaded - OK');
                 var event_format = [];
 
@@ -105,17 +148,19 @@ export class CalendarioPage {
                 }                  
                 self.calendar.eventSource = event_format;
                 self.cargar = false;
+                resolve();
               },
               err =>{
                 console.log('error after create BD');
+                reject();
               }
-            );                                            
-          },
-           function(e){
-               console.log('Error en calendario');
-               console.log(e);
-           }
-        );
+            );
+        });
+
+
+        return promise;
+
+        
     }
 
     ionViewDidLoad() {
@@ -136,12 +181,35 @@ export class CalendarioPage {
         /*var self = this;
         this.getDatos.borrarTablas(["gastostoursline", "eventos"]).then(
             res=>{
-                self.initCalendario();
+                self.initCalendario(); 
             },
             fail=>{
                 console.log('Error refresh tables');
             }
         );*/
+    }
+
+    presentConfirm() {
+      let alert = this.alertCtrl.create({
+        title: 'Actualizar datos.',
+        message: '¿ Deseas actualizar el calendario ?',
+        buttons: [
+          {
+            text: 'Mas tarde.',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Actualizar.',
+            handler: () => {
+              this.refresh();
+            }
+          }
+        ]
+      });
+      alert.present();
     }
 
 

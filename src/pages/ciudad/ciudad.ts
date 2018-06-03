@@ -29,7 +29,7 @@ export class CiudadPage {
 	    	function (datos:any[]){
 	    		self.ciudades = datos;
 	    		self.cargar = false;
-	    		//console.log(JSON.stringify(datos));
+	    		console.log(JSON.stringify(datos));
 	    	},
 	    	fail=>{
 
@@ -37,14 +37,23 @@ export class CiudadPage {
     	);
 	}
 
-	abrir_ciudad(ciudad){
-		this.navCtrl.push(CiudadDPage, {ciudad:ciudad});
+	abrir(item){
+
+		var self = this;
+        let profileModal = this.modalCtrl.create(CiudadDPage, {item:item});
+        profileModal.onDidDismiss(data => {
+            if (data.id != null) {
+
+                self.initCiudades();
+            }
+        });
+        profileModal.present();
 	}
 
 	add(){
 
 		var self = this;
-        let profileModal = this.modalCtrl.create(CiudadDPage, {ciudad:false});
+        let profileModal = this.modalCtrl.create(CiudadDPage, {item:false});
         profileModal.onDidDismiss(data => {
             if (data.id != null) {
 

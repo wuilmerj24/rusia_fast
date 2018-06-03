@@ -31,6 +31,7 @@ import { SolicitarNuevaPage } from '../pages/solicitar-nueva/solicitar-nueva'; /
 //de configuracion
 import { CiudadPage } from '../pages/ciudad/ciudad';
 import { UsuarioPage } from '../pages/usuario/usuario';
+
 import { ClientePage } from '../pages/cliente/cliente';
 import { TipoPage } from '../pages/tipo/tipo';
 import { GastosTPage } from '../pages/gastos-t/gastos-t';
@@ -55,9 +56,15 @@ import { FormPage } from '../pages/form/form';
 
 //de ganancias
 import {GanPage} from '../pages/gan/gan';
+import {GanaDPage} from '../pages/gana-d/gana-d';
 import {GananciasPage} from '../pages/ganancias/ganancias';
 import {ResumenPage} from '../pages/resumen/resumen';
+import {ResumeDPage} from '../pages/resume-d/resume-d';
+
+import {MailPage} from '../pages/mail/mail';
+
 import {GeneralPage} from '../pages/general/general';
+import {GeneralDPage} from '../pages/general-d/general-d';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -78,6 +85,10 @@ import { IOSFilePicker } from '@ionic-native/file-picker';
 @NgModule({
   declarations: [
     MyApp,
+    ResumeDPage,
+    GanaDPage,
+    GeneralDPage,
+    MailPage,
     CiudadDPage,
     UsuarioDPage,
     ClienteDPage,
@@ -128,6 +139,10 @@ import { IOSFilePicker } from '@ionic-native/file-picker';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    ResumeDPage,
+    MailPage,
+    GanaDPage,
+    GeneralDPage,
     CiudadDPage,
     UsuarioDPage,
     ClienteDPage,
