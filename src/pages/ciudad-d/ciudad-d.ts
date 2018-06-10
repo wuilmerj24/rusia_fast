@@ -64,7 +64,7 @@ export class CiudadDPage {
     			},
     			bad=>{
     				console.log('fail');
-    				self.presentAlert('Error!', 'Error al intentar borrar, vuelva a intentarlo');
+    				self.presentAlert('Error!', 'Error al intentar guardar, vuelva a intentarlo');
     				self.cargar = false;
     			}
     		);
@@ -81,7 +81,7 @@ export class CiudadDPage {
     			},
     			bad=>{
     				console.log('fail');
-    				self.presentAlert('Error!', 'Error al intentar borrar, vuelva a intentarlo');
+    				self.presentAlert('Error!', 'Error al intentar guardar, vuelva a intentarlo');
     				self.cargar = false;
     			}
     		);

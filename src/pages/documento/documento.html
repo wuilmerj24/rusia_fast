@@ -93,11 +93,7 @@
 	        </ion-col>
 	        <ion-col col-8>
 	            <ion-select name="doc.ciudades" multiple [(ngModel)]="doc.ciudades">	            	
-	            	<ion-option value="3">Moscu</ion-option>
-	            	<ion-option value="2">San petersburgo</ion-option>
-	            	<ion-option value="4">Sochi</ion-option>
-	            	<ion-option value="5">Kasan</ion-option>
-	            	<ion-option value="6">Samara</ion-option>	            	
+	            	<ion-option *ngFor="let ciudad of ciudades" [value]="ciudad.id">{{ciudad.name}}</ion-option>                  	
 	            </ion-select>
 	        </ion-col>    
 	    </ion-row>   

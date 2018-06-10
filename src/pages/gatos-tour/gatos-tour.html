@@ -76,12 +76,8 @@
 	            <b>Ciudad</b>
 	        </ion-col>
 	        <ion-col col-8>
-	            <ion-select name="gasto.ciudad_id" disabled [(ngModel)]="gasto.ciudad_id[0]">	            	
-	            	<ion-option value="3">Moscu</ion-option>
-	            	<ion-option value="2">San petersburgo</ion-option>
-	            	<ion-option value="4">Sochi</ion-option>
-	            	<ion-option value="5">Kasan</ion-option>
-	            	<ion-option value="6">Samara</ion-option>	            	
+	            <ion-select name="gasto.ciudad_id" disabled [(ngModel)]="gasto.ciudad_id[0]">        
+	            	<ion-option *ngFor="let ciudad of ciudades" [value]="ciudad.id">{{ciudad.name}}</ion-option>    	
 	            </ion-select>
 	        </ion-col>    
 	    </ion-row>            	

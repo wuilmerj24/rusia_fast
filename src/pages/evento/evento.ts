@@ -415,7 +415,7 @@ export class EventoPage {
 
             		self.cargar = true;
             			
-        			self.getDatos.cargarCalendario(true,true,false,false).then(
+        			self.getDatos.cargarCalendario(true,true,false,false,false).then(
 		        		res=>{
 		        			console.log('Update complete');
 		        			self.initEvento();
@@ -436,7 +436,7 @@ export class EventoPage {
 		        		res=>{
 		        			
 		        			self.cargar = true;
-		        			self.getDatos.cargarCalendario(true,true,false,false).then(
+		        			self.getDatos.cargarCalendario(true,true,false,false,false).then(
 				        		res=>{
 				        			console.log('Update complete');
 				        			self.initEvento();
@@ -485,7 +485,7 @@ export class EventoPage {
             	self.guardar([[0,0,data]], 1).then(
 	        		res=>{
 	        			self.cargar = true;
-	        			self.getDatos.cargarCalendario(true,true,false,false).then(
+	        			self.getDatos.cargarCalendario(true,true,false,false,false).then(
 			        		res=>{
 			        			console.log('Update complete');
 			        			self.initEvento();
@@ -590,7 +590,7 @@ export class EventoPage {
 			self.getDatos.eliminar('ir.attachment', id).then(
 				res=>{
 					self.cargar = true;
-        			self.getDatos.cargarCalendario(true,false,true,false).then(
+        			self.getDatos.cargarCalendario(true,false,true,false,false).then(
 		        		res=>{
 		        			console.log('Update complete');
 		        			self.initEvento();
@@ -648,7 +648,7 @@ export class EventoPage {
             	self.guardar(data, 2).then(
 	        		res=>{
 	        			self.cargar = true;
-	        			self.getDatos.cargarCalendario(true,false,true,false).then(
+	        			self.getDatos.cargarCalendario(true,false,true,false,false).then(
 			        		res=>{
 			        			console.log('Update complete');
 			        			self.initEvento();

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-
+import { NavController, NavParams, ModalController } from 'ionic-angular';
+import { TipoDPage } from '../../pages/tipo-d/tipo-d';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 
 @Component({
@@ -13,21 +13,21 @@ export class TipoPage {
 	private tipos = [];	
 	private items = [];
     private max = 10;
-	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 
-		this.initTipos();
+		this.init();
 	}
 
 	ionViewDidLoad() {
 	console.log('ionViewDidLoad CiudadPage');
 	}
 
-	initTipos(){
+	init(){
 
 	    var self = this; 
 	    self.tipos = [];
 	    self.cargar = true;
-	    self.getDatos.search_read('rusia.tiposervicios',[], ["ciudad_id", "name", "Code", "Hora_Inicio", "Hora_Finalizar"]).then(
+	    self.getDatos.search_read('rusia.tiposervicios',[], ["name", "Code", "Hora_Inicio", "Hora_Finalizar", "is_traslado", "is_guia", "ciudad_id", "hora_chofer", "Descripcion"]).then(
 	    	function (datos:any[]){
 	    		self.tipos = datos;
 	    		self.initItems();
@@ -39,6 +39,23 @@ export class TipoPage {
 	    	}
     	);
 	}
+
+  private onCancel(ev: any){
+
+      this.initItems();
+  }
+
+  private  getItems(ev: any) {
+    // set val to the value of the searchbar
+    const val = ev.target.value;
+
+    // if the value is an empty string don't filter the items
+    if (val && val.trim() != '') {
+      this.items = this.tipos.filter((item) => {
+        return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    }
+  }
 
 	private initItems(){
 
@@ -64,5 +81,31 @@ export class TipoPage {
           infiniteScroll.complete();
         }, 500);
     }
+
+    abrir(item){
+
+		var self = this;
+        let profileModal = this.modalCtrl.create(TipoDPage, {item:item});
+        profileModal.onDidDismiss(data => {
+            if (data.id != null) {
+
+                self.init();
+            }
+        });
+        profileModal.present();
+	}
+
+	add(){
+
+		var self = this;
+        let profileModal = this.modalCtrl.create(TipoDPage, {item:false});
+        profileModal.onDidDismiss(data => {
+            if (data.id != null) {
+
+                self.init();
+            }
+        });
+        profileModal.present();
+	}
 
 }

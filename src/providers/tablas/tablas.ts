@@ -30,7 +30,16 @@ export class TablasProvider {
 	" observaciones_solicitud TEXT,"+
 	" ciudad_id VARCHAR(255));";
 
-	
+	private tbl_ciudad = "CREATE TABLE IF NOT EXISTS ciudad("+
+	" id INTEGER PRIMARY KEY,"+
+	" name VARCHAR(255),"+
+	" Tel_Emergency VARCHAR(30),"+	
+	" Code VARCHAR(255));";
+
+	private tbl_ciudad_odoo = [
+	"name",
+	"Tel_Emergency",
+	"Code"];
 
 	private tbl_gastos = "CREATE TABLE IF NOT EXISTS gastostoursline("+
 	" id INTEGER PRIMARY KEY,"+
@@ -313,6 +322,16 @@ export class TablasProvider {
   	public get Tbl_solicitud() : string {
 		return this.tbl_solicitud;
 	}
+
+	public get Tbl_ciudad() : string {
+		return this.tbl_ciudad;
+	}
+
+	public get Tbl_ciudad_odoo() : string[] {
+		return this.tbl_ciudad_odoo;
+	}
+
+	
 
 	public get Tbl_solicitud_odoo() : string[] {
 		return this.tbl_solicitud_odoo;

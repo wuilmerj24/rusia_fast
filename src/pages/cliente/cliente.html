@@ -6,10 +6,14 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>Clientes</ion-title>
+    <ion-buttons end>        
+         <button ion-button icon-only (click)="add()">
+                <ion-icon name="add"></ion-icon>
+        </button>
+    </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
 
@@ -22,7 +26,13 @@
 
     <div *ngIf="!cargar">
 
-    	<ion-grid *ngFor="let cliente of items; let i = index" (click)="abrir_cliente(cliente)">                             
+        <ion-searchbar
+          showCancelButton="true"
+          (ionInput)="getItems($event)"
+          (ionCancel)="onCancel($event)">          
+        </ion-searchbar>
+
+    	<ion-grid *ngFor="let cliente of items; let i = index" (click)="abrir(cliente)">                             
             <!--ion-row>  
                 <ion-col col-6 align-self-center>
                         <button ion-button color="primary" type="button" (click)="crearSolicitud(solicitud)" >Aceptar</button>

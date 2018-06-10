@@ -16,6 +16,7 @@ export class GatosTourPage {
 	private cargar = false;
 	private eventos_id;
 	private gastostours = [];
+	private ciudades = [];
 
 	private clientes = [];
 
@@ -59,7 +60,24 @@ export class GatosTourPage {
 			    	self.clientes.push(user.rows.item(i));                   	
                 }
 				//console.log(JSON.stringify(self.clientes));
-				self.cargar = false;
+				//self.cargar = false;
+
+				self.getDatos.ejecutarSQL('SELECT * FROM ciudad').then(
+					function(ciudad: {rows}){
+
+													 
+						for(var i=0; i<ciudad.rows.length; i++) {
+
+					    	self.ciudades.push(ciudad.rows.item(i));                   	
+		                }
+		                //console.log(JSON.stringify(ciudad.rows));
+		                self.cargar = false;
+
+					},
+					fail=>{
+						console.log('Fail load gastos')
+					}
+				);
 			},
 			fail=>{
 

@@ -1,5 +1,5 @@
 <!--
-  Generated template for the TipoDPage page.
+  Generated template for the CiudadDPage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
@@ -7,12 +7,164 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>tipoD</ion-title>
+    <ion-title>Detalles tipo</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-end (click)="closeModal()">
+                     <ion-icon ios="ios-close" md="md-close"></ion-icon>
+            </button>
+        </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+
+	<div *ngIf="cargar" style="text-align: center">    
+        <ion-spinner name="circles"></ion-spinner><br>
+        <b>Guardando...</b>
+    </div>
+
+    <div *ngIf="!cargar">
+
+    	<ion-grid>
+            <ion-row *ngIf="!control" >  
+                <ion-col col-6 align-self-center>
+                        <button ion-button color="primary" type="button" (click)="editar()">Editar</button>
+                </ion-col>
+                <ion-col col-6 align-self-center>
+                        <button ion-button color="danger" type="button" (click)="borrar()">Eliminar</button>
+                </ion-col>
+            </ion-row> 
+            <ion-row *ngIf="control" >  
+                <ion-col col-12 align-self-center>
+                        <button ion-button color="primary" type="button" (click)="guardar()">Guardar</button>
+                </ion-col>
+            </ion-row> 
+
+
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Nombre servicio</b>
+                </ion-col>
+                <ion-col col-8>
+                    <ion-input name="tipo.name" [readonly]="read" type="text" placeholder="Nombre" [(ngModel)]="tipo.name"></ion-input>           
+                </ion-col>       
+            </ion-row>
+
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Código</b>
+                </ion-col>
+                <ion-col col-8>
+
+                    <ion-input name="tipo.Code" [readonly]="read" type="text" placeholder="Código" [(ngModel)]="tipo.Code"></ion-input>      
+                </ion-col>       
+            </ion-row>
+
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Hora inicio</b>
+                </ion-col>
+                <ion-col col-8>
+
+                    <ion-input name="tipo.Hora_Inicio"  placeholder="HH:mm" [readonly]="read" type="text" [(ngModel)]="tipo.Hora_Inicio"></ion-input>       
+                </ion-col>       
+            </ion-row>
+            <ion-row align-items-center class="borde">  
+                <ion-col col-4>
+                    <b>Hora fin</b>
+                </ion-col>
+                <ion-col col-8>
+
+                    <ion-input name="tipo.Hora_Finalizar"  placeholder="HH:mm" [readonly]="read" type="text" [(ngModel)]="tipo.Hora_Finalizar"></ion-input>
+
+                </ion-col>       
+            </ion-row>
+
+
+                      
+
+            <ion-row align-items-center>  
+		        <ion-col col-12>
+		            <b>Descripción del servicio</b>
+		        </ion-col>
+		    </ion-row>
+
+		    <ion-row align-items-center>  
+		        <ion-col col-12>
+		            <ion-textarea name="tipo.Descripcion" placeholder="Comentarios chofer" [readonly]="read" [(ngModel)]="tipo.Descripcion"> </ion-textarea>
+		        </ion-col>       
+		    </ion-row>
+
+
+		    <ion-row align-items-center>  
+		        <ion-col col-6>
+		            <b>Transporte privado</b>
+		        </ion-col>
+		        <ion-col col-6>
+		            <ion-checkbox name="tipo.is_traslado" [disabled] = "read" [(ngModel)]="tipo.is_traslado"></ion-checkbox>
+		        </ion-col>       
+		    </ion-row>
+
+		     <ion-row align-items-center>  
+		        <ion-col col-6>
+		            <b>Guía privado</b>
+		        </ion-col>
+		        <ion-col col-6>
+		            <ion-checkbox name="tipo.is_guia"  [disabled] = "read" [(ngModel)]="tipo.is_guia"></ion-checkbox>
+		        </ion-col>       
+		    </ion-row>
+
+
+		    <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Ciudad</b>
+                </ion-col>
+                <ion-col col-8>
+                	<ion-select name="tipo.ciudad_id" [disabled]="read" [(ngModel)]="tipo.ciudad_id[0]">        
+                        <ion-option *ngFor="let ciudad of ciudades" [value]="ciudad.id">{{ciudad.name}}</ion-option>        
+                    </ion-select>           
+                </ion-col>       
+            </ion-row>
+
+             <ion-row align-items-center class="borde">  
+                <ion-col col-4>
+                    <b>Hora chofer</b>
+                </ion-col>
+                <ion-col col-8>
+
+                    <ion-input name="tipo.hora_chofer"  placeholder="HH:mm" [readonly]="read" type="text" [(ngModel)]="tipo.hora_chofer"></ion-input>
+
+                </ion-col>       
+            </ion-row>
+            
+            
+
+
+
+            <!--ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Nombre</b>
+                </ion-col>
+                <ion-col col-8>
+                	<ion-input name="concep.name" [readonly]="read" type="text" placeholder="Nombre" [(ngModel)]="concep.name"></ion-input>                     
+                </ion-col>       
+            </ion-row>
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Ciudades</b>
+                </ion-col>
+                <ion-col col-8>
+                	<ion-select name="concep.ciudades" [disabled]="read" [(ngModel)]="concep.ciudades" multiple="true">        
+                        <ion-option *ngFor="let ciudad of ciudades" [value]="ciudad.id">{{ciudad.name}}</ion-option>        
+                    </ion-select>           
+                </ion-col>       
+            </ion-row-->            
+            
+            
+        </ion-grid>
+
+    </div>
 
 </ion-content>

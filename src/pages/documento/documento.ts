@@ -5,6 +5,7 @@ import { Base64 } from '@ionic-native/base64';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { File, IWriteOptions, FileEntry, IFile } from '@ionic-native/file';
 import { IOSFilePicker } from '@ionic-native/file-picker';
+import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 
 @Component({
   selector: 'page-documento',
@@ -28,12 +29,31 @@ export class DocumentoPage {
 	}
 
 	private nombre_archivo;
-	private cargar = false;
+	private cargar = true;
 
 	private archivo = true;
 	private url = false;
 
-	constructor(private filePicker: IOSFilePicker, public plt: Platform, private file:File, public viewCtrl: ViewController, private base64: Base64, private filePath: FilePath, private fileChooser: FileChooser, public navCtrl: NavController, public navParams: NavParams) {
+	private ciudades = [];
+	constructor(private filePicker: IOSFilePicker, public getDatos:GetDatosProvider, public plt: Platform, private file:File, public viewCtrl: ViewController, private base64: Base64, private filePath: FilePath, private fileChooser: FileChooser, public navCtrl: NavController, public navParams: NavParams) {
+
+		var self = this;
+        self.getDatos.ejecutarSQL('SELECT * FROM ciudad').then(
+            function(ciudad: {rows}){
+
+                                             
+                for(var i=0; i<ciudad.rows.length; i++) {
+
+                    self.ciudades.push(ciudad.rows.item(i));                       
+                }
+                //console.log(JSON.stringify(ciudad.rows));
+                self.cargar = false;
+
+            },
+            fail=>{
+                console.log('Fail load gastos')
+            }
+        );
 	}
 
 	ionViewDidLoad() {

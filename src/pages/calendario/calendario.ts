@@ -34,7 +34,7 @@ export class CalendarioPage {
 
     constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public alertCtrl: AlertController) {
 
-        //this.initCalendario(false);
+        this.initCalendario(false);
     }
 
     private initCalendario(borrar){
@@ -44,7 +44,7 @@ export class CalendarioPage {
         if(borrar == true){
 
             
-            this.getDatos.cargarCalendario(borrar, borrar, borrar, borrar).then(          
+            this.getDatos.cargarCalendario(borrar, borrar, borrar, borrar, borrar).then(          
               function() {                                
                 self.datosOffline().then(
                     good=>{

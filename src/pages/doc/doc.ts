@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, ModalController } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
+import { DocumentoPage } from '../../pages/documento/documento';
 
 @Component({
   selector: 'page-doc',
@@ -12,7 +13,7 @@ export class DocPage {
 	private docs = [];	
 	private items = [];
     private max = 10;
-	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 
 		this.init();
 	}
@@ -63,6 +64,32 @@ export class DocPage {
           infiniteScroll.complete();
         }, 500);
     }
+
+    abrir(item){
+
+		var self = this;
+        let profileModal = this.modalCtrl.create(DocumentoPage, {item:item});
+        profileModal.onDidDismiss(data => {
+            if (data.id != null) {
+
+                self.init();
+            }
+        });
+        profileModal.present();
+	}
+
+	add(){
+
+		var self = this;
+        let profileModal = this.modalCtrl.create(DocumentoPage, {item:false});
+        profileModal.onDidDismiss(data => {
+            if (data.id != null) {
+
+                self.init();
+            }
+        });
+        profileModal.present();
+	}
 
 
 }

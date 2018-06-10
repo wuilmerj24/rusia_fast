@@ -1,5 +1,5 @@
 <!--
-  Generated template for the ClienteDPage page.
+  Generated template for the usuarioDPage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
@@ -7,12 +7,101 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>clienteD</ion-title>
+    <ion-title>Detalles cliente</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-end (click)="closeModal()">
+                     <ion-icon ios="ios-close" md="md-close"></ion-icon>
+            </button>
+        </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+
+	<div *ngIf="cargar" style="text-align: center">    
+        <ion-spinner name="circles"></ion-spinner><br>
+        <b>Guardando...</b>
+    </div>
+
+    <div *ngIf="!cargar">
+
+    	<ion-grid>
+            <ion-row *ngIf="!control" >  
+                <ion-col col-6 align-self-center>
+                        <button ion-button color="primary" type="button" (click)="editar()">Editar</button>
+                </ion-col>
+                <ion-col col-6 align-self-center>
+                        <button ion-button color="danger" type="button" (click)="borrar()">Eliminar</button>
+                </ion-col>
+            </ion-row> 
+            <ion-row *ngIf="control" >  
+                <ion-col col-12 align-self-center>
+                        <button ion-button color="primary" type="button" (click)="guardar()">Guardar</button>
+                </ion-col>
+            </ion-row> 
+
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Nombre</b>
+                </ion-col>
+                <ion-col col-8>
+                	<ion-input name="usuario.name" [readonly]="read" type="text" placeholder="Nombre" [(ngModel)]="usuario.name"></ion-input>                     
+                </ion-col>       
+            </ion-row>
+
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Email</b>
+                </ion-col>
+                <ion-col col-8>
+                	<ion-input name="usuario.email" [readonly]="read" type="text" placeholder="Correo" [(ngModel)]="usuario.email"></ion-input>                    
+                </ion-col>       
+            </ion-row>
+            
+            <!--ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Usuario</b>
+                </ion-col>
+                <ion-col col-8>
+                	<ion-input name="usuario.login" [readonly]="read" type="text" placeholder="Usuario" [(ngModel)]="usuario.login"></ion-input>                    
+                </ion-col>       
+            </ion-row-->
+
+            
+
+            <ion-row align-items-center>  
+		        <ion-col col-6>
+		            <b>Notificación correo</b>
+		        </ion-col>
+		        <ion-col col-6>
+		            <ion-checkbox name="usuario.is_correo" [disabled] = "read" [(ngModel)]="usuario.is_correo"></ion-checkbox>
+		        </ion-col>       
+		    </ion-row>
+
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Móvil</b>
+                </ion-col>
+                <ion-col col-8>
+                	<ion-input name="usuario.mobile" [readonly]="read" type="text" placeholder="Móvil" [(ngModel)]="usuario.mobile"></ion-input>                    
+                </ion-col>       
+            </ion-row>
+
+            <ion-row align-items-center>  
+                <ion-col col-4>
+                    <b>Fax</b>
+                </ion-col>
+                <ion-col col-8>
+                	<ion-input name="usuario.fax" [readonly]="read" type="text" placeholder="Fax319" [(ngModel)]="usuario.fax"></ion-input>                    
+                </ion-col>       
+            </ion-row>         
+
+            
+            
+        </ion-grid>
+
+    </div>
 
 </ion-content>
