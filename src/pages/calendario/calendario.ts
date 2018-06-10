@@ -128,11 +128,25 @@ export class CalendarioPage {
                     var hora_ini = evento.hora_inicio.split(":") //<--MAC
                     var hora_fin = evento.hora_final.split(":") //<--MAC
 
-                    var tmp_guia_id = JSON.parse(evento.guia_id);
-                    var tmp_chofer_id = JSON.parse(evento.chofer_id);
+                    var tmp_chofer_id;
+                    var tmp_guia_id;
+                    if(evento.is_traslado == "true"){
+                        tmp_chofer_id = JSON.parse(evento.chofer_id);
+                    }else{
+                        tmp_chofer_id = [null, "No aplica"];
+                    }
+
+
+                    if (evento.is_guia == "true") {
+                        tmp_guia_id = JSON.parse(evento.guia_id);
+                    }else{
+                        tmp_guia_id = [null, "No aplica"];
+                    }
+                    
+                    
                     var tmp_servicio_id = JSON.parse(evento.servicio_id);
 
-                    //console.log(eventos.rows.item(i).guia_id);
+                    
                     
                     //var dateEnd = new Date(String(eventos.rows.item(i).Fecha_Inicio).replace(' ', 'T'));
                     event_format.push({

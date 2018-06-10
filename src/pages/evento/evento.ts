@@ -1,5 +1,5 @@
 import { Component, ViewChild} from '@angular/core';
-import { Slides, NavController, NavParams,ViewController, ModalController, ToastController } from 'ionic-angular';
+import { Slides, NavController, NavParams,ViewController, ModalController, ToastController, Platform } from 'ionic-angular';
 import { GetDatosProvider } from '../../providers/get-datos/get-datos';
 import { GatosTourPage } from '../../pages/gatos-tour/gatos-tour';
 import { DetallesReservaPage } from '../../pages/detalles-reserva//detalles-reserva';
@@ -79,7 +79,7 @@ export class EventoPage {
 
 
 	//private fileOpener: FileOpener,
-	constructor(private fileOpener: FileOpener, private toastCtrl: ToastController, private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
+	constructor(public plt: Platform, private fileOpener: FileOpener, private toastCtrl: ToastController, private file:File, public navCtrl: NavController, public navParams: NavParams, public getDatos:GetDatosProvider, public modalCtrl: ModalController) {
 		
 		this.evento_cal = this.navParams.get('evento');
 		this.permisos = this.navParams.get('permisos');
@@ -510,6 +510,102 @@ export class EventoPage {
 
     private descargarAtt(att){
 
+      var self  = this;
+      self.ver_download = true;
+      console.log(att.id);
+      self.getDatos.search_read('ir.attachment', [["id", "=", att.id]], ["datas", "mimetype"]).then(
+
+        (res : [{datas:'', mimetype:''}])=>{
+
+          var mimetype = res[0].mimetype.toString();
+          var ext = "." + mimetype.split("/")[1];
+          
+          //var tabla = 
+          //console.log(JSON.stringify(res[0].mimetype));
+          //var ext = '';
+          /*var mimetype_tmp = res[0].mimetype.toString();
+
+          if(mimetype_tmp == "application/pdf"){
+            ext = '.pdf';
+          }else if(mimetype_tmp == "image/png"){
+            ext = '.png';
+          }*/
+
+          let downloadPDF: any = res[0].datas;
+            let base64pdf = downloadPDF;
+            var binary = atob(base64pdf.replace(/\s/g, ''));
+            var len = binary.length;
+            var buffer = new ArrayBuffer(len);
+            var view = new Uint8Array(buffer);
+            for (var i = 0; i < len; i++) {
+                view[i] = binary.charCodeAt(i);
+            }
+               
+            var blobPdf = new Blob( [view], { type: res[0].mimetype.toString() });
+
+          const opt: IWriteOptions = { replace: true }
+
+          if (self.plt.is('ios')) {
+            console.log('------------------loading in IOS');
+            //var nativeUrl = (self.file.applicationStorageDirectory + "tmp/" + att.name.replace(/ /g,'')).substring(7) + ext;
+            //console.log(nativeUrl)
+            //self.file.applicationStorageDirectory
+            self.file.writeFile(self.file.documentsDirectory, att.name.replace(/ /g,'') + ext, blobPdf, opt).then(
+              res=>{
+                //console.log('file saved'+ res.nativeURL);
+                //console.log('file saved'+ res.toInternalURL());
+                console.log('file saved'+ res.toURL());
+                
+                //self.presentToast();
+                self.fileOpener.open(
+                  res.toURL(),
+                  mimetype//file mimeType
+                ).then((success) => {
+                  console.log('success open file: ', success);
+                }, (err) => {
+                  console.log('error open file', err.message);
+                });
+
+              },
+              fail=>{
+                console.log(JSON.stringify(fail));
+              }
+            );
+
+          }else{
+            self.file.writeFile(self.file.externalDataDirectory, att.name + ext, blobPdf, opt).then(
+              res=>{
+                console.log('file saved'+ res.nativeURL);
+                //self.presentToast();
+                self.fileOpener.open(
+                  res.toInternalURL(),
+                  mimetype//file mimeType
+                ).then((success) => {
+                  console.log('success open file: ', success);
+                }, (err) => {
+                  console.log('error open file', err.message);
+                });
+
+              },
+              fail=>{
+                console.log(JSON.stringify(fail));
+              }
+            );
+          }
+
+          //self.file.writeFile(self.file.dataDirectory, att.name + ext, blobPdf, opt).then(
+          
+          self.ver_download = false;
+        },
+        fail=>{
+          console.log('Fail downloading att');
+        }
+    );
+
+    } 
+
+    /*private descargarAtt(att){
+
     	var self  = this;
     	self.ver_download = true;
     	console.log(att.id);
@@ -517,13 +613,16 @@ export class EventoPage {
 
     		(res : [{datas:'', mimetype:''}])=>{
     			//var tabla = 
-    			console.log(JSON.stringify(res[0].mimetype));
-    			var ext = '';
-    			if(res[0].mimetype.toString() == "application/pdf"){
-    				ext = '.pdf';
-    			}else if(res[0].mimetype.toString() == "image/png"){
-    				ext = '.png';
-    			}
+    			//console.log(JSON.stringify(res[0].mimetype));
+    			var mimetype = res[0].mimetype.toString();
+    			var ext = "." + mimetype.split("/")[1];
+
+
+    			//if(res[0].mimetype.toString() == "application/pdf"){
+    			//	ext = '.pdf';
+    			//}else if(res[0].mimetype.toString() == "image/png"){
+    			//	ext = '.png';
+    			//}
 
     			let downloadPDF: any = res[0].datas;
 		        let base64pdf = downloadPDF;
@@ -535,7 +634,7 @@ export class EventoPage {
 		            view[i] = binary.charCodeAt(i);
 		        }
 		           
-		        var blobPdf = new Blob( [view], { type: res[0].mimetype.toString() });
+		        var blobPdf = new Blob( [view], { type: mimetype });
 
     			const opt: IWriteOptions = { replace: true }
 
@@ -543,12 +642,6 @@ export class EventoPage {
 
     			//var blob = 'data:application/pdf;base64,' +res[0].datas;
 
-    			/*if (ionic.Platform.isIOS()) {
-            pathFile = cordova.file.documentsDirectory
-        } else {
-            pathFile = cordova.file.externalDataDirectory
-        }
-    			);*/
 
     			self.file.writeFile(self.file.externalDataDirectory, att.name + ext, blobPdf, opt).then(
     				res=>{
@@ -556,7 +649,7 @@ export class EventoPage {
     					self.presentToast();
     					self.fileOpener.open(
 					      res.toInternalURL(),
-					      'application/pdf'//file mimeType
+					      mimetype
 					    ).then((success) => {
 					      console.log('success open file: ', success);
 					    }, (err) => {
@@ -575,7 +668,7 @@ export class EventoPage {
     		}
 		);
 
-    }
+    }*/
 
     private borrarAttachment(id){
 
@@ -612,8 +705,12 @@ export class EventoPage {
 
     private abrirReserva(){
     	//console.log('entro');
-    	// 
-    	this.navCtrl.push(DetallesReservaPage, {evento:this.evento, permisos:this.permisos, padre:false});
+    	
+    	if(!this.editable){
+
+    		this.navCtrl.push(DetallesReservaPage, {evento:this.evento, permisos:this.permisos, padre:false});
+    	}
+    	
     }
 
     private presentToast() {
@@ -641,9 +738,11 @@ export class EventoPage {
 
             if (data != 'x') {
             	
+            	//console.log(JSON.stringify(self.evento))
+            	//console.log(self.evento.cliente_id[0])
             	data.cliente_id = self.evento.cliente_id[0];
             	data.res_id = self.evento.id;
-            	console.log(data.cliente_id)
+            	console.log(JSON.stringify(data))
 
             	self.guardar(data, 2).then(
 	        		res=>{

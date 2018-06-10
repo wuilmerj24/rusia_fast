@@ -27,7 +27,7 @@ export class PanelPage {
 
   @ViewChild(Nav) nav: Nav;
 
-  rootPage:any = ConfiPage;
+  rootPage:any = CalendarioPage;
 
   pages: any; //Array<{title: string, component: any}>
 

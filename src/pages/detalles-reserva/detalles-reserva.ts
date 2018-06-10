@@ -308,16 +308,20 @@ export class DetallesReservaPage {
       self.getDatos.search_read('ir.attachment', [["id", "=", att.id]], ["datas", "mimetype"]).then(
 
         (res : [{datas:'', mimetype:''}])=>{
+
+          var mimetype = res[0].mimetype.toString();
+          var ext = "." + mimetype.split("/")[1];
+          
           //var tabla = 
-          console.log(JSON.stringify(res[0].mimetype));
-          var ext = '';
-          var mimetype_tmp = res[0].mimetype.toString();
+          //console.log(JSON.stringify(res[0].mimetype));
+          //var ext = '';
+          /*var mimetype_tmp = res[0].mimetype.toString();
 
           if(mimetype_tmp == "application/pdf"){
             ext = '.pdf';
           }else if(mimetype_tmp == "image/png"){
             ext = '.png';
-          }
+          }*/
 
           let downloadPDF: any = res[0].datas;
             let base64pdf = downloadPDF;
@@ -347,7 +351,7 @@ export class DetallesReservaPage {
                 //self.presentToast();
                 self.fileOpener.open(
                   res.toURL(),
-                  mimetype_tmp//file mimeType
+                  mimetype//file mimeType
                 ).then((success) => {
                   console.log('success open file: ', success);
                 }, (err) => {
@@ -367,7 +371,7 @@ export class DetallesReservaPage {
                 //self.presentToast();
                 self.fileOpener.open(
                   res.toInternalURL(),
-                  mimetype_tmp//file mimeType
+                  mimetype//file mimeType
                 ).then((success) => {
                   console.log('success open file: ', success);
                 }, (err) => {

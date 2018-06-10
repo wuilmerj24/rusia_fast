@@ -75,7 +75,7 @@
 	            <b>Cliente</b>
 	        </ion-col>
 	        <ion-col col-6>
-	           <ion-input name="evento.cliente_id"  readonly type="text" [(ngModel)]="evento.cliente_id[1]"></ion-input>
+	           <ion-input name="evento.cliente_id"  [readonly]="!editable" type="text" [(ngModel)]="evento.cliente_id[1]"></ion-input>
 	        </ion-col>       
 	    </ion-row>  
 
@@ -84,7 +84,7 @@
 	            <b>Evento Padre</b>
 	        </ion-col>
 	        <ion-col col-6>
-	            <ion-input name="evento.evento_id" style="color: #85C1E9"  readonly type="text" [(ngModel)]="evento.evento_id[1]"></ion-input>
+	            <ion-input name="evento.evento_id" style="color: #85C1E9"  [readonly]="!editable" type="text" [(ngModel)]="evento.evento_id[1]"></ion-input>
 	        </ion-col>       
 	    </ion-row>    
 <!--
