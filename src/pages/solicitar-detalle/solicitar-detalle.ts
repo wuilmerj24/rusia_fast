@@ -145,7 +145,7 @@ export class SolicitarDetallePage {
 			self.getDatos.write('rusia.eventos', self.evento.id, campos).then(
 				res=>{
 
-					self.getDatos.cargarCalendario(true,false,false,false,false).then(
+					self.getDatos.cargarCalendario(true,false,false,false,false,false,false).then(
 		        		res=>{
 		        			console.log('Update complete');
 		        			self.initSolitarDetalles();

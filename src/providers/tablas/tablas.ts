@@ -360,7 +360,7 @@ export class TablasProvider {
 		return this.tbl_servicios;
 	}
 
-	public get Tbl_servicios_odoo() : string {
+	public get Tbl_servicios_odoo() : string[] {
 		return this.tbl_servicios_odoo;
 	}
 	

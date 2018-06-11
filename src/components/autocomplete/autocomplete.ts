@@ -26,6 +26,7 @@ export class AutocompleteComponent {
     //lista2 = [];
     buscar = '';
     id = 0
+    disabled = true;
 
   	constructor() {
     	//console.log('Hello AutocompleteComponent Component');

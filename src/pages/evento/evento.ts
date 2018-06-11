@@ -15,6 +15,8 @@ export class EventoPage {
 
 	@ViewChild(Slides) slides: Slides;
 
+	@ViewChild("sh_cliente") sh_cliente: Slides;
+
 
 	public categories;
 	public selectedCategory;
@@ -67,8 +69,6 @@ export class EventoPage {
 	private default_guia = [];
 	private default_chofer = [];
 
-	
-
 	private eventos = [];
 	private default_evento = [];
 
@@ -80,6 +80,9 @@ export class EventoPage {
 	private default_servicio = [];
 
 	private editable = false;
+	private editableObj = {
+		editable:false
+	}
 	private cargar = false;
 	private permisos = '';
 	private ver_segmento = true;
@@ -132,7 +135,6 @@ export class EventoPage {
 	}
 
 	ionViewDidLoad() {
-		console.log('ionViewDidLoad EventoPage'); 
 
 	}
 
@@ -142,7 +144,9 @@ export class EventoPage {
 		textarea.style.height 	= 'auto';
 		textarea.style.height 	= textarea.scrollHeight + 'px';
 		return;
-	}	
+	}
+
+	
 
 	private async initEvento(){
 		
@@ -181,6 +185,7 @@ export class EventoPage {
 				self.evento.chofer_id = tmp_chofer_id;
 				self.evento.hotel_id = tmp_hotel_id;
 				self.evento.ciudad_id = tmp_ciudad_id;
+				self.evento.servicio_id = tmp_servicio_id;
 
 				
 
@@ -220,7 +225,7 @@ export class EventoPage {
 		await self.getDatos.ejecutarSQL('SELECT * FROM attachment WHERE eventos_id = "' + self.evento.id +'"').then(
 			function(attachment: {rows}){
 
-				console.log(JSON.stringify(attachment.rows));															 
+				//console.log(JSON.stringify(attachment.rows));															 
 				for(var i=0; i<attachment.rows.length; i++) {
 
 
@@ -311,7 +316,8 @@ export class EventoPage {
 				
 				for(var i=0; i<servicios.rows.length; i++) {
 
-			    	self.servicios.push(servicios.rows.item(i));                   	
+			    	self.servicios.push(servicios.rows.item(i)); 
+			    	console.log(servicios.rows.item(i));                  	
                 }				
 
 			},
@@ -321,17 +327,20 @@ export class EventoPage {
 		);
 
 		self.cargar = false;
-
+		
 
 	}
 
 	
 	private editar() {
 
+		
         if (!this.editable) {
-            this.editable = true;
+            this.editable = true;   
+            this.editableObj.editable = true;
         } else {
             this.editable = false;
+            this.editableObj.editable = false;
         }
     }
 
@@ -515,7 +524,7 @@ export class EventoPage {
 
             		console.log('---------------------------------------update ')
             		self.cargar = true;
-            		console.log(JSON.stringify([[1,gasto.id,data]]));
+            		//console.log(JSON.stringify([[1,gasto.id,data]]));
             		self.guardar([[1,gasto.id,data]], 1).then(
 		        		res=>{
 		        			

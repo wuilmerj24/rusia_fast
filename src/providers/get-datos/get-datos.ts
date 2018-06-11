@@ -156,9 +156,9 @@ export class GetDatosProvider {
 
 
 				    var registro = "INSERT OR IGNORE INTO tiposervicios "+
-				    	"(id, name, Code, Hora_Inicio, Hora_Finalizar, is_traslado , is_guia, ciudad_id, hora_chofer, Descripcion)"+
+				    	"(id, name, Code, Hora_Inicio, Hora_Finalizar, is_traslado, is_guia, ciudad_id, hora_chofer, Descripcion)"+
 				    	" VALUES (" + servicios[key].id + ", '"+servicios[key].name+"', '"+ servicios[key].Code
-				    	+"', '"+servicios[key].Hora_Inicio+"', '"+servicios[key].is_traslado+"', '"+
+				    	+"', '"+servicios[key].Hora_Inicio+"', '"+servicios[key].Hora_Finalizar+"', '"+servicios[key].is_traslado+"', '"+
 				    	servicios[key].is_guia+"', '"+JSON.stringify(servicios[key].ciudad_id)+"', '"+servicios[key].hora_chofer+"', '"+servicios[key].Descripcion+"');";
 
 				    //console.log(registro);
@@ -539,7 +539,7 @@ export class GetDatosProvider {
 			    	eventos[key].tarjeta_rub+"', '"+eventos[key].tarjeta_usd+"' , '"+eventos[key].is_guia+"', '"+eventos[key].is_traslado+"', '"+ 
 			    	JSON.stringify(eventos[key].gastostoursline_ids)+"', '"+eventos[key].guia_id[0]+"', '"+ JSON.stringify(eventos[key].gastos_ids) +"', '"+
 			    	JSON.stringify(eventos[key].servicio_id)+"', '"+eventos[key].salario+"', '"+self.parseDato(eventos[key].observaciones_solicitud)+"');";
-			    console.log(registro);							  			
+			    //console.log(registro);							  			
 			    sql.push(registro);
 			});
 
@@ -1303,7 +1303,7 @@ export class GetDatosProvider {
 					self.crearEsquema(conexion).then(
 						res=>{							
 
-							self.cargarCalendario(true, true, true, true, true).then(          
+							self.cargarCalendario(true, true, true, true, true, true, true).then(          
 			          			function() {			            			            
 			          				resolve(res);			                    
 					          	},
