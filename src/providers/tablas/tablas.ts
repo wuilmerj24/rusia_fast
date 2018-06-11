@@ -161,6 +161,7 @@ export class TablasProvider {
 	" cliente_id_tmp VARCHAR(255),"+	
 	" cliente_id VARCHAR(20),"+	
 	" representante_id VARCHAR(255),"+	
+	" nombre_reserva VARCHAR(255),"+	
 	" representante_id_tmp VARCHAR(20),"+
 	" Fecha_Inicio VARCHAR(20),"+
 	" Fecha_Fin VARCHAR(20),"+
@@ -201,10 +202,34 @@ export class TablasProvider {
 	" salario VARCHAR(10),"+
 	" gastostoursline_ids VARCHAR(255));";
 
+	private tbl_servicios_odoo = [
+	"name", 
+	"Code", 
+	"Hora_Inicio", 
+	"Hora_Finalizar", 
+	"is_traslado", 
+	"is_guia", 
+	"ciudad_id", 
+	"hora_chofer", 
+	"Descripcion"]
+
+	private tbl_servicios = "CREATE TABLE IF NOT EXISTS tiposervicios("+
+	" id INTEGER PRIMARY KEY,"+
+	" name VARCHAR(255),"+
+	" Code VARCHAR(255),"+
+	" Hora_Inicio VARCHAR(20),"+
+	" Hora_Finalizar VARCHAR(20),"+
+	" is_traslado VARCHAR(20),"+
+	" is_guia VARCHAR(20),"+
+	" ciudad_id VARCHAR(255),"+
+	" hora_chofer VARCHAR(20),"+
+	" Descripcion TEXT);";
 	
-	private tbl_eventos_odoo = ["Comentarios_Chofer",
+	private tbl_eventos_odoo = [
+	"Comentarios_Chofer",
 	"Total_Beneficios",
 	"tarjeta_usd_pos",
+	"nombre_reserva",
 	"servicio_id",
 	"salario",
 	"observaciones_solicitud",
@@ -331,6 +356,13 @@ export class TablasProvider {
 		return this.tbl_ciudad_odoo;
 	}
 
+	public get Tbl_servicios() : string {
+		return this.tbl_servicios;
+	}
+
+	public get Tbl_servicios_odoo() : string {
+		return this.tbl_servicios_odoo;
+	}
 	
 
 	public get Tbl_solicitud_odoo() : string[] {

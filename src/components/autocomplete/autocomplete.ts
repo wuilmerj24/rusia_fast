@@ -35,8 +35,8 @@ export class AutocompleteComponent {
 
   	ngAfterViewInit(){
   		
-      console.log('defaul value is:');
-      console.log(this.default.length);
+      //console.log('defaul value is:');
+      //console.log(this.default.length);
 
       if(this.default.length > 0){
 

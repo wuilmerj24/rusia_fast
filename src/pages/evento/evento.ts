@@ -56,12 +56,28 @@ export class EventoPage {
 	 tarjeta_usd :'',
 	 is_traslado :false,
 	 is_guia:false,
+	 servicio_id:null,
+	 nombre_reserva:null
+
 	 //gastostoursline_ids:[]
 	 }
+
+	private clientes = [];
+	private default_cliente = [];
+	private default_guia = [];
+	private default_chofer = [];
+
+	
+
+	private eventos = [];
+	private default_evento = [];
 
 	private gastostoursline_ids = [];
 	private attachment = [];
 	private gastostours = [];
+
+	private servicios = [];
+	private default_servicio = [];
 
 	private editable = false;
 	private cargar = false;
@@ -108,6 +124,9 @@ export class EventoPage {
 			{id:4, name:'Documentos', visible:false},	
 			{id:5, name:'Comentarios', visible:false}];
 		}
+
+
+
 		this.initEvento();
 		this.initializeCategories();
 	}
@@ -125,7 +144,7 @@ export class EventoPage {
 		return;
 	}	
 
-	private initEvento(){
+	private async initEvento(){
 		
 		var self = this;
 		self.gastostoursline_ids = [];
@@ -134,17 +153,24 @@ export class EventoPage {
 		self.gastostours = [];
 
 		self.cargar = true;
-		self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE id = ' + self.evento_cal.id).then(
+		await self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE id = ' + self.evento_cal.id).then(
 			function(eventos: {rows}){
 
 				var evento = eventos.rows.item(0);
 				var tmp_evento_id = JSON.parse(evento.evento_id);
+				self.default_evento = tmp_evento_id;
 				var tmp_cliente_id = JSON.parse(evento.cliente_id);
+				self.default_cliente = tmp_cliente_id;
 				var tmp_representante_id = JSON.parse(evento.representante_id);
 				var tmp_guia_id = JSON.parse(evento.guia_id);
+				self.default_guia = tmp_guia_id;
 				var tmp_chofer_id = JSON.parse(evento.chofer_id);
+				self.default_chofer = tmp_chofer_id;
 				var tmp_hotel_id = JSON.parse(evento.hotel_id);
 				var tmp_ciudad_id = JSON.parse(evento.ciudad_id);
+
+				var tmp_servicio_id = JSON.parse(evento.servicio_id);
+				self.default_servicio = tmp_servicio_id;
 
 
 				self.evento = evento;
@@ -156,8 +182,16 @@ export class EventoPage {
 				self.evento.hotel_id = tmp_hotel_id;
 				self.evento.ciudad_id = tmp_ciudad_id;
 
+				
 
-				self.getDatos.ejecutarSQL('SELECT * FROM gastostoursline WHERE eventos_id = "' + self.evento.id +'"').then(
+			},
+			fail=>{
+				console.log('Fail load evento')
+			}			
+		);			
+
+
+		await self.getDatos.ejecutarSQL('SELECT * FROM gastostoursline WHERE eventos_id = "' + self.evento.id +'"').then(
 					function(gastos: {rows}){
 
 						
@@ -175,72 +209,122 @@ export class EventoPage {
 		                    self.gastostoursline_ids.push(concepto);               
 		                    
 		                }
-		                //self.cargar = false;
-		                console.log('SELECT * FROM attachment WHERE res_id = "' + self.evento.id +'"');
-		                self.getDatos.ejecutarSQL('SELECT * FROM attachment WHERE eventos_id = "' + self.evento.id +'"').then(
-							function(attachment: {rows}){
-
-								console.log(JSON.stringify(attachment.rows));															 
-								for(var i=0; i<attachment.rows.length; i++) {
-
-
-									var att = attachment.rows.item(i)
-									console.log(self.getDatos.usr.tipo_usuario);
-									att.file_size = self.getDatos.bytesToSize(parseInt(att.file_size))
-									if(self.getDatos.usr.tipo_usuario == 'is_client' && att.is_cliente == 'true'){
-
-										self.attachment.push(att);               				                    
-
-									}else{
-
-										self.attachment.push(att);               				                    
-									}							
-				                   	
-				                }
-				                //self.cargar = false;
-
-//				                console.log('SELECT * FROM attachment WHERE gastostours');
-				                self.getDatos.ejecutarSQL('SELECT * FROM gastostours').then(
-									function(gastostours: {rows}){
-
-																	 
-										for(var i=0; i<gastostours.rows.length; i++) {
-
-											var gastos = gastostours.rows.item(i)
-											var tmp_ciudades = JSON.parse(gastos.ciudades);
-
-											if(tmp_ciudades.indexOf(self.evento.ciudad_id[0]) > -1) {
-									    		self.gastostours.push(gastos);
-									      		//console.log(eventos[key].name);
-									    	}										    	
-						                   	
-						                }
-						                self.cargar = false;
-
-									},
-									fail=>{
-										console.log('Fail load gastos')
-									}
-								);
-
-							},
-							fail=>{
-								console.log('Fail load gastos')
-							}
-						);
+		                
 
 					},
 					fail=>{
-						console.log('Fail load gastos')
+						console.log('Fail load gastostoursline')
 					}
 				);
+
+		await self.getDatos.ejecutarSQL('SELECT * FROM attachment WHERE eventos_id = "' + self.evento.id +'"').then(
+			function(attachment: {rows}){
+
+				console.log(JSON.stringify(attachment.rows));															 
+				for(var i=0; i<attachment.rows.length; i++) {
+
+
+					var att = attachment.rows.item(i)
+					console.log(self.getDatos.usr.tipo_usuario);
+					att.file_size = self.getDatos.bytesToSize(parseInt(att.file_size))
+					if(self.getDatos.usr.tipo_usuario == 'is_client' && att.is_cliente == 'true'){
+
+						self.attachment.push(att);               				                    
+
+					}else{
+
+						self.attachment.push(att);               				                    
+					}							
+                   	
+                }
+            
+
+			},
+			fail=>{
+				console.log('Fail load attachment')
+			}
+		);
+
+		await self.getDatos.ejecutarSQL('SELECT * FROM gastostours').then(
+			function(gastostours: {rows}){
+
+											 
+				for(var i=0; i<gastostours.rows.length; i++) {
+
+					var gastos = gastostours.rows.item(i)
+					var tmp_ciudades = JSON.parse(gastos.ciudades);
+
+					if(tmp_ciudades.indexOf(self.evento.ciudad_id[0]) > -1) {
+			    		self.gastostours.push(gastos);
+			      		//console.log(eventos[key].name);
+			    	}										    	
+                   	
+                }
+
+			},
+			fail=>{
+				console.log('Fail load gastostours');
+			}
+		);
+
+
+		await self.getDatos.ejecutarSQL('SELECT id, name FROM user').then(
+
+			(user: {rows})=>{
+
+				//self.clientes = user.rows;
+				for(var i=0; i<user.rows.length; i++) {
+
+			    	self.clientes.push(user.rows.item(i));                   	
+                }
+				//console.log(JSON.stringify(self.clientes));
+								
+			},
+			fail=>{
+
+				console.log('Fail load user');
+
+			}
+		);
+
+		await self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE is_padre = "true"').then(
+			function(eventos: {rows}){
+
+				//var evento = eventos.rows.item(0);
+				
+				for(var i=0; i<eventos.rows.length; i++) {
+
+			    	self.eventos.push(eventos.rows.item(i));                   	
+                }
+				
 
 			},
 			fail=>{
 				console.log('Fail load evento')
 			}
-		);	
+		);
+
+		await self.getDatos.ejecutarSQL('SELECT * FROM tiposervicios').then(
+			function(servicios: {rows}){
+
+				//var evento = eventos.rows.item(0);
+				
+				for(var i=0; i<servicios.rows.length; i++) {
+
+			    	self.servicios.push(servicios.rows.item(i));                   	
+                }				
+
+			},
+			fail=>{
+				console.log('Fail load evento')
+			}
+		);
+
+		self.cargar = false;
+
+
 	}
+
 	
 	private editar() {
 
@@ -415,7 +499,7 @@ export class EventoPage {
 
             		self.cargar = true;
             			
-        			self.getDatos.cargarCalendario(true,true,false,false,false).then(
+        			self.getDatos.cargarCalendario(true,true,false,false,false,false,false).then(
 		        		res=>{
 		        			console.log('Update complete');
 		        			self.initEvento();
@@ -436,7 +520,7 @@ export class EventoPage {
 		        		res=>{
 		        			
 		        			self.cargar = true;
-		        			self.getDatos.cargarCalendario(true,true,false,false,false).then(
+		        			self.getDatos.cargarCalendario(true,true,false,false,false,false,false).then(
 				        		res=>{
 				        			console.log('Update complete');
 				        			self.initEvento();
@@ -485,7 +569,7 @@ export class EventoPage {
             	self.guardar([[0,0,data]], 1).then(
 	        		res=>{
 	        			self.cargar = true;
-	        			self.getDatos.cargarCalendario(true,true,false,false,false).then(
+	        			self.getDatos.cargarCalendario(true,true,false,false,false,false,false).then(
 			        		res=>{
 			        			console.log('Update complete');
 			        			self.initEvento();
@@ -602,73 +686,7 @@ export class EventoPage {
         }
     );
 
-    } 
-
-    /*private descargarAtt(att){
-
-    	var self  = this;
-    	self.ver_download = true;
-    	console.log(att.id);
-    	self.getDatos.search_read('ir.attachment', [["id", "=", att.id]], ["datas", "mimetype"]).then(
-
-    		(res : [{datas:'', mimetype:''}])=>{
-    			//var tabla = 
-    			//console.log(JSON.stringify(res[0].mimetype));
-    			var mimetype = res[0].mimetype.toString();
-    			var ext = "." + mimetype.split("/")[1];
-
-
-    			//if(res[0].mimetype.toString() == "application/pdf"){
-    			//	ext = '.pdf';
-    			//}else if(res[0].mimetype.toString() == "image/png"){
-    			//	ext = '.png';
-    			//}
-
-    			let downloadPDF: any = res[0].datas;
-		        let base64pdf = downloadPDF;
-		        var binary = atob(base64pdf.replace(/\s/g, ''));
-		        var len = binary.length;
-		        var buffer = new ArrayBuffer(len);
-		        var view = new Uint8Array(buffer);
-		        for (var i = 0; i < len; i++) {
-		            view[i] = binary.charCodeAt(i);
-		        }
-		           
-		        var blobPdf = new Blob( [view], { type: mimetype });
-
-    			const opt: IWriteOptions = { replace: true }
-
-    			//var blob = new Blob([res[0].datas], {type: res[0].mimetype});
-
-    			//var blob = 'data:application/pdf;base64,' +res[0].datas;
-
-
-    			self.file.writeFile(self.file.externalDataDirectory, att.name + ext, blobPdf, opt).then(
-    				res=>{
-    					console.log('file saved'+ res.nativeURL);
-    					self.presentToast();
-    					self.fileOpener.open(
-					      res.toInternalURL(),
-					      mimetype
-					    ).then((success) => {
-					      console.log('success open file: ', success);
-					    }, (err) => {
-					      console.log('error open file', err.message);
-					    });
-
-    				},
-    				fail=>{
-    					console.log(JSON.stringify(fail));
-    				}
-    			);
-    			self.ver_download = false;
-    		},
-    		fail=>{
-    			console.log('Fail downloading att');
-    		}
-		);
-
-    }*/
+    }    
 
     private borrarAttachment(id){
 
@@ -683,7 +701,7 @@ export class EventoPage {
 			self.getDatos.eliminar('ir.attachment', id).then(
 				res=>{
 					self.cargar = true;
-        			self.getDatos.cargarCalendario(true,false,true,false,false).then(
+        			self.getDatos.cargarCalendario(true,false,true,false,false,false,false).then(
 		        		res=>{
 		        			console.log('Update complete');
 		        			self.initEvento();
@@ -706,10 +724,10 @@ export class EventoPage {
     private abrirReserva(){
     	//console.log('entro');
     	
-    	if(!this.editable){
+    	//if(!this.editable){
 
     		this.navCtrl.push(DetallesReservaPage, {evento:this.evento, permisos:this.permisos, padre:false});
-    	}
+    	//}
     	
     }
 
@@ -747,7 +765,7 @@ export class EventoPage {
             	self.guardar(data, 2).then(
 	        		res=>{
 	        			self.cargar = true;
-	        			self.getDatos.cargarCalendario(true,false,true,false,false).then(
+	        			self.getDatos.cargarCalendario(true,false,true,false,false,false,false).then(
 			        		res=>{
 			        			console.log('Update complete');
 			        			self.initEvento();

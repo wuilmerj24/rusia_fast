@@ -44,7 +44,7 @@ export class CalendarioPage {
         if(borrar == true){
 
             
-            this.getDatos.cargarCalendario(borrar, borrar, borrar, borrar, borrar).then(          
+            this.getDatos.cargarCalendario(borrar, borrar, borrar, borrar, borrar, borrar, borrar).then(          
               function() {                                
                 self.datosOffline().then(
                     good=>{

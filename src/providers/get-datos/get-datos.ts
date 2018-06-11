@@ -138,6 +138,61 @@ export class GetDatosProvider {
 
 	}
 
+	public cargarServicios(){
+
+		var self = this;
+		var sql = [];
+		var promise = new Promise(function (resolve, reject) {
+            
+            //console.log('-----------------entro3 ---------------');
+            self.search_read('rusia.tiposervicios', [], self.tablas.Tbl_servicios_odoo)
+	  		.then(function(servicios) {
+	  		
+
+	  			//console.log(JSON.stringify(gastostours))
+	            
+		  		Object.keys(servicios).forEach(key=> {
+
+
+
+				    var registro = "INSERT OR IGNORE INTO tiposervicios "+
+				    	"(id, name, Code, Hora_Inicio, Hora_Finalizar, is_traslado , is_guia, ciudad_id, hora_chofer, Descripcion)"+
+				    	" VALUES (" + servicios[key].id + ", '"+servicios[key].name+"', '"+ servicios[key].Code
+				    	+"', '"+servicios[key].Hora_Inicio+"', '"+servicios[key].is_traslado+"', '"+
+				    	servicios[key].is_guia+"', '"+JSON.stringify(servicios[key].ciudad_id)+"', '"+servicios[key].hora_chofer+"', '"+servicios[key].Descripcion+"');";
+
+				    //console.log(registro);
+				    sql.push(registro);
+				}); 
+
+				self.insertBatch(sql)
+			        .then(res => {
+			        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+			        	resolve();
+							
+					}).catch(e => {
+			  		console.log('Error en insertBatch DB');
+			  		console.log(e.message);
+			  		reject(e) 
+			  	});
+
+			
+		  	}, 
+			function() {
+		  		
+		  		console.log('Error search_read - Loading offline attachment');
+		  		//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+		  		reject();							  		
+			});
+
+			
+
+        });
+
+        return promise;	
+
+	}
+
 	public cargarGastosConceptos(){
 
 		var self = this;
@@ -574,7 +629,7 @@ export class GetDatosProvider {
 	}
 
 
-	public async cargarCalendario(borrarE, borrarG, borrarA, borrarC, borrarCi){
+	public async cargarCalendario(borrarE, borrarG, borrarA, borrarC, borrarCi, borrarU, borrarS){
 
 		var self = this;
 
@@ -586,6 +641,7 @@ export class GetDatosProvider {
 
 			if(self.usr.tipo_usuario + '' == 'is_root'){
 				dominio = [['is_padre', '=' , false]];
+				dominioUsers = [];
 				dominioSol = [
 				["is_padre", "=", false],
 				["is_guia", "=", true],
@@ -662,10 +718,18 @@ export class GetDatosProvider {
 				await self.cargarCiudades(borrarCi);
 			}			
 
-			if(dominioUsers != null){
+			if(borrarU && dominioUsers != null){
 
+				console.log('----------  await self.dominioUsers();');
 				await self.cargarUsuario(dominioUsers);
-			}			
+			}
+
+			if(borrarS){
+
+				console.log('----------  await self.cargarServicios();');
+				await self.cargarServicios();	
+			}
+			
 
 			//return self.usr;
 
@@ -1132,7 +1196,7 @@ export class GetDatosProvider {
 
 					        self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
 					      		//
-					      		var sql = [self.tablas.Tbl_solicitud, self.tablas.Tbl_gastos_ciudad, self.tablas.Tbl_gastostours, self.tablas.Tbl_eventos, self.tablas.Tbl_gastos, self.tablas.Tbl_user, self.tablas.Tbl_attachment, self.tablas.Tbl_ciudad];
+					      		var sql = [self.tablas.Tbl_solicitud, self.tablas.Tbl_gastos_ciudad, self.tablas.Tbl_gastostours, self.tablas.Tbl_eventos, self.tablas.Tbl_gastos, self.tablas.Tbl_user, self.tablas.Tbl_attachment, self.tablas.Tbl_ciudad, self.tablas.Tbl_servicios];
 
 						      	db.sqlBatch(sql)
 						      	.then(
