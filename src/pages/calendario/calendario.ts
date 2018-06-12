@@ -27,7 +27,7 @@ export class CalendarioPage {
         formatMonthTitle: 'MMMM yyyy',
         allDayLabel: 'Todo el día',
         formatWeekTitle: 'MMMM yyyy, Se $n',
-        locale: 'es-US'
+        locale: 'es-RU'
     };
 
     usuario;

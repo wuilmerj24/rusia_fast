@@ -64,6 +64,7 @@ export class EventoPage {
 	 //gastostoursline_ids:[]
 	 }
 
+
 	private clientes = [];
 	private default_cliente = [];
 	private default_guia = [];
@@ -128,9 +129,14 @@ export class EventoPage {
 			{id:5, name:'Comentarios', visible:false}];
 		}
 
+		if(this.evento_cal != null){
 
 
-		this.initEvento();
+			this.initEvento();
+			
+		}else{
+			this.editable = true;
+		}
 		this.initializeCategories();
 	}
 
@@ -344,6 +350,28 @@ export class EventoPage {
         }
     }
 
+    seleccionCliente(ev: any){
+
+    	//console.log(ev);
+    	this.evento.cliente_id[0] = ev;
+    }
+    seleccionEvento(ev: any){
+
+    	this.evento.evento_id[0] = ev;
+    }
+    seleccionServicio(ev: any){
+
+    	this.evento.servicio_id[0] = ev;
+    }
+
+    seleccionGuia(ev: any){
+    	this.evento.guia_id[0] = ev;
+    }
+
+    seleccionChofer(ev: any){
+    	this.evento.chofer_id[0] = ev;
+    }
+
     private guardar(dato, opcion){
 
     	var self = this;
@@ -370,7 +398,12 @@ export class EventoPage {
 							 message:self.evento.message,
 							 numero_pax :self.evento.numero_pax,					 
 							 is_traslado :self.evento.is_traslado,
-							 is_guia:self.evento.is_guia
+							 is_guia:self.evento.is_guia,
+							 cliente_id: self.evento.cliente_id[0],
+							 evento_id: self.evento.evento_id[0],
+							 servicio_id: self.evento.servicio_id[0],
+							 guia_id: self.evento.guia_id[0],
+							 chofer_id: self.evento.chofer_id[0]
 						};			
 					case 1:
 						campos = {

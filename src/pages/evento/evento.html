@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>Detalles Reserva</ion-title>
+    <ion-title>Detalles Evento</ion-title>
     <!--ion-buttons end>
         <button ion-button icon-only (click)="closeModal('x')">
                 <ion-icon item-right name="ios-close-outline"></ion-icon>
@@ -87,7 +87,7 @@
 	        </ion-col>
 	        <ion-col col-6>
 	            <ion-input *ngIf="!editable" name="evento.evento_id"  [readonly]="!editable" type="text" [(ngModel)]="evento.evento_id[1]"></ion-input>
-	            <autocomplete *ngIf="editable" [lista]="eventos" [default]="default_evento" placeholder="Evento Padre" (onselect) = "seleccionCliente($event)"></autocomplete>
+	            <autocomplete *ngIf="editable" [lista]="eventos" [default]="default_evento" placeholder="Evento Padre" (onselect) = "seleccionEvento($event)"></autocomplete>
 	        </ion-col>       
 	    </ion-row>  
 
@@ -111,7 +111,7 @@
 
 	        	<ion-input *ngIf="!editable" name="evento.servicio_id"  placeholder="Nombre de Reserva" readonly type="text" [(ngModel)]="evento.servicio_id[1]"></ion-input>
 
-	            <autocomplete *ngIf="editable" [lista]="servicios" [default]="default_servicio" placeholder="Tipo de servicio" (onselect) = "seleccionCliente($event)"></autocomplete>
+	            <autocomplete *ngIf="editable" [lista]="servicios" [default]="default_servicio" placeholder="Tipo de servicio" (onselect) = "seleccionServicio($event)"></autocomplete>
 	        </ion-col>       
 	    </ion-row>    
 
@@ -171,7 +171,7 @@
 	        <ion-col col-6>
 	            <ion-input *ngIf="!editable" name="evento.guia_id" placeholder="Guía" readonly type="text" [(ngModel)]="evento.guia_id[1]"></ion-input>
 
-	            <autocomplete *ngIf="editable" [lista]="clientes" [default]="default_guia" placeholder="Guía" (onselect) = "seleccionCliente($event)"></autocomplete>
+	            <autocomplete *ngIf="editable" [lista]="clientes" [default]="default_guia" placeholder="Guía" (onselect) = "seleccionGuia($event)"></autocomplete>
 	        </ion-col>       
 	    </ion-row>    
 
@@ -182,7 +182,7 @@
 	        <ion-col col-6>
 	            <ion-input *ngIf="!editable" name="evento.chofer_id" placeholder="Chofer" readonly type="text" [(ngModel)]="evento.chofer_id[1]"></ion-input>
 
-	            <autocomplete *ngIf="editable" [lista]="clientes" [default]="default_chofer" placeholder="Chofer" (onselect) = "seleccionCliente($event)"></autocomplete>
+	            <autocomplete *ngIf="editable" [lista]="clientes" [default]="default_chofer" placeholder="Chofer" (onselect) = "seleccionChofer($event)"></autocomplete>
 	        </ion-col>       
 	    </ion-row>    
 
