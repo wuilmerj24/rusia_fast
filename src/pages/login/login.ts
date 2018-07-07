@@ -24,8 +24,9 @@ export class LoginPage {
 
    	//guia
     //conexion = {usuario: 'joselugar8@hotmail.com', bd: 'rusia3', pwd: '123456'}; //pruebas
+    
     //conexion = {usuario: 'cupabanoscar@gmail.com', bd: 'rusia3', pwd: '123456'};//produccion 
-
+ 
     //chofer
     //conexion = {usuario: 'anton1985info@gmail.com', bd: 'rusia3', pwd: '123456'};
     

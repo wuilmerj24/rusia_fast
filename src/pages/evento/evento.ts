@@ -103,7 +103,8 @@ export class EventoPage {
 		
 		this.evento_cal = this.navParams.get('evento');
 		this.permisos = this.navParams.get('permisos');
-		//console.log('permisos:'+ this.permisos);
+		console.log('permisos:'+ this.permisos);
+		console.log('permisos:'+ JSON.stringify(this.evento_cal));
 		if(this.permisos == 'is_client'){
 			this.ver_segmento = false;
 
@@ -167,16 +168,24 @@ export class EventoPage {
 			function(eventos: {rows}){
 
 				var evento = eventos.rows.item(0);
+
+				//console.log(JSON.stringify(evento));
+
 				var tmp_evento_id = JSON.parse(evento.evento_id);
 				self.default_evento = tmp_evento_id;
 				var tmp_cliente_id = JSON.parse(evento.cliente_id);
 				self.default_cliente = tmp_cliente_id;
 				var tmp_representante_id = JSON.parse(evento.representante_id);
+				self.evento.representante_id = tmp_representante_id;
 				var tmp_guia_id = JSON.parse(evento.guia_id);
 				self.default_guia = tmp_guia_id;
-				var tmp_chofer_id = JSON.parse(evento.chofer_id);
+				var tmp_chofer_id = JSON.parse(evento.chofer_id);				
 				self.default_chofer = tmp_chofer_id;
-				var tmp_hotel_id = JSON.parse(evento.hotel_id);
+
+				var tmp_hotel_id = (evento.hotel_id == "")?[0,'']:JSON.parse(evento.hotel_id);
+				self.evento.hotel_id = tmp_hotel_id;
+
+
 				var tmp_ciudad_id = JSON.parse(evento.ciudad_id);
 
 				var tmp_servicio_id = JSON.parse(evento.servicio_id);
@@ -186,10 +195,10 @@ export class EventoPage {
 				self.evento = evento;
 				self.evento.evento_id = tmp_evento_id;
 				self.evento.cliente_id = tmp_cliente_id;
-				self.evento.representante_id = tmp_representante_id;
+				
 				self.evento.guia_id = tmp_guia_id;
 				self.evento.chofer_id = tmp_chofer_id;
-				self.evento.hotel_id = tmp_hotel_id;
+				
 				self.evento.ciudad_id = tmp_ciudad_id;
 				self.evento.servicio_id = tmp_servicio_id;
 
@@ -228,10 +237,11 @@ export class EventoPage {
 					}
 				);
 
+		console.log('SELECT * FROM attachment WHERE eventos_id = "' + self.evento.id +'"');
 		await self.getDatos.ejecutarSQL('SELECT * FROM attachment WHERE eventos_id = "' + self.evento.id +'"').then(
 			function(attachment: {rows}){
 
-				//console.log(JSON.stringify(attachment.rows));															 
+				console.log('ATT: ' + JSON.stringify(attachment.rows));															 
 				for(var i=0; i<attachment.rows.length; i++) {
 
 
@@ -323,7 +333,7 @@ export class EventoPage {
 				for(var i=0; i<servicios.rows.length; i++) {
 
 			    	self.servicios.push(servicios.rows.item(i)); 
-			    	console.log(servicios.rows.item(i));                  	
+			    	//console.log(servicios.rows.item(i));                  	
                 }				
 
 			},
@@ -331,7 +341,7 @@ export class EventoPage {
 				console.log('Fail load evento')
 			}
 		);
-
+		
 		self.cargar = false;
 		
 

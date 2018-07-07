@@ -114,6 +114,7 @@ export class CalendarioPage {
 
                 where = 'is_padre = "false"';
             }
+            console.log('where: ' + where)
 
             self.getDatos.ejecutarSQL('SELECT * FROM eventos WHERE '+ where +'  ORDER BY id DESC').then(
 

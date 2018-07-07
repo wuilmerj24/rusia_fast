@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.inso.guiarus" version="1.1.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.inso.guiarus" version="1.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>GuiaRus</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="jose1914luis@gmail.com" href="https://www.linkedin.com/in/jose1914luis/">Jose Luis Garcia Hernandez</author>
@@ -102,6 +102,8 @@
     <plugin name="cordova-plugin-filechooser" spec="^1.0.1" />
     <allow-navigation href="http://192.168.1.12:8100" />
     <allow-navigation href="http://10.1.43.20:8100" />
+    <allow-navigation href="http://192.168.1.14:8100" />
+    <allow-navigation href="http://192.168.1.10:8100" />
     <engine name="browser" spec="5.0.3" />
     <engine name="android" spec="7.0.0" />
     <engine name="ios" spec="4.5.4" />

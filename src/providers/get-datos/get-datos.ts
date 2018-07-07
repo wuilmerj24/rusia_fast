@@ -276,13 +276,13 @@ export class GetDatosProvider {
 		var promise = new Promise(function (resolve, reject) {
             
             //console.log('-----------------entro3 ---------------');
-            self.search_read('ir.attachment', [["id", "<>", 0], ["cliente_id", "<>", false]], self.tablas.Tbl_attachment_odoo)
+            self.search_read('ir.attachment', [["id", "=", 378214]], self.tablas.Tbl_attachment_odoo)
 	  		.then(function(attachment) {
 	  		
 
 	  			//console.log('resolvio gastos');
 	  			//console.log('-----------------entro4 ---------------');
-	  			//console.log(JSON.stringify(attachment));
+	  			console.log(JSON.stringify(attachment));
 	  			if(borrar == true){
 		  			sql.push('DELETE FROM attachment;');
 	  			}	
@@ -522,7 +522,7 @@ export class GetDatosProvider {
 			    	" Comentarios_Internos, Comentarios_Cliente, Comentarios_Guia, Fecha_Fin, Transporte, hotel_id,"+
 			    	" ciudad_id, Total_Representante, message, numero_pax, evento_id, Servicio_Gastos, tarjeta_eur,"+
 			    	" tarjeta_rub, tarjeta_usd, is_guia, is_traslado, gastostoursline_ids, guia_id_tmp, gastos_ids,"+
-			    	" servicio_id, salario, observaciones_solicitud)"+
+			    	" servicio_id, salario, observaciones_solicitud, nombre_reserva)"+
 			    	" VALUES (" + eventos[key].id + ", '"+eventos[key].Datos_Cliente_id[0]+"', '" + JSON.stringify(eventos[key].Datos_Cliente_id)+"', '" +
 			    	JSON.stringify(eventos[key].representante_id)+ "', '"+ eventos[key].representante_id[0] +"', '" + eventos[key].Fecha_Inicio +"','" + 
 			    	eventos[key].hora_inicio + "', '" + eventos[key].hora_final + "', '" + self.parseDato(eventos[key].hora_chofer) + "', '" + 
@@ -538,7 +538,8 @@ export class GetDatosProvider {
 			    	JSON.stringify(eventos[key].evento_id)+"', '"+eventos[key].Servicio_Gastos+"', '"+eventos[key].tarjeta_eur+"', '"+
 			    	eventos[key].tarjeta_rub+"', '"+eventos[key].tarjeta_usd+"' , '"+eventos[key].is_guia+"', '"+eventos[key].is_traslado+"', '"+ 
 			    	JSON.stringify(eventos[key].gastostoursline_ids)+"', '"+eventos[key].guia_id[0]+"', '"+ JSON.stringify(eventos[key].gastos_ids) +"', '"+
-			    	JSON.stringify(eventos[key].servicio_id)+"', '"+eventos[key].salario+"', '"+self.parseDato(eventos[key].observaciones_solicitud)+"');";
+			    	JSON.stringify(eventos[key].servicio_id)+"', '"+eventos[key].salario+"', '"+self.parseDato(eventos[key].observaciones_solicitud)+"', '"
+			    	+self.parseDato(eventos[key].nombre_reserva)+"');";
 			    //console.log(registro);							  			
 			    sql.push(registro);
 			});
@@ -642,10 +643,10 @@ export class GetDatosProvider {
 			if(self.usr.tipo_usuario + '' == 'is_root'){
 				dominio = [['is_padre', '=' , false]];
 				dominioUsers = [];
-				dominioSol = [
+				/*dominioSol = [
 				["is_padre", "=", false],
 				["is_guia", "=", true],
-				["guia_id", "=", false]];
+				["guia_id", "=", false]];*/
 
 
 			}else if(self.usr.tipo_usuario + '' == 'is_client'){
@@ -655,20 +656,20 @@ export class GetDatosProvider {
 				
 				dominio = [['is_padre', '=' , false], ["guia_id", "=", self.usr.id]];
 				dominioUsers = [["is_client", "=", false], ["is_rep", "=", false]];
-				dominioSol = [
+				/*dominioSol = [
 				["is_padre", "=", false],
 				["is_guia", "=", true],
-				["guia_id", "=", false]];
+				["guia_id", "=", false]];*/
 				
 															
 
 			}else if(self.usr.tipo_usuario + '' == 'is_chofer'){
 				dominio = [['is_padre', '=' , false], ["chofer_id", "=", self.usr.id]];
 				dominioUsers = [["is_client", "=", false], ["is_rep", "=", false]];
-				dominioSol = [
+				/*dominioSol = [
 				["is_padre", "=", false],
 				["is_traslado", "=", true],
-				["chofer_id", "=", false]];				
+				["chofer_id", "=", false]];	*/			
 			}else if(self.usr.tipo_usuario == 'is_rep'){
 
 				dominio = [['is_padre', '=' , false], ["representante_id", "=", self.usr.id]];
@@ -678,10 +679,11 @@ export class GetDatosProvider {
 			}else if(self.usr.tipo_usuario == 'is_general'){
 
 				dominio = [['is_padre', '=' , false]];
-				dominioSol = [
+				dominioUsers = [];
+				/*dominioSol = [
 				["is_padre", "=", false],
 				["is_guia", "=", true],
-				["guia_id", "=", false]];
+				["guia_id", "=", false]];*/
 			}
 
 
@@ -689,9 +691,14 @@ export class GetDatosProvider {
 
 				console.log('----------  Cargar los eventos asignados');
 				await self.cargarEventos(dominio,borrarE);
+
+				//console.log('----------  Cargar los eventos padres');
+				//await self.cargarEventos(dominioSol, false);
+
 				console.log('----------  Cargar los eventos para la tabla solicitudes');
-				await self.cargarEventos(dominioSol, false);
-				console.log('----------  Cargar los eventos padres');
+				await self.cargarSolicitudes(borrarE);
+				
+				console.log('cargar eventos padre');
 				await self.cargarEventos(null, false);	
 			}
 			

@@ -24,6 +24,7 @@ export class SolicitarAdminPage {
 
       function(solicitudes:{rows}){
 
+        console.log('entro');
         for(var i=0; i<solicitudes.rows.length; i++) {
 
             var solicitud = solicitudes.rows.item(i);
