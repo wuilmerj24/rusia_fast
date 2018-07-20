@@ -47,6 +47,25 @@ export class GeneralPage {
         }
     }
 
+    private onCancel(ev: any){
+
+    	this.initItems();
+    }
+
+    private  getItems(ev: any) {
+    	// set val to the value of the searchbar
+	    const val = ev.target.value;
+
+	    // if the value is an empty string don't filter the items
+	    if (val && val.trim() != '') {
+	      this.items = this.general.filter((item) => {
+	      	//console.log(String(item.name[1]).toLowerCase());
+	        return (String(item.evento_id[1]).toLowerCase().indexOf(val.toLowerCase()) > -1);
+	      })
+	    }
+    }
+
+
 
 	doInfinite(infiniteScroll) {
         console.log('Begin async operation');

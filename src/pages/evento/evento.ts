@@ -169,7 +169,9 @@ export class EventoPage {
 
 				var evento = eventos.rows.item(0);
 
-				//console.log(JSON.stringify(evento));
+				self.evento = evento;
+
+				console.log(JSON.stringify(self.evento));
 
 				var tmp_evento_id = JSON.parse(evento.evento_id);
 				self.default_evento = tmp_evento_id;
@@ -182,17 +184,16 @@ export class EventoPage {
 				var tmp_chofer_id = JSON.parse(evento.chofer_id);				
 				self.default_chofer = tmp_chofer_id;
 
-				var tmp_hotel_id = (evento.hotel_id == "")?[0,'']:JSON.parse(evento.hotel_id);
+				var tmp_hotel_id = (evento.hotel_id == "")?([0,'']):JSON.parse(evento.hotel_id);	
 				self.evento.hotel_id = tmp_hotel_id;
 
-
 				var tmp_ciudad_id = JSON.parse(evento.ciudad_id);
-
+				
 				var tmp_servicio_id = JSON.parse(evento.servicio_id);
 				self.default_servicio = tmp_servicio_id;
 
 
-				self.evento = evento;
+				
 				self.evento.evento_id = tmp_evento_id;
 				self.evento.cliente_id = tmp_cliente_id;
 				
@@ -341,6 +342,32 @@ export class EventoPage {
 				console.log('Fail load evento')
 			}
 		);
+
+		await self.getDatos.ejecutarSQL('SELECT * FROM hoteles WHERE id = ' +self.evento.hotel_id[0]).then(
+			function(hotel: {rows}){
+
+				//var evento = eventos.rows.item(0);
+				
+				console.log(JSON.stringify(hotel.rows))
+
+				self.evento.hotel_id[0]
+
+				if (hotel.rows.length) {
+					
+					self.evento.hotel_id[1] = self.evento.hotel_id[1] + " / " + hotel.rows.item(0).direccion 
+
+				}
+				/*for(var i=0; i<servicios.rows.length; i++) {
+
+			    	self.servicios.push(servicios.rows.item(i)); 
+			    	//console.log(servicios.rows.item(i));                  	
+                }*/				
+
+			},
+			fail=>{
+				console.log('Fail load evento')
+			}
+		);
 		
 		self.cargar = false;
 		
@@ -382,6 +409,31 @@ export class EventoPage {
     	this.evento.chofer_id[0] = ev;
     }
 
+    private guardar_campos(){
+    	var self = this;
+
+    	self.guardar(null, 0).then(
+			res=>{
+				self.cargar = true;
+				var reload = [true,false,false,false,false,false,false];
+				self.getDatos.cargarCalendario(reload).then(
+	        		res=>{
+	        			console.log('Update complete');
+	        			self.initEvento();
+	        		},
+	        		fail=>{
+
+	        			console.log('Error loading cgastos');
+	        		}
+	        	);
+			},
+			fail=>{
+
+				console.log('Error loading cgastos');
+			}
+		);
+    }
+
     private guardar(dato, opcion){
 
     	var self = this;
@@ -393,6 +445,7 @@ export class EventoPage {
     		if(self.editable){
     			
     			var campos;
+    			console.log(opcion);
 				switch (opcion) {
 					case 0:
 						campos = {
@@ -414,7 +467,8 @@ export class EventoPage {
 							 servicio_id: self.evento.servicio_id[0],
 							 guia_id: self.evento.guia_id[0],
 							 chofer_id: self.evento.chofer_id[0]
-						};			
+						};	
+						break;		
 					case 1:
 						campos = {
 							gastostoursline_ids: dato
@@ -431,7 +485,8 @@ export class EventoPage {
 						break;
 				}					
 									
-				
+				console.log(JSON.stringify(campos));
+				console.log(self.evento.id);
 				self.getDatos.write('rusia.eventos', self.evento.id, campos).then(
 					res=>{
 						console.log('save event ok');
@@ -550,8 +605,8 @@ export class EventoPage {
             	if(typeof data == 'boolean'){
 
             		self.cargar = true;
-            			
-        			self.getDatos.cargarCalendario(true,true,false,false,false,false,false).then(
+            		var reload = [true,true,false,false,false,false,false]	
+        			self.getDatos.cargarCalendario(reload).then(
 		        		res=>{
 		        			console.log('Update complete');
 		        			self.initEvento();
@@ -572,7 +627,8 @@ export class EventoPage {
 		        		res=>{
 		        			
 		        			self.cargar = true;
-		        			self.getDatos.cargarCalendario(true,true,false,false,false,false,false).then(
+		        			var reload = [true,true,false,false,false,false,false]
+		        			self.getDatos.cargarCalendario(reload).then(
 				        		res=>{
 				        			console.log('Update complete');
 				        			self.initEvento();
@@ -621,7 +677,8 @@ export class EventoPage {
             	self.guardar([[0,0,data]], 1).then(
 	        		res=>{
 	        			self.cargar = true;
-	        			self.getDatos.cargarCalendario(true,true,false,false,false,false,false).then(
+	        			var reload = [true,true,false,false,false,false,false]
+	        			self.getDatos.cargarCalendario(reload).then(
 			        		res=>{
 			        			console.log('Update complete');
 			        			self.initEvento();
@@ -753,7 +810,8 @@ export class EventoPage {
 			self.getDatos.eliminar('ir.attachment', id).then(
 				res=>{
 					self.cargar = true;
-        			self.getDatos.cargarCalendario(true,false,true,false,false,false,false).then(
+					var reload = [true,false,true,false,false,false,false];
+        			self.getDatos.cargarCalendario(reload).then(
 		        		res=>{
 		        			console.log('Update complete');
 		        			self.initEvento();
@@ -817,7 +875,8 @@ export class EventoPage {
             	self.guardar(data, 2).then(
 	        		res=>{
 	        			self.cargar = true;
-	        			self.getDatos.cargarCalendario(true,false,true,false,false,false,false).then(
+	        			var reload = [true,false,true,false,false,false,false];
+	        			self.getDatos.cargarCalendario(reload).then(
 			        		res=>{
 			        			console.log('Update complete');
 			        			self.initEvento();

@@ -15,8 +15,8 @@ export class GetDatosProvider {
 
 	private db: SQLiteObject = null;
 
-	//private url = '/api';
-	private url = 'https://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
+	private url = '/api';
+	//private url = 'https://rusiatoursmoscu.com';    //"proxyUrl":"http://rusiatoursmoscu.com"
 
 	public usr = null;	
 	private eventoHijo = [];
@@ -159,9 +159,63 @@ export class GetDatosProvider {
 				    	"(id, name, Code, Hora_Inicio, Hora_Finalizar, is_traslado, is_guia, ciudad_id, hora_chofer, Descripcion)"+
 				    	" VALUES (" + servicios[key].id + ", '"+servicios[key].name+"', '"+ servicios[key].Code
 				    	+"', '"+servicios[key].Hora_Inicio+"', '"+servicios[key].Hora_Finalizar+"', '"+servicios[key].is_traslado+"', '"+
-				    	servicios[key].is_guia+"', '"+JSON.stringify(servicios[key].ciudad_id)+"', '"+servicios[key].hora_chofer+"', '"+servicios[key].Descripcion+"');";
+				    	servicios[key].is_guia+"', '"+JSON.stringify(servicios[key].ciudad_id)+"', '"+servicios[key].hora_chofer+"', '"+self.parseDato(servicios[key].Descripcion)+"');";
 
-				    //console.log(registro);
+				    console.log(registro);
+				    sql.push(registro);
+				}); 
+
+				self.insertBatch(sql)
+			        .then(res => {
+			        	//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+			        	resolve();
+							
+					}).catch(e => {
+			  		console.log('Error en insertBatch DB');
+			  		console.log(e.message);
+			  		reject(e) 
+			  	});
+
+			
+		  	}, 
+			function() {
+		  		
+		  		console.log('Error search_read - Loading offline attachment');
+		  		//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+		  		reject();							  		
+			});
+
+			
+
+        });
+
+        return promise;	
+
+	}
+
+
+	public cargarHoteles(){
+
+		var self = this;
+		var sql = [];
+		var promise = new Promise(function (resolve, reject) {
+            
+            //console.log('-----------------entro3 ---------------');
+            self.search_read('rusia.hoteles', [], self.tablas.Tbl_hoteles_odoo)
+	  		.then(function(servicios) {
+	  		
+
+	  			//console.log(JSON.stringify(gastostours))
+	            
+		  		Object.keys(servicios).forEach(key=> {
+
+
+
+				    var registro = "INSERT OR IGNORE INTO hoteles "+
+				    	"(id, name, direccion)"+
+				    	" VALUES (" + servicios[key].id + ", '"+self.parseDato(servicios[key].name)+"', '"+self.parseDato(servicios[key].direccion)+"');";
+
+				    console.log(registro);
 				    sql.push(registro);
 				}); 
 
@@ -276,7 +330,7 @@ export class GetDatosProvider {
 		var promise = new Promise(function (resolve, reject) {
             
             //console.log('-----------------entro3 ---------------');
-            self.search_read('ir.attachment', [["id", "=", 378214]], self.tablas.Tbl_attachment_odoo)
+            self.search_read('ir.attachment', [], self.tablas.Tbl_attachment_odoo)
 	  		.then(function(attachment) {
 	  		
 
@@ -442,7 +496,7 @@ export class GetDatosProvider {
 			function() {
 		  		
 		  		console.log('Error search_read - Loading offline gastos');
-		  		//console.log('usr.tipo_usuario'+ usr.tipo_usuario);						        	
+		  		//console.log('usr.tipo_usuario'+ usr.tipo_usuario);					 	        	
 		  		resolve();							  		
 			});					
 
@@ -630,8 +684,9 @@ export class GetDatosProvider {
 	}
 
 
-	public async cargarCalendario(borrarE, borrarG, borrarA, borrarC, borrarCi, borrarU, borrarS){
+	public async cargarCalendario(borrar){
 
+		//borrarE, borrarG, borrarA, borrarC, borrarCi, borrarU, borrarS
 		var self = this;
 
 		var dominioUsers = null;
@@ -687,54 +742,55 @@ export class GetDatosProvider {
 			}
 
 
-			if(borrarE){
+			if(borrar[0]){
 
 				console.log('----------  Cargar los eventos asignados');
-				await self.cargarEventos(dominio,borrarE);
+				await self.cargarEventos(dominio,borrar[0]);
 
 				//console.log('----------  Cargar los eventos padres');
 				//await self.cargarEventos(dominioSol, false);
 
 				console.log('----------  Cargar los eventos para la tabla solicitudes');
-				await self.cargarSolicitudes(borrarE);
+				await self.cargarSolicitudes(borrar[0]);
 				
 				console.log('cargar eventos padre');
 				await self.cargarEventos(null, false);	
 			}
 			
 
-			if(borrarG){
+			if(borrar[1]){
 
 				console.log('----------  await self.cargarGastos(false);;');				
-				await self.cargarGastos(borrarG);	
+				await self.cargarGastos(borrar[1]);	
 			}
-			if(borrarA){
+			if(borrar[2]){
 
 				console.log('----------  await self.cargarAttachment(false);');
-				await self.cargarAttachment(borrarA);	
+				await self.cargarAttachment(borrar[2]);	
 			}
-			if(borrarC){
+			if(borrar[3]){
 
 				console.log('----------  await self.cargarGastosConceptos();');
 				await self.cargarGastosConceptos();//-> no lo carga el usuario
 			}	
 
-			if (borrarCi) {
+			if (borrar[4]) {
 
 				console.log('----------  await self.cargarCiudades();');
-				await self.cargarCiudades(borrarCi);
+				await self.cargarCiudades(borrar[4]);
 			}			
 
-			if(borrarU && dominioUsers != null){
+			if(borrar[5] && dominioUsers != null){
 
 				console.log('----------  await self.dominioUsers();');
 				await self.cargarUsuario(dominioUsers);
 			}
 
-			if(borrarS){
+			if(borrar[6]){
 
 				console.log('----------  await self.cargarServicios();');
 				await self.cargarServicios();	
+				await self.cargarHoteles();
 			}
 			
 
@@ -1203,7 +1259,7 @@ export class GetDatosProvider {
 
 					        self.sqlite.create(self.bd_conf).then((db: SQLiteObject) => {
 					      		//
-					      		var sql = [self.tablas.Tbl_solicitud, self.tablas.Tbl_gastos_ciudad, self.tablas.Tbl_gastostours, self.tablas.Tbl_eventos, self.tablas.Tbl_gastos, self.tablas.Tbl_user, self.tablas.Tbl_attachment, self.tablas.Tbl_ciudad, self.tablas.Tbl_servicios];
+					      		var sql = [self.tablas.Tbl_solicitud, self.tablas.Tbl_hoteles, self.tablas.Tbl_gastos_ciudad, self.tablas.Tbl_gastostours, self.tablas.Tbl_eventos, self.tablas.Tbl_gastos, self.tablas.Tbl_user, self.tablas.Tbl_attachment, self.tablas.Tbl_ciudad, self.tablas.Tbl_servicios];
 
 						      	db.sqlBatch(sql)
 						      	.then(
@@ -1310,7 +1366,8 @@ export class GetDatosProvider {
 					self.crearEsquema(conexion).then(
 						res=>{							
 
-							self.cargarCalendario(true, true, true, true, true, true, true).then(          
+							var reload = [true, true, true, true, true, true, true];
+							self.cargarCalendario(reload).then(          
 			          			function() {			            			            
 			          				resolve(res);			                    
 					          	},

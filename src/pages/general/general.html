@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>General</ion-title>
   </ion-navbar>
 
@@ -21,6 +21,12 @@
     </div>
 
     <div *ngIf="!cargar">
+
+        <ion-searchbar
+          showCancelButton="true"
+          (ionInput)="getItems($event)"
+          (ionCancel)="onCancel($event)">          
+        </ion-searchbar>
 
     	<ion-grid *ngFor="let general of items; let i = index" (click)="abrir_general(general)">                             
             <!--ion-row>  

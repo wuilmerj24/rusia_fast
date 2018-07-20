@@ -43,8 +43,8 @@ export class CalendarioPage {
         self.cargar = true;
         if(borrar == true){
 
-            
-            this.getDatos.cargarCalendario(borrar, borrar, borrar, borrar, borrar, borrar, borrar).then(          
+            var reload = [true,true,true,true,true,true,true];
+            this.getDatos.cargarCalendario(reload).then(          
               function() {                                
                 self.datosOffline().then(
                     good=>{

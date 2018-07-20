@@ -144,8 +144,8 @@ export class SolicitarDetallePage {
 			//console.log('usd:' + campos.gasto_usd)
 			self.getDatos.write('rusia.eventos', self.evento.id, campos).then(
 				res=>{
-
-					self.getDatos.cargarCalendario(true,false,false,false,false,false,false).then(
+					var reload = [true,false,false,false,false,false,false]
+					self.getDatos.cargarCalendario(reload).then(
 		        		res=>{
 		        			console.log('Update complete');
 		        			self.initSolitarDetalles();

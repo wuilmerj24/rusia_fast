@@ -202,6 +202,18 @@ export class TablasProvider {
 	" salario VARCHAR(10),"+
 	" gastostoursline_ids VARCHAR(255));";
 
+	private tbl_hoteles_odoo=[
+		"name", 
+		"ciudad_id", 
+		"direccion"
+	]
+
+	private tbl_hoteles= "CREATE TABLE IF NOT EXISTS hoteles("+
+	" id INTEGER PRIMARY KEY,"+
+	" name VARCHAR(255),"+	
+	" ciudad_id VARCHAR(255),"+	
+	" direccion VARCHAR(255))";
+
 	private tbl_servicios_odoo = [
 	"name", 
 	"Code", 
@@ -367,6 +379,14 @@ export class TablasProvider {
 
 	public get Tbl_solicitud_odoo() : string[] {
 		return this.tbl_solicitud_odoo;
+	}
+
+	public get Tbl_hoteles() : string {
+		return this.tbl_hoteles;
+	}
+
+	public get Tbl_hoteles_odoo() : string[] {
+		return this.tbl_hoteles_odoo;
 	}
 
 }

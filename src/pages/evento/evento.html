@@ -40,7 +40,7 @@
                             <ion-icon ios="ios-create" md="md-create"></ion-icon>
             Editar
         </ion-segment-button>
-        <ion-segment-button value="bookmark" icon-start (click)="guardar(null, 0)">
+        <ion-segment-button value="bookmark" icon-start (click)="guardar_campos()">
                             <ion-icon ios="ios-cloud-upload" md="md-cloud-upload"></ion-icon>
             Guardar
         </ion-segment-button>
@@ -187,11 +187,19 @@
 	    </ion-row>    
 
 	     <ion-row align-items-center>  
-	        <ion-col col-6>
+	        <ion-col col-12>
 	            <b>Hotel</b>
-	        </ion-col>
-	        <ion-col col-6>
-	            <ion-input name="evento.hotel_id"  readonly type="text" [(ngModel)]="evento.hotel_id[1]"></ion-input>
+	        </ion-col>   
+	    </ion-row>
+
+	    <ion-row align-items-center>  
+	        <ion-col col-12>
+
+	        	<textarea class="desText" id="evento.hotel_id" rows="2" (click)="adjustTextarea($event);" name="evento.message" placeholder="" [readonly]="!editable" [(ngModel)]="evento.hotel_id[1]"  #hotel_id> </textarea>
+
+	        	<!--ion-textarea rows="2" name="evento.hotel_id" placeholder="" [readonly]="!editable" [(ngModel)]="evento.hotel_id[1]"> </ion-textarea-->
+
+	            <!--ion-input name="evento.hotel_id"  readonly type="text" [(ngModel)]=""></ion-input-->
 	        </ion-col>       
 	    </ion-row>
 
