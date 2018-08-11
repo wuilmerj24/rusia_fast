@@ -181,6 +181,10 @@ export class EventoPage {
 				self.evento.representante_id = tmp_representante_id;
 				var tmp_guia_id = JSON.parse(evento.guia_id);
 				self.default_guia = tmp_guia_id;
+
+				/*console.log('---------------------------' + typeof evento.chofer_id );
+				console.log('---------------------------' + (evento.chofer_id == 'false') );
+				console.log('---------------------------' + Number.isInteger(evento.chofer_id) )*/
 				var tmp_chofer_id = JSON.parse(evento.chofer_id);				
 				self.default_chofer = tmp_chofer_id;
 
@@ -402,11 +406,28 @@ export class EventoPage {
     }
 
     seleccionGuia(ev: any){
-    	this.evento.guia_id[0] = ev;
+
+    	
+    	if (JSON.stringify(this.evento.guia_id) == 'false') {
+    		//console.log('-----entro----')    		
+    		delete this.evento.guia_id;
+    		this.evento.guia_id = [ev, ''];
+    	}else{
+    		this.evento.guia_id[0] = ev;
+    	}
     }
 
     seleccionChofer(ev: any){
-    	this.evento.chofer_id[0] = ev;
+    	//console.log(ev)
+    	if (JSON.stringify(this.evento.chofer_id) == 'false') {
+    		//console.log('-----entro----')    		
+    		delete this.evento.chofer_id;
+    		this.evento.chofer_id = [ev, ''];
+    	}else{
+    		this.evento.chofer_id[0] = ev ;	
+    	}
+    	//this.evento.chofer_id[0] = null;
+    	//this.evento.chofer_id[0] = parseInt(ev) ;
     }
 
     private guardar_campos(){
