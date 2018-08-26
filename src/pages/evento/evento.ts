@@ -466,7 +466,8 @@ export class EventoPage {
     		if(self.editable){
     			
     			var campos;
-    			console.log(opcion);
+    			console.log(((JSON.stringify(self.evento.is_traslado) == "true")?true:false));
+    			console.log(((JSON.stringify(self.evento.is_guia) == "true")?true:false));
 				switch (opcion) {
 					case 0:
 						campos = {
@@ -481,13 +482,13 @@ export class EventoPage {
 							 Transporte :self.evento.Transporte,
 							 message:self.evento.message,
 							 numero_pax :self.evento.numero_pax,					 
-							 is_traslado :self.evento.is_traslado,
-							 is_guia:self.evento.is_guia,
+							 is_traslado :((String(self.evento.is_traslado) == "true")?true:false),
+							 is_guia:((String(self.evento.is_guia) == "true")?true:false),
 							 cliente_id: self.evento.cliente_id[0],
 							 evento_id: self.evento.evento_id[0],
 							 servicio_id: self.evento.servicio_id[0],
-							 guia_id: self.evento.guia_id[0],
-							 chofer_id: self.evento.chofer_id[0]
+							 guia_id: ((JSON.stringify(self.evento.guia_id) == 'false')?self.evento.guia_id:self.evento.guia_id[0]),
+							 chofer_id: ((JSON.stringify(self.evento.chofer_id) == 'false')?self.evento.chofer_id:self.evento.chofer_id[0])
 						};	
 						break;		
 					case 1:
